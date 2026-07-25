@@ -345,7 +345,7 @@ td:first-child{white-space:nowrap;font-weight:500}
   <tr><td class="indent2">↳↳ 赠送金额类型</td><td><span class="tag tag-cond">条件必填</span></td><td>下拉单选</td><td>弹框内容选「赠送彩金升级」后展示；可选：固定金额 / 随机金额；默认「固定金额」</td><td>「固定金额」：弹窗展示一个固定的赠送数值，如「安装送100」。「随机金额」：弹窗展示一个区间值，如「安装送50~200」，实际赠送金额在区间内随机。</td></tr>
   <tr><td class="indent2">↳↳ 显示赠送金额</td><td><span class="tag tag-cond">条件必填</span></td><td>数字输入</td><td>固定金额为单一输入框，随机金额为两个输入框（最小值/最大值）</td><td>仅为弹窗中展示给用户看的营销数字，不影响实际赠送金额。</td></tr>
   <tr><td class="indent">↳ 弹框时间点</td><td><span class="tag tag-cond">条件必填</span></td><td>下拉单选</td><td>引导安装开启后展示；默认「用户充值」</td><td>「访问主页」：用户每次访问H5首页时触发弹窗（受弹框间隔时间控制）。「用户充值」：用户每次充值回调成功后触发（若用户当前在游戏中则不弹，退出游戏后仍会弹出）。「首次提现」：用户第一次提现回调成功后触发，仅触发一次。</td></tr>
-  <tr><td class="indent">↳ 弹框间隔时间</td><td><span class="tag tag-cond">条件必填</span></td><td>下拉单选</td><td>引导安装开启后展示；默认「0小时(强制安装)」；可选：0小时(强制安装) / 1~24小时</td><td>「0小时(强制安装)」：弹窗强制弹出，用户无法关闭，必须完成安装或继续停留在弹窗上。1~24小时：弹窗弹出后用户可关闭，但每隔对应时长会再次弹出，直到用户完成安装。</td></tr>
+  <tr><td class="indent">↳ 弹框间隔时间</td><td><span class="tag tag-cond">条件必填</span></td><td>下拉单选</td><td>引导安装开启后展示；默认「0小时(强制安装)」；可选：0小时(强制安装) / 1~24小时</td><td>「0小时(强制安装)」：弹窗强制弹出，无「×」按钮，用户无法关闭，也无法点击弹窗外区域关闭。<span class="chg">用户触发下载或完成安装后，弹窗仍保留、不会自动关闭，直至页面刷新或跳转。</span>1~24小时：弹窗弹出后用户可点击弹窗外区域关闭。<span class="chg">用户触发下载或完成安装后，弹窗同样保留、不自动关闭；</span>每隔对应时长会再次弹出，直到用户完成安装。<span class="chg">（弹窗关闭逻辑与《安装引导模块 PRD》3.4 节「弹窗关闭逻辑」口径一致）</span></td></tr>
   <tr><td class="indent">↳ 弹框安装类型</td><td><span class="tag tag-cond">条件必填</span></td><td>下拉单选</td><td>引导安装开启后展示；默认「apk(需要自己封装)」；当前平台APK暂未上线，含APK选项实际置灰不可用</td><td>「pwa(快速安装)」：引导用户将H5页面添加到手机桌面（PWA），若用户使用非谷歌浏览器，会提示用户用谷歌浏览器打开后再安装。「apk(需要自己封装)」：弹窗引导用户下载并安装APK包，需要商户提前上传封装好的APK。「pwa(优先)+apk(推荐使用)」：优先引导安装PWA，若当前浏览器不支持PWA，则降级引导安装APK。</td></tr>
   <tr><td class="indent2">↳↳ APK包地址</td><td><span class="tag tag-cond">条件必填</span></td><td>文本输入</td><td>弹框安装类型含APK时展示</td><td>APK文件的下载地址，用户点击安装时从该地址下载APK包。</td></tr>
   <tr><td class="indent2">↳↳ APK包名</td><td>—</td><td>自动填充</td><td>含APK时展示；选择马甲包后自动读取，手动修改APK包地址后自动清空</td><td>APK的唯一包标识符，系统用于判断用户设备是否已安装该APK。</td></tr>
@@ -354,7 +354,7 @@ td:first-child{white-space:nowrap;font-weight:500}
   <tr><td class="indent">↳ 赠送金额</td><td><span class="tag tag-cond">条件必填</span></td><td>数字输入</td><td>选赠送类型后展示</td><td>用户安装后实际到账的彩金金额，与弹窗中「显示赠送金额」相互独立，两者可以不同。</td></tr>
   <tr><td class="indent">↳ 打码倍数</td><td><span class="tag tag-cond">条件必填</span></td><td>数字输入</td><td>选赠送类型后展示</td><td>赠送彩金的流水要求倍数。例如赠送100元、打码倍数为10，则用户需累计投注1000元后，赠送金额方可提现。</td></tr>
 </table>
-<div class="tip"><span class="chg">用户完成PWA或APK安装后，强制安装弹窗不再弹出；顶部横幅保持可见，用户可点击「×」手动关闭（与《安装引导模块 PRD》口径一致）。</span></div>
+<div class="tip"><span class="chg">安装引导弹窗在用户触发下载或完成安装后均不会自动关闭：「0小时(强制安装)」下弹窗保留至页面刷新或跳转，「1~24小时」下需用户手动关闭。用户完成PWA或APK安装后，弹窗不再按弹框间隔时间重新弹出；顶部横幅保持可见，用户可点击「×」手动关闭（与《安装引导模块 PRD》口径一致）。</span></div>
 
 <p><strong>渠道设置 - 苹果 Tab</strong></p>
 <table>
