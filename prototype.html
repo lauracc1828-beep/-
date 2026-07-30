@@ -2334,7 +2334,11 @@ select.fs.ph{color:#bfbfbf}
         <div class="fi"><span class="fl req">下载按钮：</span><div class="fc"><select class="fs"><option>关闭</option><option>开启</option></select></div></div>
         <div class="fi"><span class="fl req">引导安装：</span><div class="fc"><select class="fs" id="ac-ios-g" onchange="gcond('ac-ios-gsub',this.value==='开启')"><option>关闭</option><option>开启</option></select></div></div>
         <div id="ac-ios-gsub" class="cond">
-          <div class="fi"><span class="fl req">弹框内容：</span><div class="fc"><select class="fs"><option>常规升级</option><option>赠送彩金升级</option></select></div></div>
+          <div class="fi"><span class="fl req">弹框内容：</span><div class="fc"><select class="fs" id="ac-ios-popup" onchange="gcond('ac-ios-bonus',this.value==='赠送彩金升级')"><option>常规升级</option><option>赠送彩金升级</option></select></div></div>
+          <div id="ac-ios-bonus" class="cond">
+            <div class="fi"><span class="fl req">显示赠送金额类型：</span><div class="fc"><select class="fs" id="ac-ios-bt" onchange="bonusAmt('ac-ios-ba',this.value)"><option>固定金额</option><option>随机金额</option></select></div></div>
+            <div class="fi"><span class="fl req">显示赠送金额：</span><div class="fc" id="ac-ios-ba"><input class="fin" placeholder="请输入金额"></div></div>
+          </div>
           <div class="fi"><span class="fl req">弹框时间点：</span><div class="fc"><select class="fs"><option>访问主页</option><option>用户充值</option><option>首次提现</option></select></div></div>
           <div class="fi"><span class="fl req">弹框间隔时间：</span><div class="fc"><select class="fs"><option>0小时(强制安装)</option><option>1小时</option><option>2小时</option><option>3小时</option><option>4小时</option><option>5小时</option><option>6小时</option><option>7小时</option><option>8小时</option><option>9小时</option><option>10小时</option><option>11小时</option><option>12小时</option><option>13小时</option><option>14小时</option><option>15小时</option><option>16小时</option><option>17小时</option><option>18小时</option><option>19小时</option><option>20小时</option><option>21小时</option><option>22小时</option><option>23小时</option><option>24小时</option></select></div></div>
           <div class="fi"><span class="fl req">弹框安装类型：</span><div class="fc"><select class="fs" id="ac-ios-it" onchange="gcond('ac-ios-store',this.value==='苹果商店')"><option>保存桌面</option><option>苹果商店</option></select></div></div>
