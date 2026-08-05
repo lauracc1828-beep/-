@@ -218,15 +218,22 @@ var collectLabels={daily:'每日10点',weekly:'每周三',monthly:'每月7,17,27
 function getMidnightTarget(){var d=new Date();d.setHours(24,0,0,0);return d.getTime();}
 function getMidnightLabel(){var d=new Date();d.setDate(d.getDate()+1);return d.toISOString().slice(0,10)+' 00:00:00';}
 
+// 切换控制台任一选项时重置页面状态：清除已领取标记、关闭弹窗，可再次点击领取
+function resetState(){
+  hasClaimed=false;
+  document.getElementById('ov-congrats').classList.remove('show');
+  document.getElementById('restrict-overlay').classList.remove('show');
+}
 function setLogin(v){
   isLoggedIn=v;
+  resetState();
   document.getElementById('btn-login').classList.toggle('active',v);
   document.getElementById('btn-nologin').classList.toggle('active',!v);
   updateBtn();
 }
 function setMemberDay(v){
   isMemberDay=v;
-  hasClaimed=false;
+  resetState();
   document.getElementById('btn-memberday').classList.toggle('active',v);
   document.getElementById('btn-nonmemberday').classList.toggle('active',!v);
   document.getElementById('cd-label').textContent = v ? '奖励领取截止' : '即将开启';
@@ -235,12 +242,15 @@ function setMemberDay(v){
 }
 function setResult(v){
   claimResult=v;
+  resetState();
+  updateBtn();
   document.getElementById('btn-success').classList.toggle('active',v==='success');
   document.getElementById('btn-zero').classList.toggle('active',v==='zero');
   document.getElementById('btn-restrict').classList.toggle('active',v==='restrict');
 }
 function setReset(v){
   resetMode=v;
+  resetState();
   ['daily','weekly','monthly'].forEach(function(k){document.getElementById('btn-'+k).classList.toggle('active',k===v);});
   document.getElementById('collect-time').textContent=collectLabels[v];
   if(!isMemberDay) document.getElementById('cd-date').textContent=dateLabels[v];
