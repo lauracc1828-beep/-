@@ -1205,9 +1205,15 @@ function setTab(t){
   $('panel-dl').classList.toggle('on',t==='dl');
   $('panel-gp').classList.toggle('on',t==='gp');
   $('panel-store').classList.toggle('on',t==='store');
+  refreshTab();
+}
+
+/* ── 同步刷新：切换控制台任一选项时重置当前页面状态，
+      关闭所有弹窗/进度并重新展示初始交互，无需手动刷新 ── */
+function refreshTab(){
   closeAllOverlays();
-  if(t==='dl'){showTopBar();showBS();}
-  else if(t==='gp'){showGP();}
+  if(S.tab==='dl'){showTopBar();showBS();}
+  else if(S.tab==='gp'){showGP();}
   else{showStore();}
   updateUrl();
 }
@@ -1267,6 +1273,7 @@ function updateGP(){
     :'下载应用到您的桌面，体验更流畅';
 }
 function resetGpBtn(){
+  clearInterval(_gpT); // 停止进行中的安装进度
   $('gpBtn').style.display='';
   $('gpProg').classList.remove('on');
   $('gpFill').style.width='0%';
@@ -1392,25 +1399,29 @@ function setDlDev(v){
   $('cs-dlType').style.display=v==='android'?'':'none';
   $('cs-dlPwa').style.display=v==='android'&&S.dlType!=='apk'?'':'none';
   $('cs-dlBr').style.display=v==='ios'?'':'none';
+  refreshTab();
 }
 function setDlType(v){
   S.dlType=v;
   ['pwa','apk','pwa_apk'].forEach(t=>$('dlType-'+t).classList.toggle('on',t===v));
   $('cs-dlPwa').style.display=S.dlDev==='android'&&v!=='apk'?'':'none';
+  refreshTab();
 }
 function setDlPwa(v){
   S.dlPwa=v;
   $('dlPwa-yes').classList.toggle('on',v);
   $('dlPwa-no').classList.toggle('on',!v);
+  refreshTab();
 }
 function setDlBr(v){
   S.dlBr=v;
   ['safari','other'].forEach(b=>$('dlBr-'+b).classList.toggle('on',b===v));
+  refreshTab();
 }
 function setGpContent(v){
   S.gpContent=v;
   ['normal','bonus'].forEach(c=>$('gpCt-'+c).classList.toggle('on',c===v));
-  updateGP(); // 即时刷新弹窗内容
+  refreshTab(); // 同步刷新弹窗内容
 }
 function setGpDev(v){
   S.gpDev=v;
@@ -1419,6 +1430,7 @@ function setGpDev(v){
   $('cs-gpPwa').style.display=v==='android'&&S.gpType!=='apk'?'':'none';
   $('cs-gpBr').style.display=v==='ios'?'':'none';
   applyGpDevUI();
+  refreshTab();
 }
 /* iOS 设备：隐藏整块安卓安装说明 */
 function applyGpDevUI(){
@@ -1427,23 +1439,25 @@ function applyGpDevUI(){
 function setGpBr(v){
   S.gpBr=v;
   ['safari','other'].forEach(b=>$('gpBr-'+b).classList.toggle('on',b===v));
+  refreshTab();
 }
 function setGpType(v){
   S.gpType=v;
   ['pwa','apk','pwa_apk'].forEach(t=>$('gpType-'+t).classList.toggle('on',t===v));
   $('cs-gpPwa').style.display=S.gpDev==='android'&&v!=='apk'?'':'none';
+  refreshTab();
 }
 function setGpPwa(v){
   S.gpPwa=v;
   $('gpPwa-yes').classList.toggle('on',v);
   $('dlPwa-no2').classList.toggle('on',!v);
+  refreshTab();
 }
 function setGpClose(v){
   S.gpCanClose=v;
   $('gpClose-force').classList.toggle('on',!v);
   $('gpClose-free').classList.toggle('on',v);
-  // GP已显示时实时同步遮罩可点击状态
-  if($('gp').classList.contains('on')) _maskOk=v;
+  refreshTab(); // 重新展示弹窗并同步遮罩可点击状态
 }
 
 /* ══════════ 仿应用商店页 ══════════ */
@@ -1565,7 +1579,7 @@ function setStPage(v){
   S.stPage=v;
   ['google','apple'].forEach(p=>$('stPage-'+p).classList.toggle('on',p===v));
   $('cs-stAuth').style.display=v==='google'?'':'none'; // 认证选择仅谷歌页
-  if(S.tab==='store')showStore();
+  refreshTab();
 }
 function setStDev(v){
   S.stDev=v;
@@ -1573,23 +1587,25 @@ function setStDev(v){
   $('cs-stType').style.display=v==='android'?'':'none';
   $('cs-stPwa').style.display=v==='android'&&S.stType!=='apk'?'':'none';
   $('cs-stBr').style.display=v==='ios'?'':'none';
-  if(S.tab==='store')showStore();
+  refreshTab();
 }
 function setStType(v){
   S.stType=v;
   ['pwa','apk','pwa_apk'].forEach(t=>$('stType-'+t).classList.toggle('on',t===v));
   $('cs-stPwa').style.display=S.stDev==='android'&&v!=='apk'?'':'none';
+  refreshTab();
 }
-function setStPwa(v){S.stPwa=v;$('stPwa-yes').classList.toggle('on',v);$('stPwa-no').classList.toggle('on',!v);}
+function setStPwa(v){S.stPwa=v;$('stPwa-yes').classList.toggle('on',v);$('stPwa-no').classList.toggle('on',!v);refreshTab();}
 function setStBr(v){
   S.stBr=v;
   ['safari','other'].forEach(b=>$('stBr-'+b).classList.toggle('on',b===v));
-  if(S.tab==='store')showStore();
+  refreshTab();
 }
 function setStAuth(v){
   S.stAuth=v;
   ['standard','native'].forEach(a=>$('stAuth-'+a).classList.toggle('on',a===v));
   $('gNativeBar').classList.toggle('on',v==='native');
+  refreshTab();
 }
 /* 同步控制面板按钮状态与子项显隐（供 download 入口/切 tab 时对齐）*/
 function syncStControls(){
