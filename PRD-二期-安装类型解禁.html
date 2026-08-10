@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>二期优化需求说明 · 安装类型解禁</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;background:#f5f6fa;color:#333;font-size:14px;line-height:1.7}
+.page{max-width:960px;margin:0 auto;padding:40px 20px}
+h1{font-size:26px;font-weight:700;color:#1a1a2e;margin-bottom:6px}
+.meta{color:#888;font-size:13px;margin-bottom:32px;display:flex;gap:20px;flex-wrap:wrap}
+.meta span{display:flex;align-items:center;gap:4px}
+h2{font-size:18px;font-weight:700;color:#0961BD;margin:40px 0 16px;padding-bottom:8px;border-bottom:2px solid #e8f0ff}
+h3{font-size:15px;font-weight:600;color:#262626;margin:28px 0 12px}
+h4{font-size:14px;font-weight:600;color:#444;margin:20px 0 10px}
+p{margin-bottom:12px;color:#444}
+.note{background:#fff7e6;border-left:3px solid #fa8c16;padding:10px 14px;border-radius:4px;margin:12px 0;font-size:13px;color:#7d4f00}
+.info{background:#e6f4ff;border-left:3px solid #0961BD;padding:10px 14px;border-radius:4px;margin:12px 0;font-size:13px;color:#003a8c}
+.tip{background:#f6ffed;border-left:3px solid #52c41a;padding:10px 14px;border-radius:4px;margin:12px 0;font-size:13px;color:#135200}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13px;background:#fff;border-radius:6px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+th{background:#f0f5ff;padding:10px 14px;text-align:left;font-weight:600;color:#0961BD;border-bottom:2px solid #d6e4ff;white-space:nowrap}
+td{padding:9px 14px;border-bottom:1px solid #f0f0f0;vertical-align:top}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#fafcff}
+td:first-child{white-space:nowrap;font-weight:500}
+.tag{display:inline-block;padding:1px 8px;border-radius:10px;font-size:11px;font-weight:500}
+.divider{height:1px;background:#f0f0f0;margin:32px 0}
+.toc{background:#fff;border-radius:8px;padding:20px 24px;margin-bottom:32px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.toc h3{margin:0 0 12px;font-size:14px;color:#888}
+.toc ol{padding-left:20px}
+.toc li{margin-bottom:6px}
+.toc a{color:#0961BD;text-decoration:none;font-size:13px}
+.toc a:hover{text-decoration:underline}
+.section-card{background:#fff;border-radius:8px;padding:28px 32px;margin-bottom:24px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.badge{display:inline-block;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:500;margin-left:8px}
+.badge-wip{background:#fff7e6;color:#d46b08;border:1px solid #ffd591}
+.badge-new{background:#e6f4ff;color:#0961BD;border:1px solid #91caff}
+.indent{padding-left:24px}
+.chg{background:#fff3cd;box-shadow:0 0 0 1px #ffe58f inset;border-radius:3px;padding:0 2px}
+.ref{color:#0961BD;font-weight:500}
+.flow-wrap{background:#f8f9ff;border-radius:8px;padding:20px;margin:16px 0;overflow-x:auto;text-align:center}
+</style>
+</head>
+<body>
+<div class="page">
+
+<h1>二期优化需求说明 · 安装类型解禁</h1>
+<div class="meta">
+  <span>📄 版本：v1.0</span>
+  <span>✏️ 作者：Laura</span>
+  <span>📅 更新日期：2026-08-10</span>
+</div>
+
+<div class="info">本文档说明二期优化的<strong>修改点</strong>：在「推广渠道管理」与「安装引导」两个关联菜单放开 APK / PWA+APK 安装类型，并新增「已安装唤起」前台逻辑。两菜单的引导安装 / 安装类型配置为<strong>同一套交互逻辑</strong>，故合并说明。各修改点的详细字段定义与交互，参照文中标注的具体《XX模块 PRD》章节；未提及部分均沿用一期。</div>
+
+<!-- TOC -->
+<div class="toc">
+  <h3>目录</h3>
+  <ol>
+    <li><a href="#bg">一、优化背景与范围</a></li>
+    <li><a href="#overview">二、修改点总览</a></li>
+    <li><a href="#detail">三、修改点详述</a></li>
+    <li><a href="#wake">四、新增逻辑：已安装唤起 + 兜底</a></li>
+    <li><a href="#dep">五、依赖与需同步确认</a></li>
+  </ol>
+</div>
+
+<!-- 一、背景 -->
+<div class="section-card" id="bg">
+<h2>一、优化背景与范围</h2>
+<p>一期开发中，为便于开发与测试，安装类型里的 <strong>APK</strong> 与 <strong>PWA+APK（pwa优先+apk推荐）</strong> 相关配置在两个菜单的后台均做了「置灰 / 隐藏」处理，前台对应的 APK 安装分支实际未生效——需求内容本就存在，只是暂时关闭入口。</p>
+<p><strong>本期范围</strong>：在「推广渠道管理」与「安装引导」两菜单放开 APK / PWA+APK 安装类型及其下属字段（APK 包地址 / APK 包名 / 选择 APK）的可用性；打通前台安卓 APK / PWA+APK 安装流程；并新增「已安装唤起 + 兜底」前台逻辑。</p>
+</div>
+
+<!-- 二、总览 -->
+<div class="section-card" id="overview">
+<h2>二、修改点总览</h2>
+<p>本期共 7 处修改点，涉及两个菜单。「参照位置」列为详细字段定义所在的原 PRD 具体位置，开发与测试据此逐项落地与验收。</p>
+<table>
+  <tr><th>#</th><th>修改点</th><th>涉及菜单</th><th>参照位置</th><th>二期要点</th></tr>
+  <tr><td>1</td><td>安装类型选项去置灰</td><td>推广渠道管理<br>安装引导</td><td>《推广渠道管理模块 PRD》3.5.3<br>《安装引导模块 PRD》2.3</td><td>APK / PWA+APK 全部可选</td></tr>
+  <tr><td>2</td><td>APK 子字段解禁<br>（包地址/包名/选择APK）</td><td>推广渠道管理<br>安装引导</td><td>《推广渠道管理模块 PRD》3.5.3<br>《安装引导模块 PRD》2.3</td><td>可填可选；马甲包下拉暂空 + 手动上传</td></tr>
+  <tr><td>3</td><td>批量替换弹窗</td><td>推广渠道管理</td><td>《推广渠道管理模块 PRD》3.5.1</td><td>更换安装包 / 更换安装引导中 APK 解禁</td></tr>
+  <tr><td>4</td><td>数据表格展示</td><td>推广渠道管理</td><td>《推广渠道管理模块 PRD》3.4</td><td>去置灰备注，正常展示 APK 信息</td></tr>
+  <tr><td>5</td><td>前台安卓安装流程</td><td>安装引导</td><td>《安装引导模块 PRD》3.4</td><td>APK / PWA+APK 分支实际生效</td></tr>
+  <tr><td>6</td><td>落地下载页</td><td>推广渠道管理</td><td>《推广渠道管理模块 PRD》3.5.3 落地页说明<br>《仿应用商店模块 PRD》第四章</td><td>弹框安装类型 + APK 包地址生效</td></tr>
+  <tr><td>7</td><td>已安装唤起（新增逻辑）</td><td>两菜单前台</td><td>《安装引导模块 PRD》3.2 / 3.3 / 3.4<br>《推广渠道管理模块 PRD》3.5.3</td><td>已装唤起并同步登录态，未装兜底下载</td></tr>
+</table>
+<div class="note">第 1–6 项均为<strong>解除一期限制</strong>，字段展示条件与联动关系一期已定义，二期不改，仅恢复其可用/生效状态；第 7 项为新增逻辑，见第四节。</div>
+</div>
+
+<!-- 三、详述 -->
+<div class="section-card" id="detail">
+<h2>三、修改点详述</h2>
+
+<h3>3.1 安装类型选项去置灰 <span class="badge badge-wip">解禁</span></h3>
+<p>两菜单的安装类型下拉，去除 APK 选项置灰，<code>pwa(快速安装)</code> / <code>apk(需要自己封装)</code> / <code>pwa(优先)+apk(推荐使用)</code> 三项全部可选。选项含义与联动沿用一期，详见《推广渠道管理模块 PRD》3.5.3「弹框安装类型」及《安装引导模块 PRD》2.3「安卓安装类型」。<span class="chg">默认值两菜单<strong>统一为 <code>pwa(快速安装)</code></strong>；《推广渠道管理模块 PRD》3.5.3 原默认 apk，本期改为 pwa 与《安装引导模块 PRD》2.3 对齐。</span></p>
+
+<h3>3.2 APK 子字段解禁 <span class="badge badge-wip">解禁</span></h3>
+<p>安装类型选中含 APK 的类型时，「APK 包地址 / APK 包名 / 选择 APK」解禁可用，联动逻辑沿用一期（选马甲包自动填地址+包名，手动改地址后包名自动清空）。详见《推广渠道管理模块 PRD》3.5.3 与《安装引导模块 PRD》2.3 对应字段行。</p>
+<div class="note"><strong>马甲包管理菜单暂未上线</strong>：「选择 APK-选择马甲包」弹窗内下拉选项<strong>暂时留空</strong>，待马甲包管理上线后再读取列表；当前通过「上传」手动上传 apk 文件（限 100MB）跑通配置流程。</div>
+
+<h3>3.3 批量替换弹窗 <span class="badge badge-wip">解禁</span></h3>
+<p>仅「推广渠道管理」菜单涉及。参照《推广渠道管理模块 PRD》3.5.1：「更换安装包」的渠道安装类型放开 <code>APK</code> / <code>PWA+APK</code> 及其 APK 子字段；「更换安装引导」的弹框安装类型（安卓）放开 <code>PWA</code> / <code>APK</code> / <code>PWA+APK</code> 及其 APK 子字段。「替换渠道」仅展示安装类型完全匹配的渠道，逻辑不变。</p>
+
+<h3>3.4 数据表格展示 <span class="badge badge-wip">解禁</span></h3>
+<p>仅「推广渠道管理」菜单涉及。参照《推广渠道管理模块 PRD》3.4：删除「APK 相关配置项置灰不可操作」备注，「安装类型」列正常展示 apk / pwa+apk，「安装方式」列正常展示 APK 包地址（展示样式沿用一期）。</p>
+
+<h3>3.5 前台安卓安装流程与落地下载页 <span class="badge badge-wip">解禁</span></h3>
+<p><strong>安装流程</strong>：参照《安装引导模块 PRD》3.4「引导安装流程（安卓分支）」，纯 APK / PWA+APK 的前台流程（含下载进度条、PWA 提示后取消降级 APK、复制链接弹框等）一期已定义，二期随 APK 上线后<strong>实际生效并联调验证</strong>，流程本身不改。</p>
+<p><strong>落地下载页</strong>：参照《推广渠道管理模块 PRD》3.5.3 落地页说明，仿谷歌页 / 防封下载页安卓侧「弹框安装类型 + APK 包地址生效，决定安装方式」；下载页遮罩与层级规则以《仿应用商店模块 PRD》第四章为准。</p>
+</div>
+
+<!-- 四、唤起 -->
+<div class="section-card" id="wake">
+<h2>四、新增逻辑：已安装唤起 + 兜底 <span class="badge badge-new">新增</span></h2>
+<p><strong>需求目标（产品视角）</strong>：当用户设备已安装该渠道对应的 PWA 或 APK 时，在 H5 再次点击安装应直接打开已安装的应用，而非重复下载，并让用户无缝保持登录状态进入应用。本逻辑同时适用于两菜单的前台安装入口。</p>
+
+<h4>触发场景</h4>
+<p>用户在 H5 端点击任意安装入口：顶部固定横幅、底部安装浮层、引导安装弹窗，以及仿谷歌页 / 防封下载页的下载按钮（参照《安装引导模块 PRD》3.2 / 3.3 / 3.4）。</p>
+
+<h4>核心逻辑</h4>
+<p>点击安装时，系统<strong>先尝试唤起</strong>该渠道对应的、已安装在设备上的应用：</p>
+<p class="indent">· <strong>唤起成功（已安装）</strong>：直接打开该应用，不再重复下载；进入后用户<strong>保持与 H5 一致的登录状态</strong>，无需重新登录，体验上等同于从 H5 无缝进入 App。</p>
+<p class="indent">· <strong>唤起失败（未安装）</strong>：<strong>兜底</strong>回落到原有安装流程，按安装类型正常触发 PWA 安装提示或 APK 下载。</p>
+<p class="indent">· <strong>组合类型 PWA+APK</strong>：按原有优先级（优先 PWA，不支持再 APK）判断后，唤起对应的已安装应用。</p>
+
+<div class="flow-wrap">
+<svg width="720" height="300" viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,'PingFang SC',sans-serif">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#0961BD"/>
+    </marker>
+  </defs>
+  <rect x="255" y="16" width="210" height="42" rx="6" fill="#e6f4ff" stroke="#91caff"/>
+  <text x="360" y="42" text-anchor="middle" font-size="13" fill="#003a8c" font-weight="600">用户在 H5 点击安装入口</text>
+  <line x1="360" y1="58" x2="360" y2="86" stroke="#0961BD" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <rect x="230" y="88" width="260" height="52" rx="6" fill="#f9f0ff" stroke="#d3adf7"/>
+  <text x="360" y="110" text-anchor="middle" font-size="13" fill="#531dab" font-weight="600">系统尝试唤起对应已安装应用</text>
+  <text x="360" y="128" text-anchor="middle" font-size="11" fill="#722ed1">PWA / APK；PWA+APK 按优先级判断</text>
+  <line x1="360" y1="140" x2="360" y2="158" stroke="#0961BD" stroke-width="1.5"/>
+  <line x1="170" y1="158" x2="550" y2="158" stroke="#0961BD" stroke-width="1.5"/>
+  <line x1="170" y1="158" x2="170" y2="180" stroke="#0961BD" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="550" y1="158" x2="550" y2="180" stroke="#0961BD" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="250" y="172" text-anchor="middle" font-size="11" fill="#389e0d" font-weight="600">唤起成功（已安装）</text>
+  <text x="470" y="172" text-anchor="middle" font-size="11" fill="#d46b08" font-weight="600">唤起失败（未安装）</text>
+  <rect x="55" y="182" width="230" height="52" rx="6" fill="#f6ffed" stroke="#b7eb8f"/>
+  <text x="170" y="204" text-anchor="middle" font-size="13" fill="#135200" font-weight="600">直接打开已安装应用</text>
+  <text x="170" y="222" text-anchor="middle" font-size="11" fill="#237804">保持登录态，无缝进入 App</text>
+  <rect x="435" y="182" width="230" height="52" rx="6" fill="#fff7e6" stroke="#ffd591"/>
+  <text x="550" y="204" text-anchor="middle" font-size="13" fill="#7d4f00" font-weight="600">兜底：回落原安装流程</text>
+  <text x="550" y="222" text-anchor="middle" font-size="11" fill="#ad6800">按安装类型正常触发下载/安装</text>
+  <text x="360" y="270" text-anchor="middle" font-size="11" fill="#888">弹窗弹出频率口径不变：仍不做持续性已安装判定，横幅/浮层/弹窗照常按时间点与间隔展示</text>
+  <text x="360" y="288" text-anchor="middle" font-size="11" fill="#888">本逻辑仅作用于「点击安装」这一动作的瞬间</text>
+</svg>
+</div>
+
+<div class="tip"><strong>与原口径的关系（务必写清，避免开发理解偏差）</strong>：本逻辑<strong>不改变</strong>弹窗弹出频率——系统仍不做持续性已安装判定，顶部横幅、底部浮层、引导弹窗仍按原弹框时间点与间隔照常展示（与《安装引导模块 PRD》2.3、3.4 及《推广渠道管理模块 PRD》3.5.3 一致）。即：<strong>不是</strong>「检测到已安装就不弹了」，<strong>而是</strong>「照常弹，用户点击后先尝试打开、打不开再走安装流程」。</div>
+</div>
+
+<!-- 五、依赖 -->
+<div class="section-card" id="dep">
+<h2>五、依赖与需同步确认</h2>
+<p><strong>两菜单口径同步</strong>：「推广渠道管理」与「安装引导」的引导安装 / 安装类型为同一套逻辑，本期修改需在两菜单保持一致。<span class="chg">安卓安装类型默认值<strong>统一为 <code>pwa(快速安装)</code></strong>：《安装引导模块 PRD》2.3 保持不变，《推广渠道管理模块 PRD》3.5.3 由 <code>apk(需要自己封装)</code> 改为 <code>pwa(快速安装)</code>。</span></p>
+<p><strong>马甲包管理（系统管理）</strong>：「选择 APK-选择马甲包」依赖该菜单。当前未上线，本期以「下拉留空 + 手动上传 apk」跑通；待其上线后回补自动读取列表的联动。</p>
+<p><strong>《仿应用商店模块 PRD》</strong>：落地下载页的 APK 安装交互、下载中状态、下载确认弹框、PWA / APK / 复制链接弹框的遮罩与层级规则，统一以《仿应用商店模块 PRD》第四章为准。</p>
+</div>
+
+<div class="divider"></div>
+<p style="text-align:center;color:#aaa;font-size:12px">二期优化需求说明 · 安装类型解禁 v1.0 · 2026-08-10 · 作者：Laura</p>
+
+</div>
+</body>
+</html>
