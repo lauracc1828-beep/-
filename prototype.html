@@ -1281,6 +1281,11 @@ select.fs.ph{color:#bfbfbf}
               <label class="radio-item"><input type="checkbox"> 苹果H5</label>
               <label class="radio-item"><input type="checkbox"> 安卓H5</label>
               <label class="radio-item"><input type="checkbox"> PWA</label>
+              <label class="radio-item"><input type="checkbox"> APK</label>
+              <label class="radio-item"><input type="checkbox"> 苹果包</label>
+              <label class="radio-item"><input type="checkbox"> 苹果书签</label>
+              <label class="radio-item"><input type="checkbox"> APK上架包</label>
+              <label class="radio-item"><input type="checkbox"> 电脑系统</label>
             </div>
           </div>
         </div>
@@ -1669,8 +1674,8 @@ select.fs.ph{color:#bfbfbf}
               <label class="radio-item"><input type="radio" name="va-participant" disabled> 新注册会员(活动时间内注册玩家)</label>
             </div>
             <div class="day-tabs">
-              <div class="day-tab active">第2日</div><div class="day-tab">第3日</div>
-              <div class="day-tab">第7日</div><div class="day-tab">第15日</div><div class="day-tab">第30日</div>
+              <div class="day-tab active" onclick="vaDaySwitch(this,0)">第2日</div><div class="day-tab" onclick="vaDaySwitch(this,1)">第3日</div>
+              <div class="day-tab" onclick="vaDaySwitch(this,2)">第7日</div><div class="day-tab" onclick="vaDaySwitch(this,3)">第15日</div><div class="day-tab" onclick="vaDaySwitch(this,4)">第30日</div>
             </div>
             <div class="aa-tier-scroll" id="va-tier-area">
               <!-- tiers rendered by JS -->
@@ -1683,6 +1688,11 @@ select.fs.ph{color:#bfbfbf}
             <label class="radio-item"><input type="checkbox" checked disabled> 苹果H5</label>
             <label class="radio-item"><input type="checkbox" checked disabled> 安卓H5</label>
             <label class="radio-item"><input type="checkbox" checked disabled> PWA</label>
+            <label class="radio-item"><input type="checkbox" checked disabled> APK</label>
+            <label class="radio-item"><input type="checkbox" checked disabled> 苹果包</label>
+            <label class="radio-item"><input type="checkbox" checked disabled> 苹果书签</label>
+            <label class="radio-item"><input type="checkbox" checked disabled> APK上架包</label>
+            <label class="radio-item"><input type="checkbox" checked disabled> 电脑系统</label>
           </div></div>
         </div>
         <div class="aa-fi" style="align-items:flex-start">
@@ -1994,6 +2004,11 @@ select.fs.ph{color:#bfbfbf}
             <label class="radio-item"><input type="checkbox" checked disabled> 苹果H5</label>
             <label class="radio-item"><input type="checkbox" checked disabled> 安卓H5</label>
             <label class="radio-item"><input type="checkbox" checked disabled> PWA</label>
+            <label class="radio-item"><input type="checkbox" checked disabled> APK</label>
+            <label class="radio-item"><input type="checkbox" checked disabled> 苹果包</label>
+            <label class="radio-item"><input type="checkbox" checked disabled> 苹果书签</label>
+            <label class="radio-item"><input type="checkbox" checked disabled> APK上架包</label>
+            <label class="radio-item"><input type="checkbox" checked disabled> 电脑系统</label>
           </div></div>
         </div>
         <div class="aa-fi" style="align-items:flex-start">
@@ -3176,10 +3191,18 @@ function openEditActivity(idx){
 function openViewActivity(idx){
   // Populate read-only tier area with sample data
   const vt = document.getElementById('va-tier-area');
-  if(vt && vt.innerHTML.trim() === '') {
-    vt.innerHTML = aaBuildViewTier();
+  if(vt && !vt.querySelector('.aa-tier-block')) {
+    vt.innerHTML = aaBuildViewTier(0);
   }
   openM('m-view-activity');
+}
+
+// ─── VIEW ACTIVITY DAY TAB SWITCH（查看窗口日期标签切换）───
+function vaDaySwitch(el, idx){
+  el.closest('.day-tabs').querySelectorAll('.day-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  const vt = document.getElementById('va-tier-area');
+  if(vt){ vt.innerHTML = aaBuildViewTier(idx); vt.scrollTop = 0; }
 }
 
 // ─── OPEN VIEW MEMBER ───
@@ -3215,11 +3238,31 @@ function openEditMember(){
   openM('m-add-activity');
 }
 
-function aaBuildViewTier(){
-  const tiers = [
+// 查看活动：各活动日的档位示例数据（模拟已保存配置）
+const VA_DAY_TIERS = [
+  [ // 第2日
     {charge:'30.00',dMin:'0.30',dMax:'88.00',conds:[{m:'0',a:'0.50',b:'0.51'},{m:'3',a:'0.50',b:'0.52'},{m:'5',a:'0.50',b:'0.53'}]},
     {charge:'70.00',dMin:'0.50',dMax:'177.00',conds:[{m:'0',a:'0.50',b:'1.00'},{m:'2',a:'0.75',b:'1.50'},{m:'5',a:'1.00',b:'2.00'}]}
-  ];
+  ],
+  [ // 第3日
+    {charge:'50.00',dMin:'0.50',dMax:'99.00',conds:[{m:'0',a:'0.60',b:'0.80'},{m:'3',a:'0.80',b:'1.00'}]},
+    {charge:'100.00',dMin:'1.00',dMax:'199.00',conds:[{m:'0',a:'1.00',b:'1.50'},{m:'3',a:'1.50',b:'2.50'}]}
+  ],
+  [ // 第7日
+    {charge:'100.00',dMin:'1.00',dMax:'288.00',conds:[{m:'0',a:'1.00',b:'2.00'},{m:'5',a:'2.00',b:'3.00'}]},
+    {charge:'200.00',dMin:'2.00',dMax:'388.00',conds:[{m:'0',a:'2.00',b:'3.00'},{m:'5',a:'3.00',b:'5.00'}]}
+  ],
+  [ // 第15日
+    {charge:'200.00',dMin:'2.00',dMax:'488.00',conds:[{m:'0',a:'2.00',b:'4.00'},{m:'5',a:'4.00',b:'6.00'}]},
+    {charge:'500.00',dMin:'5.00',dMax:'688.00',conds:[{m:'0',a:'5.00',b:'8.00'},{m:'5',a:'8.00',b:'12.00'}]}
+  ],
+  [ // 第30日
+    {charge:'500.00',dMin:'5.00',dMax:'888.00',conds:[{m:'0',a:'5.00',b:'10.00'},{m:'8',a:'10.00',b:'20.00'}]},
+    {charge:'1000.00',dMin:'10.00',dMax:'1888.00',conds:[{m:'0',a:'10.00',b:'20.00'},{m:'8',a:'20.00',b:'40.00'}]}
+  ]
+];
+function aaBuildViewTier(dayIdx){
+  const tiers = VA_DAY_TIERS[dayIdx||0] || VA_DAY_TIERS[0];
   let html2 = '';
   tiers.forEach(function(t,i){
     html2 += `<div class="aa-tier-block"><div class="aa-tier-hd"><span>第${i+1}档位</span></div><div class="aa-tier-body">`;
