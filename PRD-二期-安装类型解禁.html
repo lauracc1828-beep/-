@@ -78,16 +78,16 @@ td:first-child{white-space:nowrap;font-weight:500}
 <h2>二、修改点总览</h2>
 <p>本期共 7 处修改点，涉及两个菜单。「参照位置」列为详细字段定义所在的原 PRD 具体位置，开发与测试据此逐项落地与验收。</p>
 <table>
-  <tr><th>#</th><th>修改点</th><th>涉及菜单</th><th>参照位置</th><th>二期要点</th></tr>
-  <tr><td>1</td><td>安装类型选项去置灰</td><td>推广渠道管理<br>安装引导</td><td>《推广渠道管理模块 PRD》3.5.3<br>《安装引导模块 PRD》2.3</td><td>APK / PWA+APK 全部可选</td></tr>
-  <tr><td>2</td><td>APK 子字段解禁<br>（包地址/包名/选择APK）</td><td>推广渠道管理<br>安装引导</td><td>《推广渠道管理模块 PRD》3.5.3<br>《安装引导模块 PRD》2.3</td><td>可填可选；马甲包下拉暂空 + 手动上传</td></tr>
-  <tr><td>3</td><td>批量替换弹窗</td><td>推广渠道管理</td><td>《推广渠道管理模块 PRD》3.5.1</td><td>更换安装包 / 更换安装引导中 APK 解禁</td></tr>
-  <tr><td>4</td><td>数据表格展示</td><td>推广渠道管理</td><td>《推广渠道管理模块 PRD》3.4</td><td>去置灰备注，正常展示 APK 信息</td></tr>
-  <tr><td>5</td><td>前台安卓安装流程</td><td>安装引导</td><td>《安装引导模块 PRD》3.4</td><td>APK / PWA+APK 分支实际生效</td></tr>
-  <tr><td>6</td><td>落地下载页</td><td>推广渠道管理</td><td>《推广渠道管理模块 PRD》3.5.3 落地页说明<br>《仿应用商店模块 PRD》第四章</td><td>弹框安装类型 + APK 包地址生效</td></tr>
-  <tr><td>7</td><td>已安装唤起（新增逻辑）</td><td>两菜单前台</td><td>《安装引导模块 PRD》3.2 / 3.3 / 3.4<br>《推广渠道管理模块 PRD》3.5.3</td><td>已装唤起并同步登录态，未装兜底下载</td></tr>
+  <tr><th>修改点</th><th>涉及菜单</th><th>参照位置</th><th>二期要点</th></tr>
+  <tr><td>安装类型选项去置灰</td><td>推广渠道管理<br>安装引导</td><td>《推广渠道管理模块 PRD》3.5.3<br>《安装引导模块 PRD》2.3</td><td>APK / PWA+APK 全部可选</td></tr>
+  <tr><td>APK 子字段解禁<br>（包地址/包名/选择APK）</td><td>推广渠道管理<br>安装引导</td><td>《推广渠道管理模块 PRD》3.5.3<br>《安装引导模块 PRD》2.3</td><td>可填可选；马甲包下拉暂空 + 手动上传</td></tr>
+  <tr><td>批量替换弹窗</td><td>推广渠道管理</td><td>《推广渠道管理模块 PRD》3.5.1</td><td>更换安装包 / 更换安装引导中 APK 解禁</td></tr>
+  <tr><td>数据表格展示</td><td>推广渠道管理</td><td>《推广渠道管理模块 PRD》3.4</td><td>去置灰备注，正常展示 APK 信息</td></tr>
+  <tr><td>前台安卓安装流程</td><td>安装引导</td><td>《安装引导模块 PRD》3.4</td><td>APK / PWA+APK 分支实际生效</td></tr>
+  <tr><td>落地下载页</td><td>推广渠道管理</td><td>《推广渠道管理模块 PRD》3.5.3 落地页说明<br>《仿应用商店模块 PRD》第四章</td><td>弹框安装类型 + APK 包地址生效</td></tr>
+  <tr><td>已安装唤起（新增逻辑）</td><td>两菜单前台</td><td>《安装引导模块 PRD》3.2 / 3.3 / 3.4<br>《推广渠道管理模块 PRD》3.5.3<br>《仿应用商店模块 PRD》4.2 / 4.3</td><td>已装唤起（H5 同步登录态；下载页仅唤起、不涉登录态），未装兜底下载</td></tr>
 </table>
-<div class="note">第 1–6 项均为<strong>解除一期限制</strong>，字段展示条件与联动关系一期已定义，二期不改，仅恢复其可用/生效状态；第 7 项为新增逻辑，见第四节。</div>
+<div class="note">除「已安装唤起」为<strong>新增逻辑</strong>（见第四节）外，其余各项均为<strong>解除一期限制</strong>：字段展示条件与联动关系一期已定义，二期不改，仅恢复其可用 / 生效状态。</div>
 </div>
 
 <!-- 三、详述 -->
@@ -95,7 +95,7 @@ td:first-child{white-space:nowrap;font-weight:500}
 <h2>三、修改点详述</h2>
 
 <h3>3.1 安装类型选项去置灰 <span class="badge badge-wip">解禁</span></h3>
-<p>两菜单的安装类型下拉，去除 APK 选项置灰，<code>pwa(快速安装)</code> / <code>apk(需要自己封装)</code> / <code>pwa(优先)+apk(推荐使用)</code> 三项全部可选。选项含义与联动沿用一期，详见《推广渠道管理模块 PRD》3.5.3「弹框安装类型」及《安装引导模块 PRD》2.3「安卓安装类型」。<span class="chg">默认值两菜单<strong>统一为 <code>pwa(快速安装)</code></strong>；《推广渠道管理模块 PRD》3.5.3 原默认 apk，本期改为 pwa 与《安装引导模块 PRD》2.3 对齐。</span></p>
+<p>两菜单的安装类型下拉，去除 APK 选项置灰，<code>pwa(快速安装)</code> / <code>apk(需要自己封装)</code> / <code>pwa(优先)+apk(推荐使用)</code> 三项全部可选。选项含义与联动沿用一期，详见《推广渠道管理模块 PRD》3.5.3「弹框安装类型」及《安装引导模块 PRD》2.3「安卓安装类型」。<span class="chg">默认值两菜单<strong>统一为 <code>pwa(快速安装)</code></strong>。</span></p>
 
 <h3>3.2 APK 子字段解禁 <span class="badge badge-wip">解禁</span></h3>
 <p>安装类型选中含 APK 的类型时，「APK 包地址 / APK 包名 / 选择 APK」解禁可用，联动逻辑沿用一期（选马甲包自动填地址+包名，手动改地址后包名自动清空）。详见《推广渠道管理模块 PRD》3.5.3 与《安装引导模块 PRD》2.3 对应字段行。</p>
@@ -122,9 +122,10 @@ td:first-child{white-space:nowrap;font-weight:500}
 
 <h4>核心逻辑</h4>
 <p>点击安装时，系统<strong>先尝试唤起</strong>该渠道对应的、已安装在设备上的应用：</p>
-<p class="indent">· <strong>唤起成功（已安装）</strong>：直接打开该应用，不再重复下载；进入后用户<strong>保持与 H5 一致的登录状态</strong>，无需重新登录，体验上等同于从 H5 无缝进入 App。</p>
+<p class="indent">· <strong>唤起成功（已安装）</strong>：直接打开该应用，不再重复下载。<strong>H5 页</strong>进入后用户保持与 H5 一致的登录状态，无需重新登录，无缝进入 App；<strong>下载页（仿谷歌 / 防封下载页）仅做唤起打开已装应用，不涉及登录态</strong>（下载页本身无登录）。</p>
 <p class="indent">· <strong>唤起失败（未安装）</strong>：<strong>兜底</strong>回落到原有安装流程，按安装类型正常触发 PWA 安装提示或 APK 下载。</p>
 <p class="indent">· <strong>组合类型 PWA+APK</strong>：按原有优先级（优先 PWA，不支持再 APK）判断后，唤起对应的已安装应用。</p>
+<div class="note"><strong>下载页点击安装流程：</strong>点击 CTA → 加载状态 → 就绪状态 → 点击「安装」→ 尝试唤起已装应用（成功则直接打开，失败再进入原下载安装流程）；详见《仿应用商店模块 PRD》4.2 / 4.3。</div>
 
 <div class="flow-wrap">
 <svg width="720" height="300" viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,'PingFang SC',sans-serif">
@@ -162,7 +163,7 @@ td:first-child{white-space:nowrap;font-weight:500}
 <!-- 五、依赖 -->
 <div class="section-card" id="dep">
 <h2>五、依赖与需同步确认</h2>
-<p><strong>两菜单口径同步</strong>：「推广渠道管理」与「安装引导」的引导安装 / 安装类型为同一套逻辑，本期修改需在两菜单保持一致。<span class="chg">安卓安装类型默认值<strong>统一为 <code>pwa(快速安装)</code></strong>：《安装引导模块 PRD》2.3 保持不变，《推广渠道管理模块 PRD》3.5.3 由 <code>apk(需要自己封装)</code> 改为 <code>pwa(快速安装)</code>。</span></p>
+<p><strong>两菜单口径同步</strong>：「推广渠道管理」与「安装引导」的引导安装 / 安装类型为同一套逻辑，本期修改需在两菜单保持一致。<span class="chg">安卓安装类型默认值<strong>统一为 <code>pwa(快速安装)</code></strong>。</span></p>
 <p><strong>马甲包管理（系统管理）</strong>：「选择 APK-选择马甲包」依赖该菜单。当前未上线，本期以「下拉留空 + 手动上传 apk」跑通；待其上线后回补自动读取列表的联动。</p>
 <p><strong>《仿应用商店模块 PRD》</strong>：落地下载页的 APK 安装交互、下载中状态、下载确认弹框、PWA / APK / 复制链接弹框的遮罩与层级规则，统一以《仿应用商店模块 PRD》第四章为准。</p>
 </div>
