@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>活动公共配置项 必填校验与错误提示说明</title>
+<style>
+  :root{--ink:#1f2430;--sub:#5b6472;--line:#e6e8ee;--head:#3a1878;--red:#d4380d;--amber:#6a4a00;--bg:#f6f7fb;}
+  *{box-sizing:border-box}
+  body{margin:0;padding:32px 16px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',Arial,sans-serif;font-size:14px;line-height:1.7;}
+  .wrap{max-width:1040px;margin:0 auto;background:#fff;border-radius:12px;box-shadow:0 2px 16px rgba(0,0,0,.06);padding:36px 40px;}
+  h1{font-size:22px;margin:0 0 6px;color:var(--head);}
+  .meta{color:var(--sub);font-size:13px;margin-bottom:22px;}
+  .meta span{margin-right:20px;}
+  h2{font-size:16px;margin:28px 0 10px;padding-left:10px;border-left:4px solid var(--head);color:var(--head);}
+  p{margin:8px 0;}
+  .lead{color:var(--sub);}
+  ul{margin:8px 0;padding-left:22px;}
+  li{margin:3px 0;}
+  code,.k{background:#f0eefb;color:#4a2a9e;border-radius:4px;padding:1px 6px;font-size:13px;}
+  table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13px;}
+  th,td{border:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top;}
+  th{background:#f3f1fb;color:var(--head);font-weight:600;white-space:nowrap;}
+  tbody tr:nth-child(even){background:#fafafb;}
+  .req{color:var(--red);font-weight:600;}
+  .auto{color:#389e0d;font-weight:600;}
+  .msg{color:var(--red);}
+  .dash{color:#9aa1ac;}
+  .notice{background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;padding:12px 14px;color:var(--amber);font-size:13px;margin:14px 0;}
+  .tag{display:inline-block;background:#eef6ff;color:#0958d9;border:1px solid #bcdcff;border-radius:4px;padding:1px 8px;font-size:12px;margin-right:6px;}
+  .foot{margin-top:26px;padding-top:14px;border-top:1px dashed var(--line);color:var(--sub);font-size:12px;}
+  @media(max-width:640px){.wrap{padding:22px 16px}th,td{padding:7px 8px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>活动公共配置项 · 必填校验与错误提示说明</h1>
+  <div class="meta">
+    <span>版本：v1.0</span>
+    <span>更新日期：2026-08-20</span>
+    <span>作者：Laura</span>
+    <span>适用活动：神秘彩金 · 会员答谢</span>
+  </div>
+
+  <p class="lead">本说明用于后台「新增 / 编辑活动」弹窗中<strong>活动公共配置项</strong>的必填 / 必选校验与错误提示。神秘彩金与会员答谢两类活动共用同一套校验口径（会员答谢固定为手动领取，故其申领终端恒为必选）。</p>
+
+  <h2>一、触发与提示机制</h2>
+  <ul>
+    <li>校验触发时机：点击弹窗底部「保存」按钮时。</li>
+    <li>校验未通过：在对应字段下方以红色文案提示，并<strong>阻断保存</strong>，同时定位到首个未通过项。</li>
+    <li>多项同时未通过：按下表自上而下顺序，仅提示并定位<strong>第一条</strong>未通过项。</li>
+    <li>默认兜底项（展示时间、参与层级、显示排序、背景样式、LOGO样式）：保存时自动补全默认值，<strong>不阻断保存</strong>。</li>
+  </ul>
+
+  <h2>二、申领终端（最新完整版本）</h2>
+  <p>可选终端共 <strong>8 项</strong>：<span class="k">苹果H5</span> <span class="k">安卓H5</span> <span class="k">PWA</span> <span class="k">APK</span> <span class="k">苹果包</span> <span class="k">苹果书签</span> <span class="k">APK上架包</span> <span class="k">电脑系统</span></p>
+  <ul>
+    <li>领取方式 = <strong>手动领取</strong>：可选且<span class="req">为必选</span>，至少勾选一项。</li>
+    <li>领取方式 = <strong>自动领取</strong>：该项<strong>置灰且全部不勾选</strong>，不参与校验。</li>
+    <li class="dash">备注：旧描述「未勾选时不限制终端类型」已废弃，以本规则为准。</li>
+  </ul>
+
+  <h2>三、公共配置项校验一览</h2>
+  <table>
+    <thead>
+      <tr><th>配置项</th><th>生效条件</th><th>必填 / 必选</th><th>校验与默认逻辑</th><th>错误提示文案</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>活动名称</td><td>活动名称 = 自定义</td><td class="req">必填</td><td>自定义时未输入名称则阻断保存（系统默认时自动填入名称，无需校验）</td><td class="msg">请输入活动名称</td></tr>
+      <tr><td>活动时间</td><td>活动时间 = 自定义</td><td class="req">必填</td><td>开始、结束时间任一未选择则阻断保存</td><td class="msg">请选择活动的开始和结束时间</td></tr>
+      <tr><td>展示时间</td><td>活动时间 = 自定义</td><td class="auto">非必填</td><td>未选择时，保存时默认填入与活动开始 / 结束时间一致</td><td class="dash">—（自动兜底）</td></tr>
+      <tr><td>申领终端</td><td>领取方式 = 手动领取</td><td class="req">必选（≥1 项）</td><td>手动领取时至少勾选一项；自动领取时置灰全不选，不参与校验</td><td class="msg">请选择申领终端</td></tr>
+      <tr><td>申领限制（整体）</td><td>领取方式 = 手动领取</td><td class="auto">非必选</td><td>手动领取时可选；自动领取时置灰且全部不勾选</td><td class="dash">—</td></tr>
+      <tr><td>申领限制 · 最近「M」天内充值次数 ≥「N」次</td><td>勾选该条件</td><td class="req">M、N 均必填</td><td>勾选后，M 为空先报错；M 有值而 N 为空再报错</td><td class="msg">M 为空：申领限制充值天数不能为空<br>N 为空：申领限制充值次数不能为空</td></tr>
+      <tr><td>申领限制 · 最近「P」天内充值金额 ≥「Q」</td><td>勾选该条件</td><td class="req">P、Q 均必填</td><td>勾选后，P 为空先报错；P 有值而 Q 为空再报错</td><td class="msg">P 为空：申领限制充值天数不能为空<br>Q 为空：申领限制充值金额不能为空</td></tr>
+      <tr><td>稽核限定平台</td><td>稽核限定平台 = 仅限以下平台</td><td class="req">必选（≥1 项）</td><td>选择"仅限以下平台"时，未勾选任何平台或游戏则阻断保存</td><td class="msg">至少选择一个平台或游戏</td></tr>
+      <tr><td>参与层级</td><td>始终</td><td class="req">必选</td><td>未勾选任何层级时，保存时<strong>默认勾选"全部层级"</strong>，不阻断保存</td><td class="dash">—（自动兜底）</td></tr>
+      <tr><td>规则说明</td><td>规则说明 = 自定义</td><td class="req">必填</td><td>自定义时规则内容为空则阻断保存</td><td class="msg">请输入自定义活动规则</td></tr>
+      <tr><td>显示排序</td><td>始终</td><td class="req">必填</td><td>默认填入 1；如手动清空未输入，保存时<strong>自动填入 1</strong>，不阻断保存</td><td class="dash">—（自动兜底）</td></tr>
+      <tr><td>背景样式</td><td>背景样式 = 自定义</td><td class="auto">非必填（上传图片）</td><td>自定义但未上传图片时，保存时<strong>自动切换为系统默认样式并勾选默认背景图</strong></td><td class="dash">—（自动兜底）</td></tr>
+      <tr><td>LOGO样式</td><td>LOGO样式 = 自定义</td><td class="auto">非必填（上传图片）</td><td>自定义但未上传图片时，保存时<strong>自动切换为系统默认样式并勾选默认 LOGO</strong></td><td class="dash">—（自动兜底）</td></tr>
+    </tbody>
+  </table>
+
+  <div class="notice">📌 必填 / 必选项校验失败会阻断保存并定位到首个未通过项；设有默认兜底的配置项（展示时间、参与层级、显示排序、背景样式、LOGO样式）保存时自动补全默认值，不阻断保存。</div>
+
+  <div class="foot">本文档为独立校验说明，内容与《神秘彩金活动 PRD》3.3、《会员答谢活动 PRD》4.5 章节保持一致。前台「请通过…申领」提示卡片及中葡对照文案本轮未同步（仍为 7 项，缺电脑系统葡语文案），后续更新时须使用参考图葡语原文。</div>
+</div>
+</body>
+</html>
