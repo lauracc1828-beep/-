@@ -3181,6 +3181,29 @@ function openAddActivity(){
   if(platAll){ platAll.checked=true; aaPlatToggle('all'); }
   // reset sort
   var sortInp=document.getElementById('aa-sort-inp'); if(sortInp) sortInp.value='1';
+  // ── 重置其余配置项为初始默认值（避免残留上次保存/编辑的值）──
+  // 活动分类
+  var catEl=document.getElementById('aa-category'); if(catEl) catEl.selectedIndex=0;
+  // 活动时间日期显示回默认占位
+  var ds0=document.getElementById('aa-date-start'); if(ds0){ ds0.textContent='开始日期'; ds0.style.color='rgba(0,0,0,.45)'; }
+  var de0=document.getElementById('aa-date-end'); if(de0){ de0.textContent='结束日期'; de0.style.color='rgba(0,0,0,.45)'; }
+  // 稽核倍数
+  var mult0=document.getElementById('aa-audit-mult'); if(mult0) mult0.value='1';
+  // 奖励作废保留天数
+  var expDays0=document.getElementById('aa-expire-days-inp'); if(expDays0) expDays0.value='0';
+  // 申领限制：全部取消勾选并清空输入
+  var restSec0=document.getElementById('aa-restrict-sec');
+  if(restSec0){ restSec0.querySelectorAll('input[type=checkbox]').forEach(function(cb){cb.checked=false;}); restSec0.querySelectorAll('input.aa-s-inp').forEach(function(t){t.value='';}); }
+  // 稽核限定平台：清空平台/游戏勾选
+  var platList0=document.getElementById('aa-plat-list');
+  if(platList0){ platList0.querySelectorAll('input[type=checkbox]').forEach(function(cb){cb.checked=false;}); }
+  // 参与层级：清空全部勾选
+  var allTier0=document.getElementById('aa-all-tier');
+  if(allTier0){ var tierFc=allTier0.closest('.aa-fc'); if(tierFc) tierFc.querySelectorAll('input[type=checkbox]').forEach(function(cb){cb.checked=false;}); }
+  // 规则说明自定义内容
+  var ruleCustom0=document.getElementById('aa-rule-custom'); if(ruleCustom0) ruleCustom0.value='';
+  // 会员答谢最高奖励
+  var maxR0=document.getElementById('ma-max-reward'); if(maxR0) maxR0.value='1.00';
   aaResetErrors();
   aaSetEditMode(false);
   openM('m-add-activity');
