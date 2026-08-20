@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DD.GG Admin - 系统账号管理</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;background:#f0f2f5;color:#333;font-size:13px;display:flex;height:100vh;overflow:hidden}
+
+/* ── SIDEBAR ── */
+.sidebar{width:210px;background:#0b1f33;display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto}
+.sidebar-logo{padding:16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.08)}
+.logo-box{width:30px;height:30px;background:#e8a33d;border-radius:6px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:12px;flex-shrink:0}
+.logo-text{color:#fff;font-size:15px;font-weight:700;letter-spacing:.5px}
+.menu-item{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;cursor:pointer;color:rgba(255,255,255,.7);font-size:13px;transition:all .2s;user-select:none}
+.menu-item:hover{color:#fff;background:rgba(255,255,255,.06)}
+.menu-item.open{color:#fff}
+.menu-item-left{display:flex;align-items:center;gap:9px}
+.menu-icon{font-size:14px;width:16px;text-align:center}
+.arrow{font-size:10px;color:rgba(255,255,255,.35);transition:transform .2s}
+.menu-item.open .arrow{transform:rotate(90deg)}
+.submenu{background:#071626}
+.submenu-item{padding:10px 16px 10px 41px;cursor:pointer;color:rgba(255,255,255,.6);font-size:13px;transition:all .2s}
+.submenu-item:hover{color:#fff;background:rgba(255,255,255,.04)}
+.submenu-item.active{color:#fff;background:#2f80ed;border-left:3px solid #4d94ff}
+.submenu-item.disabled{color:rgba(255,255,255,.28);cursor:not-allowed}
+.submenu-item.disabled:hover{background:none;color:rgba(255,255,255,.28)}
+
+/* ── MAIN ── */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+.topbar{height:48px;background:#fff;border-bottom:1px solid #e8e8e8;display:flex;align-items:center;justify-content:space-between;padding:0 18px;flex-shrink:0}
+.breadcrumb{font-size:13px;color:#8c8c8c;display:flex;align-items:center;gap:6px}
+.breadcrumb .cur{color:#262626;font-weight:500}
+.topbar-right{display:flex;align-items:center;gap:14px;font-size:15px;color:#8c8c8c}
+.tab-bar{display:flex;gap:2px;background:#fff;padding:8px 16px 0 16px;border-bottom:1px solid #e8e8e8}
+.tab{padding:7px 16px;font-size:13px;color:#595959;cursor:pointer;background:#fafafa;border:1px solid #e8e8e8;border-bottom:none;border-radius:4px 4px 0 0;display:flex;align-items:center;gap:8px}
+.tab.active{color:#2f80ed;background:#fff;font-weight:500;position:relative;top:1px}
+.tab .x{color:#bbb;font-size:13px}
+.content{flex:1;overflow-y:auto;padding:20px}
+
+/* ── FILTER ── */
+.filter-area{background:#fff;padding:18px 20px;border-radius:6px;margin-bottom:14px;border:1px solid #f0f0f0}
+.filter-row{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.filter-item{display:flex;align-items:center;gap:8px;white-space:nowrap}
+.f-select,.f-input{height:34px;border:1px solid #d9d9d9;border-radius:4px;padding:0 12px;font-size:13px;color:#333;background:#fff;min-width:150px;outline:none}
+.f-select{cursor:pointer}
+.f-select:focus,.f-input:focus{border-color:#2f80ed;box-shadow:0 0 0 2px rgba(31,95,214,.1)}
+
+/* ── BUTTONS ── */
+.btn{height:34px;padding:0 18px;border-radius:4px;font-size:13px;cursor:pointer;border:1px solid transparent;transition:all .15s;display:inline-flex;align-items:center;gap:4px;white-space:nowrap;font-family:inherit}
+.btn-blue{background:#2f80ed;color:#fff;border-color:#2f80ed}
+.btn-blue:hover{background:#5296ff}
+.btn-white{background:#fff;color:#595959;border-color:#d9d9d9}
+.btn-white:hover{border-color:#2f80ed;color:#2f80ed}
+.btn-danger{background:#f5484a;color:#fff;border-color:#f5484a}
+.btn-danger:hover{background:#ff6b6d;border-color:#ff6b6d}
+.action-bar{display:flex;justify-content:flex-end;gap:10px;margin-bottom:14px;align-items:center}
+.icon-btn{width:34px;height:34px;border:1px solid #d9d9d9;border-radius:4px;background:#fff;display:inline-flex;align-items:center;justify-content:center;color:#8c8c8c;cursor:pointer}
+
+/* ── TABLE ── */
+.table-wrap{background:#fff;border-radius:6px;border:1px solid #f0f0f0;overflow:hidden}
+.table-scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{background:#fafafa;padding:14px 20px;text-align:center;font-weight:500;color:#595959;border-bottom:1px solid #f0f0f0;white-space:nowrap}
+td{padding:14px 20px;border-bottom:1px solid #f5f5f5;vertical-align:middle;color:#333;text-align:center}
+th:first-child,td:first-child{padding-left:28px}
+th:last-child,td:last-child{padding-right:28px}
+.filter-area{padding:20px 26px}
+tr:hover td{background:#fafcff}
+
+.st-tag{display:inline-block;padding:2px 10px;border-radius:3px;font-size:12px;font-weight:500}
+.st-tag.on{background:#f6ffed;color:#389e0d;border:1px solid #b7eb8f}
+.st-tag.off{background:#fff1f0;color:#cf1322;border:1px solid #ffa39e}
+.tgl{display:inline-block;width:50px;height:24px;border-radius:24px;background:#2f80ed;position:relative;cursor:pointer;vertical-align:middle;transition:background .2s;font-size:12px;color:#fff;line-height:24px;box-sizing:border-box;text-align:left;padding-left:9px}
+.tgl.off{background:#bfbfbf;text-align:right;padding-left:0;padding-right:9px}
+.tgl .k{position:absolute;top:2px;left:28px;width:20px;height:20px;border-radius:50%;background:#fff;transition:left .2s}
+.tgl.off .k{left:2px}
+.op-link{color:#2f80ed;cursor:pointer;font-size:13px;margin:0 8px;user-select:none}
+.op-link:hover{text-decoration:underline}
+.op-link.danger{color:#f5222d}
+.op-link.disabled{color:#bfbfbf;cursor:not-allowed}
+.op-link.disabled:hover{text-decoration:none}
+.op-btn{display:inline-block;height:32px;line-height:30px;padding:0 18px;border-radius:5px;font-size:13px;cursor:pointer;border:1px solid;margin:0 5px;letter-spacing:1px;transition:all .15s}
+.op-btn.edit{background:#2f80ed;color:#fff;border-color:#2f80ed}
+.op-btn.edit:hover{background:#5296ff;border-color:#5296ff}
+.op-btn.del{background:#f5484a;color:#fff;border-color:#f5484a}
+.op-btn.del:hover{background:#ff6b6d;border-color:#ff6b6d}
+.op-btn.disabled{background:#f5f5f5;color:#bfbfbf;border-color:#e8e8e8;cursor:not-allowed}
+
+/* ── MODAL ── */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:1000;align-items:center;justify-content:center}
+.overlay.show{display:flex}
+.modal{background:#fff;border-radius:8px;box-shadow:0 8px 40px rgba(0,0,0,.18);width:430px}
+.mh{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;border-bottom:1px solid #f0f0f0}
+.mt{font-size:15px;font-weight:600;color:#262626}
+.mc{cursor:pointer;color:#8c8c8c;font-size:20px;line-height:1}
+.confirm-body{padding:28px 28px;font-size:14px;color:#333;text-align:center;line-height:1.7}
+.confirm-icon{color:#faad14;font-size:20px;margin-right:8px;vertical-align:-2px}
+.confirm-hint{display:block;margin-top:10px;font-size:12px;color:#8c8c8c}
+.mf{padding:16px 24px;border-top:1px solid #f0f0f0;display:flex;justify-content:center;gap:12px}
+
+/* ── TOAST ── */
+.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#fff;box-shadow:0 4px 20px rgba(0,0,0,.15);border-radius:6px;padding:12px 20px;font-size:14px;z-index:2000;display:none;align-items:center;gap:8px}
+.toast.show{display:flex}
+.toast .ok{color:#52c41a;font-weight:700}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="sidebar-logo"><div class="logo-box">DD</div><div class="logo-text">DD.GG Admin</div></div>
+  <div class="menu-item"><div class="menu-item-left"><span class="menu-icon">🏠</span>站点厅主管理</div><span class="arrow">›</span></div>
+  <div class="menu-item"><div class="menu-item-left"><span class="menu-icon">👥</span>站点会员管理</div><span class="arrow">›</span></div>
+  <div class="menu-item"><div class="menu-item-left"><span class="menu-icon">✅</span>系统功能管理</div><span class="arrow">›</span></div>
+  <div class="menu-item"><div class="menu-item-left"><span class="menu-icon">☰</span>站点功能管理</div><span class="arrow">›</span></div>
+  <div class="menu-item"><div class="menu-item-left"><span class="menu-icon">🏟️</span>站点场馆管理</div><span class="arrow">›</span></div>
+  <div class="menu-item"><div class="menu-item-left"><span class="menu-icon">💠</span>站点金流管理</div><span class="arrow">›</span></div>
+  <div class="menu-item open"><div class="menu-item-left"><span class="menu-icon">⚙️</span>总控系统管理</div><span class="arrow">›</span></div>
+  <div class="submenu">
+    <div class="submenu-item disabled">系统角色管理</div>
+    <div class="submenu-item active">系统账号管理</div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div class="breadcrumb"><span>总控系统管理</span> / <span class="cur">系统账号管理</span></div>
+    <div class="topbar-right"><span>🔍</span><span>🔔</span><span>🌐</span><span>👤</span></div>
+  </div>
+  <div class="tab-bar">
+    <div class="tab active">系统账号管理</div>
+  </div>
+  <div class="content">
+    <div class="filter-area">
+      <div class="filter-row">
+        <div class="filter-item"><input class="f-input" placeholder="请输入账号"></div>
+        <div class="filter-item"><select class="f-select"><option>账号状态</option><option>启用</option><option>停用</option></select></div>
+        <div class="filter-item"><select class="f-select"><option>角色</option><option>超级管理员</option><option>总控管理员</option></select></div>
+        <div class="filter-item" style="margin-left:auto"><button class="btn btn-white" onclick="toast('已重置')">重 置</button><button class="btn btn-blue" style="margin-left:10px" onclick="acctRender()">查 询</button></div>
+      </div>
+    </div>
+    <div class="action-bar">
+      <button class="btn btn-blue" onclick="toast('打开创建账号弹窗')">创建账号</button>
+      <span class="icon-btn">⟲</span><span class="icon-btn">⚙</span>
+    </div>
+    <div class="table-wrap">
+      <div class="table-scroll">
+        <table>
+          <thead><tr>
+            <th>账号</th><th>状态</th><th>角色</th><th>创建人</th><th>创建时间</th><th>最后登录时间</th><th>状态</th><th style="min-width:180px">操作</th>
+          </tr></thead>
+          <tbody id="acct-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 删除二次确认弹窗 -->
+<div class="overlay" id="m-acct-del">
+  <div class="modal">
+    <div class="mh"><span class="mt">删除确认</span><span class="mc" onclick="closeM('m-acct-del')">×</span></div>
+    <div class="confirm-body" id="acct-del-text"></div>
+    <div class="mf"><button class="btn btn-white" onclick="closeM('m-acct-del')">取消</button><button class="btn btn-danger" onclick="acctConfirmDel()">确定删除</button></div>
+  </div>
+</div>
+
+<div class="toast" id="g-toast"></div>
+
+<script>
+function openM(id){document.getElementById(id).classList.add('show')}
+function closeM(id){document.getElementById(id).classList.remove('show')}
+function toast(msg){var t=document.getElementById('g-toast');t.innerHTML='<span class="ok">✓</span><span>'+msg+'</span>';t.classList.add('show');setTimeout(function(){t.classList.remove('show')},2500);}
+
+// 当前登录账号（不可删除本人）
+var ACCT_CURRENT = 'laura123';
+var acctData = [
+  {ac:'laura1234',   on:false, role:'超级管理员', op:'-', ct:'2026-08-20 12:36:34', lt:'2026-08-20 12:36:38'},
+  {ac:'mgtvega444',  on:true,  role:'超级管理员', op:'-', ct:'2026-08-11 16:00:53', lt:'2026-08-11 16:02:27'},
+  {ac:'laura123',    on:true,  role:'超级管理员', op:'-', ct:'2026-08-08 14:31:12', lt:'2026-08-08 14:34:39'},
+  {ac:'admin120',    on:true,  role:'总控管理员', op:'-', ct:'2026-08-07 23:04:40', lt:'2026-08-09 04:19:52'},
+  {ac:'kasion123',   on:true,  role:'超级管理员', op:'-', ct:'2026-08-06 13:25:35', lt:'2026-08-06 13:26:45'},
+  {ac:'spencer123',  on:true,  role:'超级管理员', op:'-', ct:'2026-08-06 13:24:19', lt:'2026-08-06 14:00:30'},
+  {ac:'mtgFelix1',   on:true,  role:'超级管理员', op:'-', ct:'2026-08-04 13:39:19', lt:'2026-08-04 13:40:06'},
+  {ac:'power888',    on:true,  role:'超级管理员', op:'-', ct:'2026-08-03 17:18:45', lt:'2026-08-03 17:20:26'},
+  {ac:'moyi111',     on:true,  role:'超级管理员', op:'-', ct:'2026-08-03 14:28:24', lt:'2026-08-03 14:29:36'},
+  {ac:'zane111',     on:true,  role:'超级管理员', op:'-', ct:'2026-08-03 13:05:23', lt:'2026-08-03 13:05:23'},
+  {ac:'admin999',    on:true,  role:'总控管理员', op:'-', ct:'2026-08-02 11:14:53', lt:'2026-08-02 11:17:16'},
+  {ac:'admin888',    on:true,  role:'超级管理员', op:'-', ct:'2026-07-31 21:57:40', lt:'2026-07-31 22:18:55'},
+  {ac:'mgmario1222', on:true,  role:'超级管理员', op:'-', ct:'2026-07-21 10:16:05', lt:'2026-07-21 10:16:50'}
+];
+var acctDelTarget = null;
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function acctRender(){
+  var tb=document.getElementById('acct-tbody');
+  tb.innerHTML = acctData.map(function(r,i){
+    var stag = r.on ? '<span class="st-tag on">启用</span>' : '<span class="st-tag off">停用</span>';
+    var tgl  = r.on ? '<span class="tgl" title="启用"><i class="k"></i>启</span>' : '<span class="tgl off" title="停用"><i class="k"></i>停</span>';
+    var isSelf = (r.ac===ACCT_CURRENT);
+    var delBtn = isSelf
+      ? '<span class="op-btn del disabled" title="不可删除当前登录账号">删除</span>'
+      : '<span class="op-btn del" onclick="acctAskDel('+i+')">删除</span>';
+    return '<tr>'
+      + '<td style="font-weight:500">'+esc(r.ac)+(isSelf?'<br><span style="color:#2f80ed;font-size:11px">(当前登录)</span>':'')+'</td>'
+      + '<td>'+stag+'</td>'
+      + '<td>'+esc(r.role)+'</td>'
+      + '<td>'+esc(r.op)+'</td>'
+      + '<td>'+r.ct+'</td>'
+      + '<td>'+r.lt+'</td>'
+      + '<td>'+tgl+'</td>'
+      + '<td><span class="op-btn edit">编 辑</span>'+delBtn+'</td>'
+      + '</tr>';
+  }).join('');
+}
+function acctAskDel(i){
+  acctDelTarget = i;
+  var r = acctData[i];
+  document.getElementById('acct-del-text').innerHTML =
+    '确认将 <strong>'+esc(r.ac)+'（'+esc(r.role)+'）</strong> 删除吗？';
+  openM('m-acct-del');
+}
+function acctConfirmDel(){
+  if(acctDelTarget===null) return;
+  // 软删除：仅从列表移除，数据保留供系统日志追溯；删除动作写入系统日志（此处为原型演示）
+  acctData.splice(acctDelTarget,1);
+  acctDelTarget = null;
+  closeM('m-acct-del');
+  acctRender();
+  toast('删除成功');
+}
+acctRender();
+</script>
+</body>
+</html>

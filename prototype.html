@@ -563,6 +563,39 @@ select.fs.ph{color:#bfbfbf}
 .date-text-wrap{position:relative;display:block}
 .date-text-wrap input{width:100%;padding-right:32px!important;box-sizing:border-box}
 .date-text-wrap .date-icon{position:absolute;right:10px;top:50%;transform:translateY(-50%);color:#bbb;font-size:14px;pointer-events:none}
+
+/* ── 账号管理页 ── */
+.sub-site-tag{display:inline-block;background:#e6f4ff;color:#0961BD;border:1px solid #91caff;border-radius:4px;padding:2px 10px;font-size:12px;margin-bottom:12px}
+.acct-tabs{display:flex;gap:2px;margin-bottom:14px}
+.acct-tab{padding:7px 18px;font-size:13px;color:#595959;cursor:pointer;border-radius:4px 4px 0 0}
+.acct-tab.active{color:#fff;background:#2f80ed;font-weight:500}
+/* 账号管理 侧边栏选中项：整条高亮（复刻参考图） */
+#si-account.active{color:#fff!important;background:#1c6fe0!important;border-left:3px solid #1c6fe0!important}
+/* 操作区按钮（带底框，复刻参考图） */
+.op-btn{display:inline-block;height:30px;line-height:28px;padding:0 14px;border-radius:5px;font-size:13px;cursor:pointer;border:1px solid;margin:0 3px;user-select:none;transition:all .15s;letter-spacing:1px}
+.op-btn.edit,.op-btn.reset{background:#2f80ed;color:#fff;border-color:#2f80ed}
+.op-btn.edit:hover,.op-btn.reset:hover{background:#5296ff;border-color:#5296ff}
+.op-btn.del{background:#f5484a;color:#fff;border-color:#f5484a}
+.op-btn.del:hover{background:#ff6b6d;border-color:#ff6b6d}
+.op-btn.disabled{background:#f5f5f5;color:#bfbfbf;border-color:#e8e8e8;cursor:not-allowed}
+.st-tag{display:inline-block;padding:1px 8px;border-radius:3px;font-size:12px;font-weight:500}
+.st-tag.on{background:#f6ffed;color:#389e0d;border:1px solid #b7eb8f}
+.st-tag.off{background:#fff1f0;color:#cf1322;border:1px solid #ffa39e}
+/* toggle switch（含 启/停 文字） */
+.tgl{display:inline-block;width:48px;height:22px;border-radius:22px;background:#0961BD;position:relative;cursor:pointer;vertical-align:middle;transition:background .2s;font-size:11px;color:#fff;line-height:22px;box-sizing:border-box;text-align:left;padding-left:8px}
+.tgl.off{background:#bfbfbf;text-align:right;padding-left:0;padding-right:8px}
+.tgl .k{position:absolute;top:2px;left:28px;width:18px;height:18px;border-radius:50%;background:#fff;transition:left .2s}
+.tgl.off .k{left:2px}
+/* confirm modal */
+.confirm-body{padding:30px 32px;font-size:15px;color:#333;text-align:center;line-height:1.7}
+.btn-danger{background:#f5222d;color:#fff;border-color:#f5222d}
+.btn-danger:hover{background:#ff4d4f;border-color:#ff4d4f}
+/* 账号管理页：内部左右边距加大，内容不贴边 */
+#pg-account .filter-area{padding:18px 24px}
+#pg-account .action-bar{padding:0 4px}
+#pg-account th,#pg-account td{padding:13px 18px}
+#pg-account th:first-child,#pg-account td:first-child{padding-left:24px}
+#pg-account th:last-child,#pg-account td:last-child{padding-right:24px}
 </style>
 </head>
 <body>
@@ -574,7 +607,17 @@ select.fs.ph{color:#bfbfbf}
     <span class="logo-text">Panda</span>
   </div>
   <div class="menu-item" onclick="toggleMenu(this,'')"><div class="menu-item-left"><span class="menu-icon">🏠</span>平台概况</div><span class="arrow">›</span></div>
-  <div class="menu-item" onclick="toggleMenu(this,'')"><div class="menu-item-left"><span class="menu-icon">⚙️</span>系统管理</div><span class="arrow">›</span></div>
+  <div class="menu-item" id="menu-sys" onclick="toggleMenu(this,'sub-sys')"><div class="menu-item-left"><span class="menu-icon">⚙️</span>系统管理</div><span class="arrow">›</span></div>
+  <div class="submenu" id="sub-sys" style="display:none">
+    <div class="submenu-item disabled">角色管理</div>
+    <div class="submenu-item" id="si-account" onclick="switchPage('account',this)">账号管理</div>
+    <div class="submenu-item disabled">系统设置</div>
+    <div class="submenu-item disabled">登录日志</div>
+    <div class="submenu-item disabled">谷歌令牌</div>
+    <div class="submenu-item disabled">域名管理(新)</div>
+    <div class="submenu-item disabled">安全设置</div>
+    <div class="submenu-item disabled">子账号绑定(白名单日志)</div>
+  </div>
   <div class="menu-item" onclick="toggleMenu(this,'')"><div class="menu-item-left"><span class="menu-icon">🎮</span>商户游戏管理</div><span class="arrow">›</span></div>
   <div class="menu-item" onclick="toggleMenu(this,'')"><div class="menu-item-left"><span class="menu-icon">👥</span>会员管理</div><span class="arrow">›</span></div>
   <div class="menu-item" onclick="toggleMenu(this,'')"><div class="menu-item-left"><span class="menu-icon">💰</span>商户财务管理</div><span class="arrow">›</span></div>
@@ -617,6 +660,44 @@ select.fs.ph{color:#bfbfbf}
     </div>
   </div>
   <div class="content">
+
+    <!-- PAGE: ACCOUNT (账号管理) -->
+    <div id="pg-account" style="display:none">
+      <div class="acct-tabs">
+        <div class="acct-tab active">账号管理</div>
+      </div>
+      <span class="sub-site-tag">巴西站-测试</span>
+      <div class="filter-area">
+        <div class="filter-row">
+          <div class="filter-item"><input class="f-input" style="min-width:160px" placeholder="请输入账号"></div>
+          <div class="filter-item"><select class="f-select"><option>账号状态</option><option>启用</option><option>停用</option></select></div>
+          <div class="filter-item"><select class="f-select"><option>角色</option><option>站点总管理</option><option>代理管理</option><option>运营人员</option></select></div>
+          <div class="filter-item" style="margin-left:auto"><button class="btn btn-white" onclick="toast('已重置')">重 置</button><button class="btn btn-query" style="margin-left:10px" onclick="acctRender()">查 询</button></div>
+        </div>
+      </div>
+      <div class="action-bar">
+        <button class="btn btn-blue" onclick="toast('打开创建账号弹窗')">创建账号</button>
+      </div>
+      <div class="table-wrap">
+        <div class="table-scroll">
+          <table>
+            <thead><tr>
+              <th>账号</th><th>角色</th><th>创建时间</th><th>最近操作时间</th><th>操作人</th><th>状态</th><th style="min-width:190px">操作</th>
+            </tr></thead>
+            <tbody id="acct-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 删除二次确认弹窗 -->
+    <div class="overlay" id="m-acct-del">
+      <div class="modal modal-sm" style="width:420px">
+        <div class="mh"><span class="mt">删除确认</span><span class="mc" onclick="closeM('m-acct-del')">×</span></div>
+        <div class="confirm-body" id="acct-del-text"></div>
+        <div class="mf"><button class="btn btn-white" onclick="closeM('m-acct-del')">取消</button><button class="btn btn-danger" onclick="acctConfirmDel()">确定删除</button></div>
+      </div>
+    </div>
 
     <!-- PAGE: CHANNEL -->
     <div id="pg-channel">
@@ -3068,7 +3149,7 @@ function guideAddrChange(){
 const _origSwitchPage = switchPage;
 function switchPage(page, el){
   // hide all pages
-  ['pg-channel','pg-effect','pg-guide','pg-activity-list','pg-appstore'].forEach(function(id){
+  ['pg-channel','pg-effect','pg-guide','pg-activity-list','pg-appstore','pg-account'].forEach(function(id){
     var p=document.getElementById(id); if(p) p.style.display='none';
   });
   // show requested
@@ -3085,9 +3166,10 @@ function switchPage(page, el){
     'effect':'推广渠道管理 / 推广效果',
     'guide':'推广渠道管理 / 安装引导页',
     'activity-list':'福利中心 / 活动列表',
-    'appstore':'推广渠道管理 / 仿应用商店'
+    'appstore':'推广渠道管理 / 仿应用商店',
+    'account':'系统管理 / 账号管理'
   };
-  const bcSec = {'channel':'DD后台管理','effect':'DD后台管理','guide':'DD后台管理','activity-list':'DD后台管理','appstore':'DD后台管理'};
+  const bcSec = {'channel':'DD后台管理','effect':'DD后台管理','guide':'DD后台管理','activity-list':'DD后台管理','appstore':'DD后台管理','account':'DD后台管理'};
   const bcEl = document.getElementById('breadcrumb');
   if(bcEl){
     const txt = document.getElementById('bc-text');
@@ -3096,12 +3178,73 @@ function switchPage(page, el){
     if(sec) sec.textContent = bcSec[page]||'';
   }
   if(page==='appstore') asRenderTable();
+  if(page==='account') acctRender();
+}
+
+// ─── 账号管理：软删除 + 二次确认 + 本人保护 ───
+var ACCT_CURRENT = 'bxlaura001'; // 当前登录账号（不可删除本人）
+var acctData = [
+  {ac:'bxlaura001', role:'超级管理员',   ct:'2026-08-20 01:20:11', ut:'2026-08-20 02:50:18', op:'-',          on:true},
+  {ac:'bxlaura002', role:'站点总管理',   ct:'2026-08-20 01:31:59', ut:'2026-08-20 01:31:59', op:'bxlaura001', on:true},
+  {ac:'qa-explore-ro', role:'QATEST 探索专用-全模块只读', ct:'2026-07-28 02:30:37', ut:'2026-08-06 02:32:59', op:'bxdaniel01', on:false},
+  {ac:'qatest05',   role:'站点总管理',   ct:'2026-07-28 02:32:00', ut:'2026-08-14 06:55:00', op:'bxoliver02', on:true},
+  {ac:'qatest_restricted01', role:'QATEST-受限权限-仅活动统计+充值会员', ct:'2026-07-24 12:41:06', ut:'2026-07-24 12:47:02', op:'t06e01', on:true},
+  {ac:'benjie123',  role:'站点总管理',   ct:'2026-07-21 23:01:09', ut:'2026-08-19 07:13:59', op:'bxduoduo01', on:true},
+  {ac:'Kasion01',   role:'站点总管理',   ct:'2026-07-19 21:41:40', ut:'2026-07-20 00:18:28', op:'bxspencer01', on:true},
+  {ac:'bxnaclr',    role:'站点总管理',   ct:'2026-07-13 23:54:21', ut:'2026-07-20 03:11:00', op:'bxduoduo01', on:true},
+  {ac:'bxtiger01',  role:'站点总管理',   ct:'2026-07-13 02:52:26', ut:'2026-07-13 03:01:07', op:'bxduoduo01', on:true},
+  {ac:'bxlx01',     role:'代理管理',     ct:'2026-07-06 05:19:32', ut:'2026-07-10 00:08:53', op:'bxlx001', on:true},
+  {ac:'fly220',     role:'超级管理员',   ct:'2026-07-07 04:25:23', ut:'2026-07-10 08:52:03', op:'-', on:true},
+  {ac:'bxaj003',    role:'运营人员',     ct:'2026-07-06 03:05:52', ut:'2026-07-06 03:05:52', op:'bxaj001', on:true},
+  {ac:'t06e01',     role:'站点总管理',   ct:'2026-07-02 05:11:00', ut:'2026-07-02 05:11:00', op:'bxvega01', on:true},
+  {ac:'bxethan001', role:'站点总管理',   ct:'2026-07-02 22:55:47', ut:'2026-07-02 22:20:43', op:'bxvega2', on:true},
+  {ac:'bxsm001',    role:'站点总管理',   ct:'2026-07-01 02:24:36', ut:'2026-07-01 04:11:45', op:'bxaj001', on:true}
+];
+var acctDelTarget = null;
+function acctEsc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function acctRender(){
+  var tb=document.getElementById('acct-tbody'); if(!tb) return;
+  tb.innerHTML = acctData.map(function(r,i){
+    var tgl = r.on ? '<span class="tgl" title="启用"><i class="k"></i>启</span>' : '<span class="tgl off" title="停用"><i class="k"></i>停</span>';
+    var isSelf = (r.ac===ACCT_CURRENT);
+    var delBtn = isSelf
+      ? '<span class="op-btn del disabled" title="不可删除当前登录账号">删除</span>'
+      : '<span class="op-btn del" onclick="acctAskDel('+i+')">删除</span>';
+    // 重置密码：仅「启用」状态账号展示
+    var resetBtn = r.on ? '<span class="op-btn reset">重置密码</span>' : '';
+    return '<tr>'
+      + '<td style="font-weight:500">'+acctEsc(r.ac)+(isSelf?' <span style="color:#0961BD;font-size:11px">(当前登录)</span>':'')+'</td>'
+      + '<td>'+acctEsc(r.role)+'</td>'
+      + '<td>'+r.ct+' (UTC-3)</td>'
+      + '<td>'+r.ut+' (UTC-3)</td>'
+      + '<td>'+acctEsc(r.op)+'</td>'
+      + '<td>'+tgl+'</td>'
+      + '<td><span class="op-btn edit">编辑</span>'+resetBtn+delBtn+'</td>'
+      + '</tr>';
+  }).join('');
+}
+function acctAskDel(i){
+  acctDelTarget = i;
+  var r = acctData[i];
+  document.getElementById('acct-del-text').innerHTML =
+    '确认将 <strong>'+acctEsc(r.ac)+'（'+acctEsc(r.role)+'）</strong> 删除吗？';
+  openM('m-acct-del');
+}
+function acctConfirmDel(){
+  if(acctDelTarget===null) return;
+  var r = acctData[acctDelTarget];
+  // 软删除：仅从列表移除，数据保留供操作日志追溯；删除动作写入操作日志（此处为原型演示）
+  acctData.splice(acctDelTarget,1);
+  acctDelTarget = null;
+  closeM('m-acct-del');
+  acctRender();
+  toast('删除成功');
 }
 
 // ─── HASH ROUTING — deep-link support ───
 // Usage: prototype.html#channel / #effect / #guide / #activity-list / #appstore
 (function(){
-  var validPages = ['channel','effect','guide','activity-list','appstore'];
+  var validPages = ['channel','effect','guide','activity-list','appstore','account'];
   function hashRoute(){
     var hash = location.hash.replace('#','');
     if(validPages.indexOf(hash) !== -1){
