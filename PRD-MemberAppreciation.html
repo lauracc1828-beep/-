@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>会员答谢活动 PRD v1.0</title>
+<title>会员答谢活动 PRD v1.5</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'PingFang SC','Helvetica Neue',Arial,sans-serif;font-size:14px;color:#1a1a1a;background:#f0f0f5;line-height:1.7}
@@ -40,7 +40,7 @@ blockquote{background:#f5f5f5;border-left:3px solid #ccc;padding:8px 14px;margin
 <div class="cover">
   <div class="cover-title">会员答谢活动</div>
   <div class="cover-sub">PRD 产品需求文档</div>
-  <div class="cover-meta"><span>版本：v1.0</span><span>日期：2026-06-26</span><span>作者：Laura</span></div>
+  <div class="cover-meta"><span>版本：v1.5</span><span>更新日期：2026-08-20</span><span>作者：Laura</span></div>
 </div>
 
 <div class="toc">
@@ -55,6 +55,7 @@ blockquote{background:#f5f5f5;border-left:3px solid #ccc;padding:8px 14px;margin
         <li><a href="#s42">4.2 新增/编辑活动弹框</a></li>
         <li><a href="#s43">4.3 奖励配置（专属）</a></li>
         <li><a href="#s44">4.4 查看活动弹框</a></li>
+        <li><a href="#s45">4.5 公共配置项必填校验与错误提示</a></li>
       </ol>
     </li>
     <li><a href="#s5">五、前台功能说明</a>
@@ -346,20 +347,20 @@ blockquote{background:#f5f5f5;border-left:3px solid #ccc;padding:8px 14px;margin
       <tr>
         <td>申领终端 <span class="tag-common">通用</span></td>
         <td>多选</td>
-        <td>仅领取方式为"手动领取"时显示。限制允许发起领取操作的终端类型，可选：苹果H5 / 安卓H5 / PWA。未勾选时不限制终端类型。</td>
+        <td>限制允许发起领取操作的终端类型。可选终端（最新完整版本，共 8 项）：<strong>苹果H5 / 安卓H5 / PWA / APK / 苹果包 / 苹果书签 / APK上架包 / 电脑系统</strong>。<br>• 领取方式=<strong>手动领取</strong>时：可选且<strong>为必选</strong>，至少勾选一项（会员答谢固定手动领取，故本项恒为必选）；<br>• 领取方式=<strong>自动领取</strong>时：该项<strong>置灰且全部不勾选</strong>（会员答谢当前不支持自动领取）。<br><strong>说明：</strong>原"未勾选时不限制终端类型"的旧描述已废弃，以本规则为准（手动领取时申领终端为必选）。校验与错误提示详见「4.5 公共配置项必填校验与错误提示」。</td>
       </tr>
       <tr>
         <td>申领限制 <span class="tag-common">通用</span></td>
         <td>多选 + 条件输入</td>
-        <td>仅领取方式为"手动领取"时显示。各选项说明：<br>
+        <td>领取方式=<strong>手动领取</strong>时可选，且<strong>为非必选</strong>；领取方式=<strong>自动领取</strong>时该项<strong>置灰且全部不勾选</strong>。各选项说明：<br>
           • 绑定收款方式：账号需绑定收款方式才能领取奖励（系统暂不支持，始终置灰不可选）<br>
           • 完成首充可申领：账号需完成首次充值，才能领取奖励<br>
           • 同姓名只能申领1次：若不同账号使用相同真实姓名，某个账号领取奖励后，其他账号在同一活动中无法领取（系统暂不支持，始终置灰不可选）<br>
           • 同登录IP只能申领1次：若不同账号登录时的IP相同，某个账号领取奖励后，其他账号在同一活动中无法领取<br>
           • 同注册IP只能申领1次：若不同账号注册时的IP相同，某个账号领取奖励后，其他账号在同一活动中无法领取<br>
-          • 最近N天内充值次数≥N次：领奖当日前N天（含当天）内累计充值N次，才能领取奖励<br>
-          • 最近N天内充值金额≥N：领奖当日前N天（含当天）累计充值金额满N元，才能领取奖励<br>
-          <strong>注：</strong>「绑定收款方式」与「同姓名只能申领1次」因系统暂不支持，始终置灰不可选。
+          • 最近「M」天内充值次数≥「N」次：勾选后 M、N <strong>均为必填</strong>；领奖当日前 M 天（含当天）内累计充值 N 次，才能领取奖励<br>
+          • 最近「P」天内充值金额≥「Q」：勾选后 P、Q <strong>均为必填</strong>；领奖当日前 P 天（含当天）累计充值金额满 Q 元，才能领取奖励<br>
+          <strong>注：</strong>「绑定收款方式」与「同姓名只能申领1次」因系统暂不支持，始终置灰不可选。条件项必填校验与错误提示详见「4.5 公共配置项必填校验与错误提示」。
         </td>
       </tr>
       <tr>
@@ -469,6 +470,28 @@ blockquote{background:#f5f5f5;border-left:3px solid #ccc;padding:8px 14px;margin
 
   <h2 id="s44">4.4 查看活动弹框</h2>
   <p>点击列表中"查看"进入，以只读形式展示活动的完整配置内容。所有字段与新增/编辑弹框一致，但均不可编辑。用于运营人员快速核查活动配置详情，无需进入编辑模式。</p>
+
+  <h2 id="s45">4.5 公共配置项必填校验与错误提示</h2>
+  <p>新增 / 编辑活动点击「保存」时，系统按下表对活动公共配置项进行必填 / 必选校验。校验未通过时，在对应字段下方以红色文案提示并<strong>阻断保存</strong>，同时定位到首个未通过的配置项；对设有默认兜底的配置项则在保存时自动填入默认值、不阻断保存。本规则与《神秘彩金活动 PRD》公共配置校验口径一致；会员答谢固定为手动领取，故其<strong>申领终端恒为必选</strong>。</p>
+  <table>
+    <thead><tr><th>配置项</th><th>生效条件</th><th>必填 / 必选</th><th>校验与默认逻辑</th><th>错误提示文案</th></tr></thead>
+    <tbody>
+      <tr><td>活动名称</td><td>活动名称 = 自定义</td><td>必填</td><td>自定义时未输入名称则阻断保存（系统默认时自动填入名称，无需校验）</td><td>请输入活动名称</td></tr>
+      <tr><td>活动时间</td><td>活动时间 = 自定义</td><td>必填</td><td>开始、结束时间任一未选择则阻断保存</td><td>请选择活动的开始和结束时间</td></tr>
+      <tr><td>展示时间</td><td>活动时间 = 自定义</td><td>非必填</td><td>未选择时，保存时默认填入与活动开始 / 结束时间一致</td><td>—（自动兜底，不报错）</td></tr>
+      <tr><td>申领终端</td><td>领取方式 = 手动领取（会员答谢固定手动）</td><td>必选（至少 1 项）</td><td>至少勾选一项终端；自动领取时置灰全不选（会员答谢暂不支持自动领取）</td><td>请选择申领终端</td></tr>
+      <tr><td>申领限制（整体）</td><td>领取方式 = 手动领取</td><td>非必选</td><td>可选；自动领取时置灰全不选</td><td>—</td></tr>
+      <tr><td>申领限制 · 最近「M」天内充值次数 ≥「N」次</td><td>勾选该条件</td><td>M、N 均必填</td><td>勾选后，M 为空先报错；M 有值而 N 为空再报错</td><td>M 为空：申领限制充值天数不能为空<br>N 为空：申领限制充值次数不能为空</td></tr>
+      <tr><td>申领限制 · 最近「P」天内充值金额 ≥「Q」</td><td>勾选该条件</td><td>P、Q 均必填</td><td>勾选后，P 为空先报错；P 有值而 Q 为空再报错</td><td>P 为空：申领限制充值天数不能为空<br>Q 为空：申领限制充值金额不能为空</td></tr>
+      <tr><td>稽核限定平台</td><td>稽核限定平台 = 仅限以下平台</td><td>必选（至少 1 项）</td><td>选择"仅限以下平台"时，未勾选任何平台或游戏则阻断保存</td><td>至少选择一个平台或游戏</td></tr>
+      <tr><td>参与层级</td><td>始终</td><td>必选</td><td>未勾选任何层级时，保存时<strong>默认勾选"全部层级"</strong>，不阻断保存</td><td>—（自动兜底，不报错）</td></tr>
+      <tr><td>规则说明</td><td>规则说明 = 自定义</td><td>必填</td><td>自定义时规则内容为空则阻断保存</td><td>请输入自定义活动规则</td></tr>
+      <tr><td>显示排序</td><td>始终</td><td>必填</td><td>默认填入 1；如手动清空未输入，保存时<strong>自动填入 1</strong>，不阻断保存</td><td>—（自动兜底，不报错）</td></tr>
+      <tr><td>背景样式</td><td>背景样式 = 自定义</td><td>非必填（上传图片）</td><td>自定义但未上传图片时，保存时<strong>自动切换为系统默认样式并勾选默认背景图</strong></td><td>—（自动兜底，不报错）</td></tr>
+      <tr><td>LOGO样式</td><td>LOGO样式 = 自定义</td><td>非必填（上传图片）</td><td>自定义但未上传图片时，保存时<strong>自动切换为系统默认样式并勾选默认 LOGO</strong></td><td>—（自动兜底，不报错）</td></tr>
+    </tbody>
+  </table>
+  <div class="notice">📌 校验触发时机为点击「保存」；多个配置项同时未通过时，按上表自上而下顺序定位并提示首个未通过项。必填 / 必选项校验失败会阻断保存；设有默认兜底的配置项（展示时间、参与层级、显示排序、背景样式、LOGO样式）保存时自动补全默认值，不阻断保存。</div>
 
 </div>
 
@@ -644,6 +667,7 @@ blockquote{background:#f5f5f5;border-left:3px solid #ccc;padding:8px 14px;margin
       <tr><td>v1.2</td><td>2026-07-02</td><td>Laura</td><td>修正6.5规则文案（第1/3/4/5条措辞）；修正4.3自定义时间说明；补充无限制双向联动说明；完善5.1活动图来源描述</td></tr>
       <tr><td>v1.3</td><td>2026-07-02</td><td>Laura</td><td>同步4.2规则说明联动文案（第1-3条）；修正4.2每月模式会员日范围（31日→30日）；合并5.2"金额为0"状态至"领取成功"；5.3补充零金额不计账变说明</td></tr>
       <tr><td>v1.4</td><td>2026-07-20</td><td>Laura</td><td>6.4 新增申领限制 7 项提示文案中葡对照，其中 2 项（绑定收款方式 / 同姓名只能申领1次）后台暂置灰、文案预留（与公共文档《申领限制提示文案-中葡对照 v1.0》同步）</td></tr>
+      <tr><td>v1.5</td><td>2026-08-20</td><td>Laura</td><td>新增 4.5 公共配置项必填校验与错误提示章节；4.2 申领终端更新为最新完整版本（8 项：苹果H5/安卓H5/PWA/APK/苹果包/苹果书签/APK上架包/电脑系统），废弃"未勾选时不限制终端类型"旧描述、修正为手动领取时必选；4.2 申领限制补充手动/自动领取置灰逻辑及 M/N/P/Q 必填说明</td></tr>
     </tbody>
   </table>
 </div>

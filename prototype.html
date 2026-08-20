@@ -337,6 +337,11 @@ select.fs.ph{color:#bfbfbf}
 .aa-fi{display:flex;align-items:flex-start;margin-bottom:14px}
 .aa-fl{width:148px;flex-shrink:0;text-align:right;padding-right:12px;line-height:32px;color:#595959;font-size:13px}
 .aa-fc{flex:1;min-width:0}
+.aa-req-star{color:#ff4d4f;margin-right:2px;display:none}
+.aa-req-star.show{display:inline}
+.aa-err{color:#ff4d4f;font-size:12px;line-height:1.5;margin-top:6px;display:none}
+.aa-err.show{display:block}
+.aa-field-invalid{border-color:#ff4d4f!important}
 .aa-info{color:#1890ff;font-size:12px;cursor:pointer;margin-left:4px;vertical-align:middle}
 
 
@@ -1026,18 +1031,19 @@ select.fs.ph{color:#bfbfbf}
         </div>
         <!-- 活动名称 -->
         <div class="aa-fi">
-          <span class="aa-fl">活动名称：</span>
+          <span class="aa-fl"><span class="aa-req-star" id="star-name">*</span>活动名称：</span>
           <div class="aa-fc">
             <div class="radio-g" style="margin-bottom:8px">
               <label class="radio-item"><input type="radio" name="aa-name-t" value="sys" checked onchange="aaNameToggle('sys')"> 系统默认</label>
               <label class="radio-item"><input type="radio" name="aa-name-t" value="custom" onchange="aaNameToggle('custom')"> 自定义</label>
             </div>
             <input class="fin" id="aa-name-inp" value="神秘彩金活动" placeholder="请输入活动名称" style="width:100%;box-sizing:border-box;background:#f5f5f5" disabled>
+            <div class="aa-err" id="err-name">请输入活动名称</div>
           </div>
         </div>
         <!-- 活动时间 -->
         <div class="aa-fi">
-          <span class="aa-fl">活动时间：</span>
+          <span class="aa-fl"><span class="aa-req-star" id="star-time">*</span>活动时间：</span>
           <div class="aa-fc">
             <div class="radio-g">
               <label class="radio-item"><input type="radio" name="aa-time" value="forever" checked onchange="aaTimeToggle(false)"> 永久</label>
@@ -1053,6 +1059,7 @@ select.fs.ph{color:#bfbfbf}
                   <span style="color:#8c8c8c;font-size:15px;margin-left:4px">📅</span>
                 </div>
               </div>
+              <div class="aa-err" id="err-time">请选择活动的开始和结束时间</div>
               <div id="aa-show-time-wrap" style="display:flex;align-items:center;gap:8px;margin-top:4px">
                 <span style="font-size:13px;color:rgba(0,0,0,.88)">展示时间：</span>
                 <div class="date-range-inp" onclick="aaOpenCal()">
@@ -1062,6 +1069,7 @@ select.fs.ph{color:#bfbfbf}
                   <span style="color:#8c8c8c;font-size:15px;margin-left:4px">📅</span>
                 </div>
               </div>
+              <div style="font-size:12px;color:#8c8c8c;margin-top:2px;margin-left:60px">非必填，不选则默认与活动开始/结束时间一致</div>
             </div>
           </div>
         </div>
@@ -1275,7 +1283,7 @@ select.fs.ph{color:#bfbfbf}
         </div>
         <!-- 申领终端 -->
         <div class="aa-fi" id="aa-terminal-sec" style="align-items:flex-start">
-          <span class="aa-fl" style="line-height:22px;padding-top:0">申领终端：</span>
+          <span class="aa-fl" style="line-height:22px;padding-top:0"><span class="aa-req-star" id="star-terminal">*</span>申领终端：</span>
           <div class="aa-fc">
             <div style="display:flex;flex-wrap:wrap;gap:14px;row-gap:10px">
               <label class="radio-item"><input type="checkbox"> 苹果H5</label>
@@ -1287,6 +1295,7 @@ select.fs.ph{color:#bfbfbf}
               <label class="radio-item"><input type="checkbox"> APK上架包</label>
               <label class="radio-item"><input type="checkbox"> 电脑系统</label>
             </div>
+            <div class="aa-err" id="err-terminal">请选择申领终端</div>
           </div>
         </div>
         <!-- 申领限制 -->
@@ -1300,34 +1309,37 @@ select.fs.ph{color:#bfbfbf}
               <label class="radio-item"><input type="checkbox" id="aa-restrict-4"> 同登录IP只能申领1次 <span class="has-tip tip-left">ⓘ<span class="tip-box">若不同账号登录时的IP相同，某个账号领取奖励后，其他账号也在同一活动中无法领取</span></span></label>
               <label class="radio-item"><input type="checkbox" id="aa-restrict-5"> 同注册IP只能申领1次 <span class="has-tip tip-left">ⓘ<span class="tip-box">若不同账号注册时的IP相同，某个账号领取奖励后，其他账号也在同一活动中无法领取</span></span></label>
             </div>
-            <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px;font-size:13px">
-              <input type="checkbox">
+            <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px;font-size:13px">
+              <input type="checkbox" id="aa-r-times-cb" onchange="aaRestrictToggle()">
               <span>最近</span>
-              <input class="aa-s-inp" style="width:64px" placeholder="1-90">
+              <input class="aa-s-inp" id="aa-r-times-day" style="width:64px" placeholder="1-90">
               <span>天内充值次数 ≥</span>
-              <input class="aa-s-inp" style="width:90px" placeholder="1-999999">
+              <input class="aa-s-inp" id="aa-r-times-cnt" style="width:90px" placeholder="1-999999">
               <span>次才能申领</span>
               <span class="has-tip tip-left">ⓘ<span class="tip-box">领奖当日前N天(含当天)内N次充值，才能领取奖励。</span></span>
             </div>
+            <div class="aa-err" id="err-r-times" style="margin-top:0;margin-bottom:8px"></div>
             <div style="display:flex;align-items:center;gap:6px;font-size:13px">
-              <input type="checkbox">
+              <input type="checkbox" id="aa-r-amt-cb" onchange="aaRestrictToggle()">
               <span>最近</span>
-              <input class="aa-s-inp" style="width:64px" placeholder="1-90">
+              <input class="aa-s-inp" id="aa-r-amt-day" style="width:64px" placeholder="1-90">
               <span>天内充值金额 ≥</span>
-              <input class="aa-s-inp" style="width:110px" placeholder="填0表示不限制">
+              <input class="aa-s-inp" id="aa-r-amt-val" style="width:110px" placeholder="填0表示不限制">
               <span>才能申领</span>
               <span class="has-tip tip-left">ⓘ<span class="tip-box">领奖当日前N天(含当天)累计充值金额满N元，才能领取奖励。</span></span>
             </div>
+            <div class="aa-err" id="err-r-amt" style="margin-top:2px"></div>
           </div>
         </div>
         <!-- 稽核限定平台 -->
         <div class="aa-fi" style="align-items:flex-start">
-          <span class="aa-fl" style="line-height:22px;padding-top:0">稽核限定平台：</span>
+          <span class="aa-fl" style="line-height:22px;padding-top:0"><span class="aa-req-star" id="star-plat">*</span>稽核限定平台：</span>
           <div class="aa-fc">
             <div class="radio-g" style="margin-bottom:10px">
               <label class="radio-item"><input type="radio" name="aa-plat" value="all" checked onchange="aaPlatToggle('all')"> 不限制</label>
               <label class="radio-item"><input type="radio" name="aa-plat" value="limited" onchange="aaPlatToggle('limited')"> 仅限以下平台</label>
             </div>
+            <div class="aa-err" id="err-plat" style="margin-top:0;margin-bottom:8px">至少选择一个平台或游戏</div>
             <div id="aa-plat-list" style="display:none">
               <div class="plat-tabs">
                 <div class="plat-tab active" onclick="aaPlatTab(this,'electronic')">电子 <span id="plat-cnt-e">(0)</span></div>
@@ -1384,7 +1396,7 @@ select.fs.ph{color:#bfbfbf}
         </div>
         <!-- 规则说明 -->
         <div class="aa-fi" style="align-items:flex-start">
-          <span class="aa-fl" style="line-height:22px;padding-top:0">规则说明：</span>
+          <span class="aa-fl" style="line-height:22px;padding-top:0"><span class="aa-req-star" id="star-rule">*</span>规则说明：</span>
           <div class="aa-fc">
             <div class="radio-g" style="margin-bottom:8px">
               <label class="radio-item"><input type="radio" name="aa-rule" checked onchange="aaRuleToggle('sys')"> 系统默认</label>
@@ -1398,12 +1410,13 @@ select.fs.ph{color:#bfbfbf}
               <div id="aa-rule-line5">5. 为避免文字理解差异，平台将保留本活动最终解释权。</div>
             </div>
             <textarea id="aa-rule-custom" class="fin" placeholder="请输入" style="display:none;width:100%;height:140px;resize:vertical;padding:8px;line-height:1.8;font-size:13px;box-sizing:border-box"></textarea>
+            <div class="aa-err" id="err-rule">请输入自定义活动规则</div>
           </div>
         </div>
         <!-- 显示排序 -->
         <div class="aa-fi">
-          <span class="aa-fl">显示排序：</span>
-          <div class="aa-fc"><input class="fin" type="number" value="1" style="width:100px"></div>
+          <span class="aa-fl"><span class="aa-req-star show">*</span>显示排序：</span>
+          <div class="aa-fc"><input class="fin" type="number" id="aa-sort-inp" value="1" style="width:100px"><div style="font-size:12px;color:#8c8c8c;margin-top:4px">必填，默认1；如清空则保存时自动填入1</div></div>
         </div>
         <!-- 活动详情页选择 -->
         <div class="aa-fi" style="align-items:flex-start">
@@ -1448,6 +1461,7 @@ select.fs.ph{color:#bfbfbf}
             <div id="aa-bg-custom" style="display:none">
               <label class="upload-btn" style="margin-bottom:6px"><span>⬆ 上传图片</span></label>
               <div class="upload-hint">支持JPG/PNG/SVG格式的图片 (建议尺寸: 660 x 220)</div>
+              <div class="upload-hint" style="color:#8c8c8c">非必填，未上传则保存时自动切换为系统默认样式并勾选默认背景图</div>
               <div id="aa-bg-custom-preview" style="display:none;margin-top:8px;width:396px;max-width:100%;height:132px;border-radius:6px;overflow:hidden"></div>
             </div>
           </div>
@@ -1552,6 +1566,8 @@ select.fs.ph{color:#bfbfbf}
             <div id="aa-logo-custom" style="display:none">
               <label class="upload-btn"><span>⬆ 上传图片</span></label>
               <div class="upload-hint">支持JPG/PNG/SVG格式的图片 (建议尺寸: 300 x 300)</div>
+              <div class="upload-hint" style="color:#8c8c8c">非必填，未上传则保存时自动切换为系统默认样式并勾选默认LOGO</div>
+              <div id="aa-logo-custom-preview" style="display:none"></div>
             </div>
           </div>
         </div>
@@ -1576,7 +1592,7 @@ select.fs.ph{color:#bfbfbf}
       </div><!-- /inner padding -->
     </div><!-- /modal-scroll -->
     <div class="mf">
-      <button class="btn btn-blue" style="width:120px;height:36px;font-size:14px" onclick="closeM('m-add-activity');toast('保存成功')">保存</button>
+      <button class="btn btn-blue" style="width:120px;height:36px;font-size:14px" onclick="aaSave()">保存</button>
     </div>
   </div>
 </div>
@@ -3157,8 +3173,23 @@ function openAddActivity(){
   var typeEl=document.getElementById('aa-type');
   if(typeEl){ typeEl.value='mystery'; aaTypeChange('mystery'); }
   aaMemberReset();
+  // reset rule to sys
+  var ruleSysRadio=document.querySelector('input[name="aa-rule"]');
+  if(ruleSysRadio){ ruleSysRadio.checked=true; aaRuleToggle('sys'); }
+  // reset plat to 不限制
+  var platAll=document.querySelector('input[name="aa-plat"][value="all"]');
+  if(platAll){ platAll.checked=true; aaPlatToggle('all'); }
+  // reset sort
+  var sortInp=document.getElementById('aa-sort-inp'); if(sortInp) sortInp.value='1';
+  aaResetErrors();
   aaSetEditMode(false);
   openM('m-add-activity');
+}
+
+// 清空全部公共配置错误提示
+function aaResetErrors(){
+  ['err-name','err-time','err-terminal','err-r-times','err-r-amt','err-plat','err-rule'].forEach(function(id){var e=document.getElementById(id); if(e) e.classList.remove('show');});
+  document.querySelectorAll('#m-add-activity .aa-field-invalid').forEach(function(f){f.classList.remove('aa-field-invalid');});
 }
 
 // ─── OPEN EDIT ACTIVITY ───
@@ -3183,6 +3214,7 @@ function openEditActivity(idx){
   if(audMult){ audMult.value='2'; }
   // 修改活动时预填申领终端（模拟已保存数据：全选）
   document.querySelectorAll('#aa-terminal-sec input[type=checkbox]').forEach(function(cb){ cb.checked=true; });
+  aaResetErrors();
   aaSetEditMode(true);
   openM('m-add-activity');
 }
@@ -3234,6 +3266,7 @@ function openEditMember(){
   if(maxR) maxR.value='555555.00';
   // 修改活动时预填申领终端（全选）
   document.querySelectorAll('#aa-terminal-sec input[type=checkbox]').forEach(function(cb){ cb.checked=true; });
+  aaResetErrors();
   aaSetEditMode(true);
   openM('m-add-activity');
 }
@@ -3450,17 +3483,42 @@ function aaNameToggle(val){
   } else {
     inp.disabled=false; inp.style.background='#fff'; inp.value='';
   }
+  aaReqStar('star-name', val==='custom');
+  aaClearErr('err-name','aa-name-inp');
 }
 function aaTimeToggle(show){
   const r=document.getElementById('aa-time-range');
   if(r) r.style.display=show?'flex':'none';
   const sw=document.getElementById('aa-show-time-wrap');
   if(sw) sw.style.display=show?'flex':'none';
+  aaReqStar('star-time', show);
+  aaClearErr('err-time');
 }
 function aaRuleToggle(val){
   document.getElementById('aa-rule-sys').style.display=val==='sys'?'block':'none';
   document.getElementById('aa-rule-custom').style.display=val==='custom'?'block':'none';
   if(val==='sys') updateRuleText();
+  aaReqStar('star-rule', val==='custom');
+  aaClearErr('err-rule','aa-rule-custom');
+}
+// ── 公共配置校验：辅助函数 ──
+function aaReqStar(id, show){
+  var s=document.getElementById(id);
+  if(s) s.classList.toggle('show', !!show);
+}
+function aaClearErr(errId, fieldId){
+  var e=document.getElementById(errId);
+  if(e) e.classList.remove('show');
+  if(fieldId){ var f=document.getElementById(fieldId); if(f) f.classList.remove('aa-field-invalid'); }
+}
+function aaShowErr(errId, msg, fieldId){
+  var e=document.getElementById(errId);
+  if(e){ if(msg) e.textContent=msg; e.classList.add('show'); }
+  if(fieldId){ var f=document.getElementById(fieldId); if(f) f.classList.add('aa-field-invalid'); }
+}
+function aaRestrictToggle(){
+  aaClearErr('err-r-times','aa-r-times-day'); aaClearErr('err-r-times','aa-r-times-cnt');
+  aaClearErr('err-r-amt','aa-r-amt-day'); aaClearErr('err-r-amt','aa-r-amt-val');
 }
 function updateRuleText(){
   var sysPre=document.getElementById('aa-rule-sys');
@@ -3637,8 +3695,15 @@ function aaClaimToggle(val){
   const termSec = document.getElementById('aa-terminal-sec');
   const restSec = document.getElementById('aa-restrict-sec');
   if(val==='auto'){
+    // 自动领取：申领终端与申领限制置灰且全不选
     if(termSec){ termSec.style.opacity='0.45'; termSec.style.pointerEvents='none'; termSec.querySelectorAll('input[type=checkbox]').forEach(function(cb){cb.checked=false;}); }
-    if(restSec){ restSec.style.opacity='0.45'; restSec.style.pointerEvents='none'; }
+    if(restSec){
+      restSec.style.opacity='0.45'; restSec.style.pointerEvents='none';
+      restSec.querySelectorAll('input[type=checkbox]').forEach(function(cb){cb.checked=false;});
+      restSec.querySelectorAll('input.aa-s-inp').forEach(function(t){t.value='';});
+    }
+    aaReqStar('star-terminal', false);
+    aaClearErr('err-terminal'); aaRestrictToggle();
   } else {
     if(termSec){ termSec.style.opacity='1'; termSec.style.pointerEvents=''; }
     if(restSec){ restSec.style.opacity='1'; restSec.style.pointerEvents=''; }
@@ -3647,6 +3712,7 @@ function aaClaimToggle(val){
       var lbl = document.getElementById('aa-restrict-'+n);
       if(lbl){ lbl.disabled=true; lbl.closest('label').style.opacity='0.4'; lbl.closest('label').style.cursor='not-allowed'; }
     });
+    aaReqStar('star-terminal', true);
   }
   updateRuleText();
 }
@@ -3683,6 +3749,8 @@ function aaLogoStyleToggle(val){
 function aaPlatToggle(val){
   const list=document.getElementById('aa-plat-list');
   if(list) list.style.display=(val==='limited')?'block':'none';
+  aaReqStar('star-plat', val==='limited');
+  aaClearErr('err-plat');
 }
 function aaPlatTab(el, panelId){
   el.closest('.plat-tabs').querySelectorAll('.plat-tab').forEach(t=>t.classList.remove('active'));
@@ -3694,6 +3762,105 @@ function aaPlatTab(el, panelId){
 }
 function aaPlatCheckAll(type, checked){
   document.querySelectorAll('.plat-cb-'+type).forEach(cb=>cb.checked=checked);
+}
+
+// ─── 新增/编辑活动：公共配置项校验与保存 ───
+function aaSave(){
+  var firstErr=null;
+  function fail(errId,msg,fieldId,scrollId){
+    aaShowErr(errId,msg,fieldId);
+    if(!firstErr) firstErr={scroll:scrollId||fieldId||errId, msg:msg||(document.getElementById(errId)?document.getElementById(errId).textContent:'')};
+  }
+  // 清空历史错误
+  ['err-name','err-time','err-terminal','err-r-times','err-r-amt','err-plat','err-rule'].forEach(function(id){var e=document.getElementById(id); if(e) e.classList.remove('show');});
+  document.querySelectorAll('#m-add-activity .aa-field-invalid').forEach(function(f){f.classList.remove('aa-field-invalid');});
+
+  // 1. 活动名称=自定义 → 必填
+  var nameMode=document.querySelector('input[name="aa-name-t"]:checked');
+  if(nameMode && nameMode.value==='custom'){
+    var nameInp=document.getElementById('aa-name-inp');
+    if(!nameInp.value.trim()) fail('err-name','请输入活动名称','aa-name-inp');
+  }
+  // 2. 活动时间=自定义 → 活动时间必填
+  var timeMode=document.querySelector('input[name="aa-time"]:checked');
+  if(timeMode && timeMode.value==='custom'){
+    var ds=document.getElementById('aa-date-start'), de=document.getElementById('aa-date-end');
+    var startEmpty=!ds||ds.textContent==='开始日期'||ds.textContent.trim()==='';
+    var endEmpty=!de||de.textContent==='结束日期'||de.textContent.trim()==='';
+    if(startEmpty||endEmpty) fail('err-time','请选择活动的开始和结束时间',null,'aa-date-range-btn');
+  }
+  // 3. 领取方式=手动 → 申领终端必选、申领限制条件项内数值必填
+  var claimEl=document.getElementById('aa-claim-manual');
+  var isManual=claimEl&&claimEl.checked;
+  if(isManual){
+    var termChecked=false;
+    document.querySelectorAll('#aa-terminal-sec input[type=checkbox]').forEach(function(cb){if(cb.checked) termChecked=true;});
+    if(!termChecked) fail('err-terminal','请选择申领终端',null,'aa-terminal-sec');
+    var tcb=document.getElementById('aa-r-times-cb');
+    if(tcb&&tcb.checked){
+      var td=document.getElementById('aa-r-times-day'), tc=document.getElementById('aa-r-times-cnt');
+      if(!td.value.trim()) fail('err-r-times','申领限制充值天数不能为空','aa-r-times-day');
+      else if(!tc.value.trim()) fail('err-r-times','申领限制充值次数不能为空','aa-r-times-cnt');
+    }
+    var acb=document.getElementById('aa-r-amt-cb');
+    if(acb&&acb.checked){
+      var ad=document.getElementById('aa-r-amt-day'), av=document.getElementById('aa-r-amt-val');
+      if(!ad.value.trim()) fail('err-r-amt','申领限制充值天数不能为空','aa-r-amt-day');
+      else if(!av.value.trim()) fail('err-r-amt','申领限制充值金额不能为空','aa-r-amt-val');
+    }
+  }
+  // 4. 稽核限定平台=仅限以下平台 → 稽核平台必选
+  var platMode=document.querySelector('input[name="aa-plat"]:checked');
+  if(platMode&&platMode.value==='limited'){
+    var platChecked=false;
+    document.querySelectorAll('#aa-plat-list input[type=checkbox]').forEach(function(cb){if(cb.checked) platChecked=true;});
+    if(!platChecked) fail('err-plat','至少选择一个平台或游戏',null,'aa-plat-list');
+  }
+  // 6. 规则说明=自定义 → 规则内容必填
+  var ruleCustom=document.getElementById('aa-rule-custom');
+  if(ruleCustom&&ruleCustom.style.display!=='none'){
+    if(!ruleCustom.value.trim()) fail('err-rule','请输入自定义活动规则','aa-rule-custom');
+  }
+
+  if(firstErr){
+    var el=document.getElementById(firstErr.scroll);
+    if(el&&el.scrollIntoView) el.scrollIntoView({behavior:'smooth',block:'center'});
+    toast(firstErr.msg,true);
+    return;
+  }
+
+  // ── 校验通过：默认值自动填充 ──
+  // 5. 参与层级：未选默认勾选"全部层级"
+  var tierChecked=false;
+  document.querySelectorAll('.aa-tier-cb').forEach(function(cb){if(cb.checked) tierChecked=true;});
+  var allTier=document.getElementById('aa-all-tier');
+  if(!tierChecked&&!(allTier&&allTier.checked)&&allTier){ allTier.checked=true; aaAllTier(true); }
+  // 7. 显示排序：为空默认1
+  var sortInp=document.getElementById('aa-sort-inp');
+  if(sortInp&&!sortInp.value.trim()) sortInp.value='1';
+  // 8. 背景样式=自定义未上传 → 回退系统默认并勾选默认背景图
+  var bgMode=document.querySelector('input[name="aa-bg-style"]:checked');
+  var bgPrev=document.getElementById('aa-bg-custom-preview');
+  var bgUploaded=bgPrev&&bgPrev.style.display!=='none'&&bgPrev.innerHTML.trim()!=='';
+  if(bgMode&&bgMode.value==='custom'&&!bgUploaded){
+    var sysBg=document.querySelector('input[name="aa-bg-style"][value="sys"]');
+    if(sysBg){ sysBg.checked=true; aaBgStyleToggle('sys'); }
+    var bgItems=document.querySelectorAll('#aa-bg-gallery .bg-img-item');
+    if(bgItems.length){ bgItems.forEach(function(it){it.classList.remove('selected'); var r=it.querySelector('input'); if(r) r.checked=false;}); bgItems[0].classList.add('selected'); var fr=bgItems[0].querySelector('input'); if(fr) fr.checked=true; }
+  }
+  // 9. LOGO样式=自定义未上传 → 回退系统默认并勾选默认LOGO
+  var logoMode=document.querySelector('input[name="aa-logo-style"]:checked');
+  var logoPrev=document.getElementById('aa-logo-custom-preview');
+  var logoUploaded=logoPrev&&logoPrev.style.display!=='none'&&logoPrev.innerHTML.trim()!=='';
+  if(logoMode&&logoMode.value==='custom'&&!logoUploaded){
+    var sysLogo=document.querySelector('input[name="aa-logo-style"][value="sys"]');
+    if(sysLogo){ sysLogo.checked=true; aaLogoStyleToggle('sys'); }
+    var logoItems=document.querySelectorAll('#aa-logo-gallery .logo-img-item');
+    if(logoItems.length){ logoItems.forEach(function(it){it.classList.remove('selected'); var r=it.querySelector('input'); if(r) r.checked=false;}); logoItems[0].classList.add('selected'); var lr=logoItems[0].querySelector('input'); if(lr) lr.checked=true; }
+  }
+
+  closeM('m-add-activity');
+  toast('保存成功');
 }
 
 // ─── PREVIEW POPUP ───
