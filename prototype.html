@@ -611,13 +611,13 @@ select.fs.ph{color:#bfbfbf}
   <div class="submenu" id="sub-sys" style="display:none">
     <div class="submenu-item disabled">角色管理</div>
     <div class="submenu-item" id="si-account" onclick="switchPage('account',this)">账号管理</div>
-    <div class="submenu-item" id="si-mafia" onclick="switchPage('mafia',this)">马甲包管理</div>
     <div class="submenu-item disabled">系统设置</div>
     <div class="submenu-item disabled">登录日志</div>
     <div class="submenu-item disabled">谷歌令牌</div>
     <div class="submenu-item disabled">域名管理(新)</div>
     <div class="submenu-item disabled">安全设置</div>
     <div class="submenu-item disabled">子账号绑定(白名单日志)</div>
+    <div class="submenu-item" id="si-mafia" onclick="switchPage('mafia',this)">马甲包管理</div>
   </div>
   <div class="menu-item" onclick="toggleMenu(this,'')"><div class="menu-item-left"><span class="menu-icon">🎮</span>商户游戏管理</div><span class="arrow">›</span></div>
   <div class="menu-item" onclick="toggleMenu(this,'')"><div class="menu-item-left"><span class="menu-icon">👥</span>会员管理</div><span class="arrow">›</span></div>
@@ -706,7 +706,7 @@ select.fs.ph{color:#bfbfbf}
         <div class="filter-row">
           <div class="filter-item"><span class="filter-label">地区：</span><select class="f-select"><option>巴西</option></select></div>
           <div class="filter-item"><span class="filter-label">商户：</span><select class="f-select"><option>762</option></select></div>
-          <div class="filter-item"><span class="filter-label">推广渠道：</span><select class="f-select"><option>全部</option><option>官方渠道</option></select></div>
+          <div class="filter-item"><span class="filter-label">推广渠道：</span><select class="f-select"><option>全部</option></select></div>
           <div class="filter-item"><span class="filter-label">打包进度：</span><select class="f-select"><option>全部</option><option>- -</option><option>待打包</option><option>打包中</option><option>打包完成</option><option>打包失败</option></select></div>
           <div class="filter-item"><span class="filter-label">包类型：</span><select class="f-select"><option>全部</option><option>APK</option></select></div>
           <div class="filter-item"><span class="filter-label">后台显示名称：</span><input class="f-input" placeholder="请输入"></div>
@@ -780,10 +780,10 @@ select.fs.ph{color:#bfbfbf}
             </tr></thead>
             <tbody id="mafia-tbody">
               <tr>
-                <td>巴西</td><td>762</td><td>400205</td><td>官方渠道</td><td>KK678本地包A</td><td>com.kk.localone</td><td>KK678.com</td><td class="muted">- -</td><td>APK</td><td class="muted">- -</td><td><span class="dl-addr" data-full="https://upload-us.q-4-g-r.com/s4/6112906/KK678.com_400205.apk" onmouseenter="showTip(this,this.dataset.full)" onmouseleave="hideTip()"><a style="color:#52c41a;cursor:pointer">https://...</a></span><span class="copy-icon" onclick="copyTxt('https://upload-us.q-4-g-r.com/s4/6112906/KK678.com_400205.apk')" title="复制">⧉</span></td><td class="muted">- -</td><td><span class="src-tag">本地上传</span></td><td>2026-08-22<br>09:10:00</td><td>2026-08-22<br>09:10:00</td><td>Laura888</td><td style="white-space:nowrap"><span class="op-ic" onclick="openMafiaEdit(this)" onmouseenter="showTip(this,'编辑')" onmouseleave="hideTip()" style="color:#0961BD">✎</span><span class="op-ic" onclick="mafiaAskDel(this)" onmouseenter="showTip(this,'删除')" onmouseleave="hideTip()" style="color:#ff4d4f">🗑</span></td>
+                <td>巴西</td><td>762</td><td>400205</td><td class="muted">- -</td><td>KK678本地包A</td><td>com.kk.localone</td><td>KK678.com</td><td class="muted">- -</td><td>APK</td><td class="muted">- -</td><td><span class="dl-addr" data-full="https://upload-us.q-4-g-r.com/s4/6112906/KK678.com_400205.apk" onmouseenter="showTip(this,this.dataset.full)" onmouseleave="hideTip()"><a style="color:#52c41a;cursor:pointer">https://...</a></span><span class="copy-icon" onclick="copyTxt('https://upload-us.q-4-g-r.com/s4/6112906/KK678.com_400205.apk')" title="复制">⧉</span></td><td class="muted">- -</td><td><span class="src-tag">本地上传</span></td><td>2026-08-22<br>09:10:00</td><td>2026-08-22<br>09:10:00</td><td>Laura888</td><td style="white-space:nowrap"><span class="op-ic" onclick="openMafiaEdit(this)" onmouseenter="showTip(this,'编辑')" onmouseleave="hideTip()" style="color:#0961BD">✎</span><span class="op-ic" onclick="mafiaAskDel(this)" onmouseenter="showTip(this,'删除')" onmouseleave="hideTip()" style="color:#ff4d4f">🗑</span></td>
               </tr>
               <tr>
-                <td>巴西</td><td>762</td><td>400206</td><td>官方渠道</td><td>KK678本地包B</td><td>com.kk.localtwo</td><td>kk678.bet</td><td class="muted">- -</td><td>APK</td><td class="muted">- -</td><td><span class="dl-addr" data-full="https://upload-us.q-4-g-r.com/s4/6112906/kk678.bet_400206.apk" onmouseenter="showTip(this,this.dataset.full)" onmouseleave="hideTip()"><a style="color:#52c41a;cursor:pointer">https://...</a></span><span class="copy-icon" onclick="copyTxt('https://upload-us.q-4-g-r.com/s4/6112906/kk678.bet_400206.apk')" title="复制">⧉</span></td><td class="muted">- -</td><td><span class="src-tag">本地上传</span></td><td>2026-08-22<br>09:32:15</td><td>2026-08-22<br>09:32:15</td><td>Laura888</td><td style="white-space:nowrap"><span class="op-ic" onclick="openMafiaEdit(this)" onmouseenter="showTip(this,'编辑')" onmouseleave="hideTip()" style="color:#0961BD">✎</span><span class="op-ic" onclick="mafiaAskDel(this)" onmouseenter="showTip(this,'删除')" onmouseleave="hideTip()" style="color:#ff4d4f">🗑</span></td>
+                <td>巴西</td><td>762</td><td>400206</td><td class="muted">- -</td><td>KK678本地包B</td><td>com.kk.localtwo</td><td>kk678.bet</td><td class="muted">- -</td><td>APK</td><td class="muted">- -</td><td><span class="dl-addr" data-full="https://upload-us.q-4-g-r.com/s4/6112906/kk678.bet_400206.apk" onmouseenter="showTip(this,this.dataset.full)" onmouseleave="hideTip()"><a style="color:#52c41a;cursor:pointer">https://...</a></span><span class="copy-icon" onclick="copyTxt('https://upload-us.q-4-g-r.com/s4/6112906/kk678.bet_400206.apk')" title="复制">⧉</span></td><td class="muted">- -</td><td><span class="src-tag">本地上传</span></td><td>2026-08-22<br>09:32:15</td><td>2026-08-22<br>09:32:15</td><td>Laura888</td><td style="white-space:nowrap"><span class="op-ic" onclick="openMafiaEdit(this)" onmouseenter="showTip(this,'编辑')" onmouseleave="hideTip()" style="color:#0961BD">✎</span><span class="op-ic" onclick="mafiaAskDel(this)" onmouseenter="showTip(this,'删除')" onmouseleave="hideTip()" style="color:#ff4d4f">🗑</span></td>
               </tr>
               <tr>
                 <td>巴西</td><td>762</td><td>400196</td><td>-</td><td>APK新12.24</td><td>com.ezfnyr.hut2wzl</td><td>KK678.com</td><td><button class="btn btn-blue btn-sm">下载</button></td><td>APK</td><td>1.2.3.1</td><td><span class="dl-addr" data-full="https://upload-us.q-4-g-r.com/s4/6112906/KK678.com_400196.apk" onmouseenter="showTip(this,this.dataset.full)" onmouseleave="hideTip()"><a style="color:#52c41a;cursor:pointer">https://...</a></span><span class="copy-icon" onclick="copyTxt('https://upload-us.q-4-g-r.com/s4/6112906/KK678.com_400196.apk')" title="复制">⧉</span></td><td style="color:#52c41a;font-weight:500">打包完成</td><td>-</td><td>2025-12-24<br>08:04:44</td><td>2026-03-20<br>07:58:20</td><td>admin555</td><td style="white-space:nowrap"><span class="op-ic" onclick="openMafiaEdit(this)" onmouseenter="showTip(this,'编辑')" onmouseleave="hideTip()" style="color:#0961BD">✎</span><span class="op-ic" onclick="mafiaAskBuild(this)" onmouseenter="showTip(this,'普通打包')" onmouseleave="hideTip()" style="color:#52c41a">🔧</span><span class="op-ic" onclick="mafiaAskDel(this)" onmouseenter="showTip(this,'删除')" onmouseleave="hideTip()" style="color:#ff4d4f">🗑</span></td>
@@ -2345,7 +2345,7 @@ select.fs.ph{color:#bfbfbf}
     <div class="mb">
       <div class="fi"><span class="fl req">地区：</span><div class="fc"><select class="fs" id="mu-region"><option>巴西</option></select></div></div>
       <div class="fi"><span class="fl req">商户：</span><div class="fc"><select class="fs" id="mu-merchant"><option>762</option></select></div></div>
-      <div class="fi"><span class="fl req">推广渠道：</span><div class="fc"><select class="fs" id="mu-channel"><option>官方渠道</option><option>-</option></select></div></div>
+      <div class="fi"><span class="fl">推广渠道：</span><div class="fc"><select class="fs" id="mu-channel"><option>全部</option></select></div></div>
       <div class="fi"><span class="fl req">包类型：</span><div class="fc"><select class="fs"><option>APK</option></select></div></div>
       <div class="fi"><span class="fl req">后台显示名称：</span><div class="fc"><input class="fin" id="mu-name" placeholder="请输入"></div></div>
       <div class="fi"><span class="fl req">上传APK包：</span><div class="fc">
@@ -3458,7 +3458,7 @@ function saveMafiaUpload(){
   const remark='本地上传';
   const region=document.getElementById('mu-region').value;
   const merchant=document.getElementById('mu-merchant').value;
-  const channel=document.getElementById('mu-channel').value;
+  // 推广渠道暂未启用，列表统一显示 - -
   const now=new Date();
   const ts=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0')+' '+String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0')+':'+String(now.getSeconds()).padStart(2,'0');
   const tsBr=ts.replace(' ','<br>');
@@ -3466,7 +3466,7 @@ function saveMafiaUpload(){
   // 编辑模式：原地更新该行（包ID为系统生成，编辑不变）
   if(mafiaMode==='edit'&&mafiaEditRow){
     const c=mafiaEditRow.children;
-    c[0].textContent=region;c[1].textContent=merchant;c[3].textContent=channel;c[4].textContent=name;
+    c[0].textContent=region;c[1].textContent=merchant;c[4].textContent=name;
     c[5].textContent=mafiaPicked.pkg;c[6].textContent=mafiaPicked.app;
     c[10].innerHTML=mafiaDlInner(url);
     c[12].innerHTML='<span class="src-tag">'+remark+'</span>';
@@ -3476,7 +3476,7 @@ function saveMafiaUpload(){
   // 新增模式：插入新行；包ID由系统生成（非 APK 解析）
   const newId=String(400213+Math.floor(Math.random()*8000));
   const tr=document.createElement('tr');tr.style.background='#f6ffed';
-  tr.innerHTML='<td>'+region+'</td><td>'+merchant+'</td><td>'+newId+'</td><td>'+channel+'</td><td>'+name+'</td>'+
+  tr.innerHTML='<td>'+region+'</td><td>'+merchant+'</td><td>'+newId+'</td><td class="muted">- -</td><td>'+name+'</td>'+
     '<td>'+mafiaPicked.pkg+'</td><td>'+mafiaPicked.app+'</td><td class="muted">- -</td><td>APK</td><td class="muted">- -</td>'+
     '<td>'+mafiaDlInner(url)+'</td><td class="muted">- -</td>'+
     '<td><span class="src-tag">'+remark+'</span></td>'+

@@ -110,7 +110,7 @@ code{background:#f5f5f5;border-radius:3px;padding:1px 6px;font-size:12px;color:#
   <tbody>
     <tr><td>地区</td><td>下拉</td><td><span class="tag tag-req">必填</span></td><td>选择所属地区，如「巴西」。</td></tr>
     <tr><td>商户</td><td>下拉</td><td><span class="tag tag-req">必填</span></td><td>选择所属商户号，如「762」。选项随地区联动。</td></tr>
-    <tr><td>推广渠道</td><td>下拉</td><td><span class="tag tag-req">必填</span></td><td>选择归属推广渠道，如「官方渠道」。用于「选择马甲包」的匹配。</td></tr>
+    <tr><td>推广渠道</td><td>下拉</td><td><span class="tag tag-fixed">暂停用</span></td><td>本期暂未启用：下拉默认「全部」（仅此一项），保存后列表「推广渠道」列显示 <code>- -</code>；筛选区同仅「全部」。</td></tr>
     <tr><td>包类型</td><td>下拉</td><td><span class="tag tag-req">必填</span></td><td>下拉选择，当前选项仅 <code>APK</code> 一项。</td></tr>
     <tr><td>后台显示名称</td><td>输入框</td><td><span class="tag tag-req">必填</span></td><td>运营自定义的识别名，展示在列表「后台显示名称」及前台「选择马甲包」下拉中。<b>全局不允许重复</b>（保存时校验，编辑时排除自身）。</td></tr>
     <tr><td>上传APK包</td><td>文件选择</td><td><span class="tag tag-req">必填</span></td><td>本地选择单个 <code>.apk</code> 文件；仅支持 .apk 格式，单个不超过 <b>100MB</b>。上传后系统解析（见第四节）。</td></tr>
@@ -189,7 +189,8 @@ code{background:#f5f5f5;border-radius:3px;padding:1px 6px;font-size:12px;color:#
 <table>
   <thead><tr><th>列表列</th><th>本地上传取值</th></tr></thead>
   <tbody>
-    <tr><td>地区 / 商户 / 推广渠道 / 后台显示名称</td><td>来自上传表单填写</td></tr>
+    <tr><td>地区 / 商户 / 后台显示名称</td><td>来自上传表单填写</td></tr>
+    <tr><td>推广渠道</td><td><code>- -</code>（本期暂未启用）</td></tr>
     <tr><td>包名称 / APP名称 / 包ID</td><td>系统解析 APK 得到</td></tr>
     <tr><td>包类型</td><td>APK</td></tr>
     <tr><td>下载地址</td><td>系统生成的存储 URL</td></tr>
@@ -207,7 +208,7 @@ code{background:#f5f5f5;border-radius:3px;padding:1px 6px;font-size:12px;color:#
 <div class="section-card" id="s6">
 <h2>六、与推广渠道管理的联动</h2>
 <p>推广渠道管理中「安装类型」包含 APK 时的「选择马甲包」联动功能<b>已具备，本期无需改动</b>。</p>
-<div class="info">说明：本列表中上传成功的 APK 包，在满足匹配条件（地区 / 商户 / 推广渠道一致）后，<b>自动成为「选择马甲包」下拉中的可选项</b>，无需额外操作。参见《PRD · 推广渠道管理模块》。</div>
+<div class="info">说明：本列表中上传成功的 APK 包，在满足匹配条件（地区 / 商户 一致；推广渠道本期暂未启用，暂不参与匹配）后，<b>自动成为「选择马甲包」下拉中的可选项</b>，无需额外操作。参见《PRD · 推广渠道管理模块》。</div>
 </div>
 
 <!-- 七 -->
