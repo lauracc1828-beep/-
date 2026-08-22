@@ -611,6 +611,7 @@ select.fs.ph{color:#bfbfbf}
   <div class="submenu" id="sub-sys" style="display:none">
     <div class="submenu-item disabled">角色管理</div>
     <div class="submenu-item" id="si-account" onclick="switchPage('account',this)">账号管理</div>
+    <div class="submenu-item" id="si-mafia" onclick="switchPage('mafia',this)">马甲包管理</div>
     <div class="submenu-item disabled">系统设置</div>
     <div class="submenu-item disabled">登录日志</div>
     <div class="submenu-item disabled">谷歌令牌</div>
@@ -696,6 +697,104 @@ select.fs.ph{color:#bfbfbf}
         <div class="mh"><span class="mt">删除确认</span><span class="mc" onclick="closeM('m-acct-del')">×</span></div>
         <div class="confirm-body" id="acct-del-text"></div>
         <div class="mf"><button class="btn btn-white" onclick="closeM('m-acct-del')">取消</button><button class="btn btn-danger" onclick="acctConfirmDel()">确定删除</button></div>
+      </div>
+    </div>
+
+    <!-- PAGE: 马甲包管理（系统管理·一期本地上传）-->
+    <div id="pg-mafia" style="display:none">
+      <div class="filter-area">
+        <div class="filter-row">
+          <div class="filter-item"><span class="filter-label">地区：</span><select class="f-select"><option>巴西</option></select></div>
+          <div class="filter-item"><span class="filter-label">商户：</span><select class="f-select"><option>762</option></select></div>
+          <div class="filter-item"><span class="filter-label">推广渠道：</span><select class="f-select"><option>全部</option><option>官方渠道</option></select></div>
+          <div class="filter-item"><span class="filter-label">打包进度：</span><select class="f-select"><option>全部</option><option>- -</option><option>待打包</option><option>打包中</option><option>打包完成</option><option>打包失败</option></select></div>
+          <div class="filter-item"><span class="filter-label">包类型：</span><select class="f-select"><option>全部</option><option>APK</option></select></div>
+          <div class="filter-item"><span class="filter-label">后台显示名称：</span><input class="f-input" placeholder="请输入"></div>
+        </div>
+        <div class="filter-row">
+          <div class="filter-item"><span class="filter-label">最后操作人：</span><input class="f-input" placeholder="请输入"></div>
+          <div class="filter-item"><span class="filter-label">创建时间：</span>
+            <div class="dt-range" id="mafia-dtrange">
+              <span class="dt-seg placeholder" id="mafia-dt-start" onclick="openDtPicker('start')">开始时间</span>
+              <span class="dt-arrow">→</span>
+              <span class="dt-seg placeholder" id="mafia-dt-end" onclick="openDtPicker('end')">结束时间</span>
+              <span class="dt-cal">🗓</span>
+            </div>
+          </div>
+          <button class="btn btn-white">重置</button>
+          <button class="btn btn-blue">查询</button>
+        </div>
+      </div>
+      <div class="action-bar" style="display:flex;justify-content:flex-end;gap:10px;margin-bottom:12px">
+        <button class="btn" style="background:#f5f5f5;color:#bbb;border-color:#d9d9d9;cursor:not-allowed" disabled title="自动打包为二期功能，暂未开放">新增</button>
+        <button class="btn btn-blue" style="background:#52c41a;border-color:#52c41a" onclick="openMafiaUpload()">上传</button>
+      </div>
+      <style>
+        #pg-mafia .table-scroll{overflow-x:visible}
+        #pg-mafia #mafia-table{width:100%;min-width:0;table-layout:fixed;font-size:12px;border-collapse:collapse}
+        #pg-mafia #mafia-table th,#pg-mafia #mafia-table td{padding:8px 5px;word-break:break-all;white-space:normal;vertical-align:middle;text-align:left;line-height:1.4}
+        #pg-mafia #mafia-table th{font-size:12px}
+        #pg-mafia #mafia-table .op-ic{cursor:pointer;font-size:15px;margin-right:6px;display:inline-block}
+        #pg-mafia #mafia-table .btn-sm{padding:0 6px;height:22px;font-size:11px}
+        #pg-mafia .src-tag{display:inline-block;padding:1px 6px;border-radius:10px;font-size:11px;background:#e6f4ff;color:#0961BD;border:1px solid #91caff}
+        #pg-mafia .muted{color:#bbb}
+        /* 日期时间区间选择器 */
+        #pg-mafia .dt-range{display:inline-flex;align-items:center;gap:8px;height:32px;border:1px solid #d9d9d9;border-radius:4px;padding:0 10px;min-width:240px;background:#fff;cursor:pointer;font-size:13px}
+        #pg-mafia .dt-range.active{border-color:#0961BD;box-shadow:0 0 0 2px rgba(9,97,189,.1)}
+        #pg-mafia .dt-seg{color:#333;min-width:118px}
+        #pg-mafia .dt-seg.placeholder{color:#bbb}
+        #pg-mafia .dt-arrow{color:#bbb}
+        #pg-mafia .dt-cal{margin-left:auto;color:#bbb}
+        .dt-picker{position:fixed;display:none;z-index:2500;background:#fff;border:1px solid #eee;border-radius:6px;box-shadow:0 6px 24px rgba(0,0,0,.15);font-size:13px}
+        .dt-picker.show{display:block}
+        .dt-body{display:flex}
+        .dt-cal-panel{padding:12px 14px;border-right:1px solid #f0f0f0;width:280px}
+        .dt-cal-head{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:10px}
+        .dt-cal-head span{cursor:pointer;color:#999;padding:0 3px}
+        .dt-cal-head span:hover{color:#0961BD}
+        .dt-title{color:#333;font-weight:500;min-width:110px;text-align:center;cursor:default!important}
+        .dt-week{display:grid;grid-template-columns:repeat(7,1fr);text-align:center;color:#999;font-size:12px;margin-bottom:6px}
+        .dt-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+        .dt-day{text-align:center;padding:6px 0;border-radius:4px;cursor:pointer;color:#333}
+        .dt-day:hover{background:#e6f4ff}
+        .dt-day.mut{color:#ccc}
+        .dt-day.sel{background:#0961BD;color:#fff}
+        .dt-time-panel{width:210px;display:flex;flex-direction:column}
+        .dt-time-head{text-align:center;padding:9px;border-bottom:1px solid #f0f0f0;color:#333}
+        .dt-time-cols{display:flex;height:238px}
+        .dt-col{flex:1;overflow-y:auto;border-right:1px solid #f5f5f5;text-align:center}
+        .dt-col::-webkit-scrollbar{width:6px}.dt-col::-webkit-scrollbar-thumb{background:#e0e0e0;border-radius:3px}
+        .dt-col div{padding:5px 0;cursor:pointer}
+        .dt-col div:hover{background:#f5f5f5}
+        .dt-col div.sel{background:#e6f4ff;color:#0961BD;font-weight:600}
+        .dt-foot{text-align:right;padding:8px 12px;border-top:1px solid #f0f0f0}
+      </style>
+      <div class="table-wrap">
+        <div class="table-scroll">
+          <table id="mafia-table">
+            <colgroup>
+              <col style="width:3%"><col style="width:4%"><col style="width:5%"><col style="width:6%"><col style="width:8%"><col style="width:9%"><col style="width:6%"><col style="width:5%"><col style="width:4%"><col style="width:5%"><col style="width:6%"><col style="width:6%"><col style="width:6%"><col style="width:6%"><col style="width:6%"><col style="width:4%"><col style="width:6%">
+            </colgroup>
+            <thead><tr>
+              <th>地区</th><th>商户</th><th>包ID</th><th>推广渠道</th><th>后台显示名称</th><th>包名称</th><th>APP名称</th><th>APP图标</th><th>包类型</th><th>母包版本</th><th>下载地址</th><th>打包进度</th><th>备注</th><th>创建时间</th><th>最后操作时间</th><th>操作人</th><th>操作</th>
+            </tr></thead>
+            <tbody id="mafia-tbody">
+              <tr>
+                <td>巴西</td><td>762</td><td>400205</td><td>官方渠道</td><td>KK678本地包A</td><td>com.kk.localone</td><td>KK678.com</td><td class="muted">- -</td><td>APK</td><td class="muted">- -</td><td><span class="dl-addr" data-full="https://upload-us.q-4-g-r.com/s4/6112906/KK678.com_400205.apk" onmouseenter="showTip(this,this.dataset.full)" onmouseleave="hideTip()"><a style="color:#52c41a;cursor:pointer">https://...</a></span><span class="copy-icon" onclick="copyTxt('https://upload-us.q-4-g-r.com/s4/6112906/KK678.com_400205.apk')" title="复制">⧉</span></td><td class="muted">- -</td><td><span class="src-tag">本地上传</span></td><td>2026-08-22<br>09:10:00</td><td>2026-08-22<br>09:10:00</td><td>Laura888</td><td style="white-space:nowrap"><span class="op-ic" onclick="openMafiaEdit(this)" onmouseenter="showTip(this,'编辑')" onmouseleave="hideTip()" style="color:#0961BD">✎</span><span class="op-ic" onclick="mafiaAskDel(this)" onmouseenter="showTip(this,'删除')" onmouseleave="hideTip()" style="color:#ff4d4f">🗑</span></td>
+              </tr>
+              <tr>
+                <td>巴西</td><td>762</td><td>400206</td><td>官方渠道</td><td>KK678本地包B</td><td>com.kk.localtwo</td><td>kk678.bet</td><td class="muted">- -</td><td>APK</td><td class="muted">- -</td><td><span class="dl-addr" data-full="https://upload-us.q-4-g-r.com/s4/6112906/kk678.bet_400206.apk" onmouseenter="showTip(this,this.dataset.full)" onmouseleave="hideTip()"><a style="color:#52c41a;cursor:pointer">https://...</a></span><span class="copy-icon" onclick="copyTxt('https://upload-us.q-4-g-r.com/s4/6112906/kk678.bet_400206.apk')" title="复制">⧉</span></td><td class="muted">- -</td><td><span class="src-tag">本地上传</span></td><td>2026-08-22<br>09:32:15</td><td>2026-08-22<br>09:32:15</td><td>Laura888</td><td style="white-space:nowrap"><span class="op-ic" onclick="openMafiaEdit(this)" onmouseenter="showTip(this,'编辑')" onmouseleave="hideTip()" style="color:#0961BD">✎</span><span class="op-ic" onclick="mafiaAskDel(this)" onmouseenter="showTip(this,'删除')" onmouseleave="hideTip()" style="color:#ff4d4f">🗑</span></td>
+              </tr>
+              <tr>
+                <td>巴西</td><td>762</td><td>400196</td><td>-</td><td>APK新12.24</td><td>com.ezfnyr.hut2wzl</td><td>KK678.com</td><td><button class="btn btn-blue btn-sm">下载</button></td><td>APK</td><td>1.2.3.1</td><td><span class="dl-addr" data-full="https://upload-us.q-4-g-r.com/s4/6112906/KK678.com_400196.apk" onmouseenter="showTip(this,this.dataset.full)" onmouseleave="hideTip()"><a style="color:#52c41a;cursor:pointer">https://...</a></span><span class="copy-icon" onclick="copyTxt('https://upload-us.q-4-g-r.com/s4/6112906/KK678.com_400196.apk')" title="复制">⧉</span></td><td style="color:#52c41a;font-weight:500">打包完成</td><td>-</td><td>2025-12-24<br>08:04:44</td><td>2026-03-20<br>07:58:20</td><td>admin555</td><td style="white-space:nowrap"><span class="op-ic" onclick="openMafiaEdit(this)" onmouseenter="showTip(this,'编辑')" onmouseleave="hideTip()" style="color:#0961BD">✎</span><span class="op-ic" onclick="mafiaAskBuild(this)" onmouseenter="showTip(this,'普通打包')" onmouseleave="hideTip()" style="color:#52c41a">🔧</span><span class="op-ic" onclick="mafiaAskDel(this)" onmouseenter="showTip(this,'删除')" onmouseleave="hideTip()" style="color:#ff4d4f">🗑</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="pagination">
+          <div class="pg-info">共 <b id="mafia-total">3</b> 条数据</div>
+          <div class="pg-controls"><div class="pg-btn active">1</div><select class="pg-size"><option>50 条/页</option></select></div>
+        </div>
       </div>
     </div>
 
@@ -2206,6 +2305,103 @@ select.fs.ph{color:#bfbfbf}
 
 <!-- TOAST -->
 <div class="toast toast-ok" id="g-toast"></div>
+<!-- HOVER TOOLTIP -->
+<div id="g-tip" style="position:fixed;display:none;z-index:3000;background:#1f1f1f;color:#fff;padding:6px 12px;border-radius:6px;font-size:12px;max-width:560px;word-break:break-all;box-shadow:0 4px 16px rgba(0,0,0,.25);pointer-events:none"></div>
+<!-- 创建时间：日期时间区间选择器 -->
+<div class="dt-picker" id="dt-picker">
+  <div class="dt-body">
+    <div class="dt-cal-panel">
+      <div class="dt-cal-head">
+        <span onclick="dtNavY(-1)" title="上一年">«</span><span onclick="dtNavM(-1)" title="上一月">‹</span>
+        <span class="dt-title" id="dt-title">2026年 7月</span>
+        <span onclick="dtNavM(1)" title="下一月">›</span><span onclick="dtNavY(1)" title="下一年">»</span>
+      </div>
+      <div class="dt-week"><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span><span>日</span></div>
+      <div class="dt-grid" id="dt-grid"></div>
+    </div>
+    <div class="dt-time-panel">
+      <div class="dt-time-head" id="dt-time-head">00:00:00</div>
+      <div class="dt-time-cols">
+        <div class="dt-col" id="dt-hh"></div>
+        <div class="dt-col" id="dt-mm"></div>
+        <div class="dt-col" id="dt-ss"></div>
+      </div>
+    </div>
+  </div>
+  <div class="dt-foot"><button class="btn btn-blue btn-sm" onclick="dtConfirm()">确 定</button></div>
+</div>
+
+<!-- 马甲包管理：上传弹窗（一期新增）-->
+<style>
+  #m-mafia-upload .fi{align-items:center}
+  #m-mafia-upload .fl{line-height:1.2;font-size:12px;display:flex;align-items:center;justify-content:flex-end}
+  #m-mafia-upload .fc{display:flex;align-items:center;flex-wrap:wrap}
+  #m-mafia-upload .fs,#m-mafia-upload .fin{font-size:12px}
+  #m-mafia-upload .hint{width:100%}
+</style>
+<div class="overlay" id="m-mafia-upload">
+  <div class="modal" style="width:560px">
+    <div class="mh"><span class="mt" id="mu-title">上传马甲包</span><span class="mc" onclick="closeM('m-mafia-upload')">×</span></div>
+    <div class="mb">
+      <div class="fi"><span class="fl req">地区：</span><div class="fc"><select class="fs" id="mu-region"><option>巴西</option></select></div></div>
+      <div class="fi"><span class="fl req">商户：</span><div class="fc"><select class="fs" id="mu-merchant"><option>762</option></select></div></div>
+      <div class="fi"><span class="fl req">推广渠道：</span><div class="fc"><select class="fs" id="mu-channel"><option>官方渠道</option><option>-</option></select></div></div>
+      <div class="fi"><span class="fl req">包类型：</span><div class="fc"><select class="fs"><option>APK</option></select></div></div>
+      <div class="fi"><span class="fl req">后台显示名称：</span><div class="fc"><input class="fin" id="mu-name" placeholder="请输入"></div></div>
+      <div class="fi"><span class="fl req">上传APK包：</span><div class="fc">
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+          <button class="btn btn-blue btn-sm" onclick="pickMafiaFile('ok')">选择文件</button>
+          <button class="btn btn-white btn-sm" onclick="pickMafiaFile('err')">模拟损坏包</button>
+          <span id="mu-file" style="font-size:12px;color:#52c41a"></span>
+        </div>
+        <div class="hint">仅支持 .apk 文件，单个不超过 100MB</div>
+        <div id="mu-parse" style="display:none;margin-top:8px;border-radius:4px;padding:8px 12px;font-size:12px"></div>
+      </div></div>
+    </div>
+    <div class="mf">
+      <button class="btn btn-white" onclick="closeM('m-mafia-upload')">取消</button>
+      <button class="btn btn-blue" onclick="saveMafiaUpload()">保存</button>
+    </div>
+  </div>
+</div>
+
+<!-- 马甲包管理：删除二次确认 -->
+<div class="overlay" id="m-mafia-del">
+  <div class="modal" style="width:420px">
+    <div class="mb" style="padding:28px 28px 8px">
+      <div style="display:flex;align-items:flex-start;gap:12px">
+        <span style="flex-shrink:0;width:22px;height:22px;border-radius:50%;background:#1c6fe0;color:#fff;font-size:14px;display:flex;align-items:center;justify-content:center;font-weight:700">i</span>
+        <div>
+          <div style="font-size:15px;font-weight:600;color:#262626;margin-bottom:8px">温馨提示</div>
+          <div style="font-size:13px;color:#8c8c8c">确认是否要删除该条配置信息？</div>
+        </div>
+      </div>
+    </div>
+    <div class="mf" style="justify-content:flex-end;border-top:none;padding-top:8px">
+      <button class="btn btn-white" onclick="closeM('m-mafia-del')">取消</button>
+      <button class="btn btn-blue" onclick="mafiaConfirmDel()">确定</button>
+    </div>
+  </div>
+</div>
+
+<!-- 马甲包管理：打包二次确认（自动打包行·普通打包）-->
+<div class="overlay" id="m-mafia-build">
+  <div class="modal" style="width:420px">
+    <div class="mb" style="padding:28px 28px 8px">
+      <div style="display:flex;align-items:flex-start;gap:12px">
+        <span style="flex-shrink:0;width:22px;height:22px;border-radius:50%;background:#1c6fe0;color:#fff;font-size:14px;display:flex;align-items:center;justify-content:center;font-weight:700">i</span>
+        <div>
+          <div style="font-size:15px;font-weight:600;color:#262626;margin-bottom:8px">温馨提示</div>
+          <div style="font-size:13px;color:#8c8c8c">确认是否要开始打包？</div>
+        </div>
+      </div>
+    </div>
+    <div class="mf" style="justify-content:flex-end;border-top:none;padding-top:8px">
+      <button class="btn btn-white" onclick="closeM('m-mafia-build')">取消</button>
+      <button class="btn btn-blue" onclick="mafiaConfirmBuild()">确定</button>
+    </div>
+  </div>
+</div>
 
 <!-- ═══════════════ MODALS ═══════════════ -->
 
@@ -3149,7 +3345,7 @@ function guideAddrChange(){
 const _origSwitchPage = switchPage;
 function switchPage(page, el){
   // hide all pages
-  ['pg-channel','pg-effect','pg-guide','pg-activity-list','pg-appstore','pg-account'].forEach(function(id){
+  ['pg-channel','pg-effect','pg-guide','pg-activity-list','pg-appstore','pg-account','pg-mafia'].forEach(function(id){
     var p=document.getElementById(id); if(p) p.style.display='none';
   });
   // show requested
@@ -3167,9 +3363,10 @@ function switchPage(page, el){
     'guide':'推广渠道管理 / 安装引导页',
     'activity-list':'福利中心 / 活动列表',
     'appstore':'推广渠道管理 / 仿应用商店',
-    'account':'系统管理 / 账号管理'
+    'account':'系统管理 / 账号管理',
+    'mafia':'系统管理 / 马甲包管理'
   };
-  const bcSec = {'channel':'DD后台管理','effect':'DD后台管理','guide':'DD后台管理','activity-list':'DD后台管理','appstore':'DD后台管理','account':'DD后台管理'};
+  const bcSec = {'channel':'DD后台管理','effect':'DD后台管理','guide':'DD后台管理','activity-list':'DD后台管理','appstore':'DD后台管理','account':'DD后台管理','mafia':'DD后台管理'};
   const bcEl = document.getElementById('breadcrumb');
   if(bcEl){
     const txt = document.getElementById('bc-text');
@@ -3179,6 +3376,212 @@ function switchPage(page, el){
   }
   if(page==='appstore') asRenderTable();
   if(page==='account') acctRender();
+}
+
+// ─── 马甲包管理：本地上传（一期）───
+const mafiaParsePool=[
+  {pkg:'com.braz.kk678apk',ver:'1.3.0',id:'400210',app:'KK678.com'},
+  {pkg:'com.win.pandaslot',ver:'1.4.2',id:'400211',app:'KK678.com'},
+  {pkg:'com.lucky.br7pk',ver:'2.0.1',id:'400212',app:'kk678.bet'}
+];
+let mafiaPicked=null, mafiaMode='add', mafiaEditRow=null;
+
+// 悬浮提示（下载完整地址 / 操作图标说明）
+function showTip(el,text){
+  const t=document.getElementById('g-tip');
+  t.textContent=text;t.style.display='block';
+  const r=el.getBoundingClientRect();
+  let top=r.top-t.offsetHeight-8; if(top<4) top=r.bottom+8;
+  let left=r.left+r.width/2-t.offsetWidth/2;
+  left=Math.max(6,Math.min(left,window.innerWidth-t.offsetWidth-6));
+  t.style.top=top+'px';t.style.left=left+'px';
+}
+function hideTip(){document.getElementById('g-tip').style.display='none';}
+
+// 下载地址单元格内容（含完整地址悬浮 + 复制图标）
+function mafiaDlInner(url){
+  return '<span class="dl-addr" data-full="'+url+'" onmouseenter="showTip(this,this.dataset.full)" onmouseleave="hideTip()"><a style="color:#52c41a;cursor:pointer">https://...</a></span>'+
+    '<span class="copy-icon" onclick="copyTxt(\''+url+'\')" title="复制">⧉</span>';
+}
+// 操作列（本地上传：编辑+删除；带图标说明悬浮）
+function mafiaOpCell(){
+  return '<td style="white-space:nowrap">'+
+    '<span class="op-ic" onclick="openMafiaEdit(this)" onmouseenter="showTip(this,\'编辑\')" onmouseleave="hideTip()" style="color:#0961BD">✎</span>'+
+    '<span class="op-ic" onclick="mafiaAskDel(this)" onmouseenter="showTip(this,\'删除\')" onmouseleave="hideTip()" style="color:#ff4d4f">🗑</span></td>';
+}
+function mafiaBuildUrl(p){return 'https://upload-us.q-4-g-r.com/s4/6112906/'+(p.app||'app').replace(/\s/g,'')+'_'+p.id+'.apk';}
+
+function openMafiaUpload(){
+  mafiaMode='add';mafiaEditRow=null;mafiaPicked=null;
+  document.getElementById('mu-title').textContent='上传马甲包';
+  document.getElementById('mu-file').textContent='';
+  document.getElementById('mu-region').value='巴西';
+  document.getElementById('mu-merchant').value='762';
+  document.getElementById('mu-channel').value='官方渠道';
+  document.getElementById('mu-name').value='';
+  const pb=document.getElementById('mu-parse');pb.style.display='none';pb.innerHTML='';
+  openM('m-mafia-upload');
+}
+function openMafiaEdit(el){
+  mafiaMode='edit';mafiaEditRow=el.closest('tr');
+  const c=mafiaEditRow.children;
+  document.getElementById('mu-title').textContent='编辑马甲包';
+  document.getElementById('mu-region').value=c[0].textContent.trim();
+  document.getElementById('mu-merchant').value=c[1].textContent.trim();
+  document.getElementById('mu-channel').value=c[3].textContent.trim();
+  document.getElementById('mu-name').value=c[4].textContent.trim();
+  // 用现有包信息预置；不重新上传则保持不变
+  mafiaPicked={pkg:c[5].textContent.trim(),app:c[6].textContent.trim(),id:c[2].textContent.trim(),ver:c[9].textContent.trim()};
+  document.getElementById('mu-file').textContent='当前包：'+mafiaPicked.pkg+'（可重新上传替换）';
+  const pb=document.getElementById('mu-parse');pb.style.display='none';pb.innerHTML='';
+  openM('m-mafia-upload');
+}
+function pickMafiaFile(mode){
+  const pb=document.getElementById('mu-parse');pb.style.display='block';
+  if(mode==='err'){
+    document.getElementById('mu-file').textContent='damaged_pkg.apk';mafiaPicked=null;
+    pb.style.background='#fff2f0';pb.style.border='1px solid #ffccc7';pb.style.color='#cf1322';
+    pb.innerHTML='✕ 解析失败：文件损坏或非合法 APK，请重新上传。（阻断保存）';return;
+  }
+  mafiaPicked=mafiaParsePool[Math.floor(Math.random()*mafiaParsePool.length)];
+  document.getElementById('mu-file').textContent='kk678_'+mafiaPicked.ver+'.apk';
+  pb.style.background='#f6ffed';pb.style.border='1px solid #b7eb8f';pb.style.color='#135200';
+  pb.innerHTML='✓ 系统已解析 APK：包名称 <b>'+mafiaPicked.pkg+'</b> · APP名称 <b>'+mafiaPicked.app+'</b>（自动回填，无需手填）';
+}
+function saveMafiaUpload(){
+  const name=document.getElementById('mu-name').value.trim();
+  if(!name){toast('请填写后台显示名称',true);return;}
+  if(!mafiaPicked){toast('请先上传合法的 APK 文件',true);return;}
+  // 后台显示名称不允许重复（编辑时排除自身；包名称等允许重复）
+  const dup=Array.prototype.some.call(document.querySelectorAll('#mafia-tbody tr'),function(r){return r!==mafiaEditRow && r.children[4].textContent.trim()===name;});
+  if(dup){toast('后台显示名称已存在，请修改',true);return;}
+  const remark='本地上传';
+  const region=document.getElementById('mu-region').value;
+  const merchant=document.getElementById('mu-merchant').value;
+  const channel=document.getElementById('mu-channel').value;
+  const now=new Date();
+  const ts=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0')+' '+String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0')+':'+String(now.getSeconds()).padStart(2,'0');
+  const tsBr=ts.replace(' ','<br>');
+  const url=mafiaBuildUrl(mafiaPicked);
+  // 编辑模式：原地更新该行（包ID为系统生成，编辑不变）
+  if(mafiaMode==='edit'&&mafiaEditRow){
+    const c=mafiaEditRow.children;
+    c[0].textContent=region;c[1].textContent=merchant;c[3].textContent=channel;c[4].textContent=name;
+    c[5].textContent=mafiaPicked.pkg;c[6].textContent=mafiaPicked.app;
+    c[10].innerHTML=mafiaDlInner(url);
+    c[12].innerHTML='<span class="src-tag">'+remark+'</span>';
+    c[14].innerHTML=tsBr;
+    closeM('m-mafia-upload');toast('保存成功');return;
+  }
+  // 新增模式：插入新行；包ID由系统生成（非 APK 解析）
+  const newId=String(400213+Math.floor(Math.random()*8000));
+  const tr=document.createElement('tr');tr.style.background='#f6ffed';
+  tr.innerHTML='<td>'+region+'</td><td>'+merchant+'</td><td>'+newId+'</td><td>'+channel+'</td><td>'+name+'</td>'+
+    '<td>'+mafiaPicked.pkg+'</td><td>'+mafiaPicked.app+'</td><td class="muted">- -</td><td>APK</td><td class="muted">- -</td>'+
+    '<td>'+mafiaDlInner(url)+'</td><td class="muted">- -</td>'+
+    '<td><span class="src-tag">'+remark+'</span></td>'+
+    '<td>'+tsBr+'</td><td>'+tsBr+'</td><td>Laura888</td>'+
+    mafiaOpCell();
+  const tb=document.getElementById('mafia-tbody');tb.insertBefore(tr,tb.firstChild);
+  document.getElementById('mafia-total').textContent=tb.children.length;
+  // 联动：上传的包实时加入「选择马甲包」下拉，满足匹配即可选
+  const sel=document.getElementById('mafia-select');
+  if(sel){const opt=document.createElement('option');opt.value=name+'|'+url+'|'+mafiaPicked.pkg;opt.textContent=name;sel.appendChild(opt);}
+  closeM('m-mafia-upload');
+  toast('上传成功，已生成下载地址并进入列表');
+}
+
+// ─── 马甲包管理：删除（二次确认）───
+let mafiaDelRow=null;
+function mafiaAskDel(el){mafiaDelRow=el.closest('tr');openM('m-mafia-del');}
+function mafiaConfirmDel(){
+  if(mafiaDelRow){mafiaDelRow.remove();mafiaDelRow=null;
+    const tb=document.getElementById('mafia-tbody');
+    document.getElementById('mafia-total').textContent=tb.children.length;
+  }
+  closeM('m-mafia-del');
+  toast('删除成功');
+}
+
+// ─── 创建时间：日期时间区间选择器 ───
+let dtField='start';
+const dtState={start:null,end:null};
+let dtY,dtMo,dtD,dtH,dtMi,dtS;
+function dtPad(n){return String(n).padStart(2,'0');}
+function openDtPicker(field){
+  dtField=field;
+  const cur=dtState[field];
+  const base=cur?new Date(cur.replace(/-/g,'/')):new Date();
+  dtY=base.getFullYear();dtMo=base.getMonth();dtD=base.getDate();
+  dtH=cur?base.getHours():0;dtMi=cur?base.getMinutes():0;dtS=cur?base.getSeconds():0;
+  dtRenderCal();dtRenderTime();
+  const box=document.getElementById('mafia-dtrange');box.classList.add('active');
+  const p=document.getElementById('dt-picker');p.classList.add('show');
+  const r=box.getBoundingClientRect();
+  let top=r.bottom+6, left=r.left;
+  if(left+p.offsetWidth>window.innerWidth-8) left=window.innerWidth-p.offsetWidth-8;
+  if(top+p.offsetHeight>window.innerHeight-8) top=r.top-p.offsetHeight-6;
+  p.style.top=top+'px';p.style.left=left+'px';
+}
+function dtCloseP(){document.getElementById('dt-picker').classList.remove('show');document.getElementById('mafia-dtrange').classList.remove('active');}
+function dtNavM(d){dtMo+=d; if(dtMo<0){dtMo=11;dtY--;} if(dtMo>11){dtMo=0;dtY++;} dtRenderCal();}
+function dtNavY(d){dtY+=d;dtRenderCal();}
+function dtRenderCal(){
+  document.getElementById('dt-title').textContent=dtY+'年 '+(dtMo+1)+'月';
+  const first=new Date(dtY,dtMo,1);
+  let lead=(first.getDay()+6)%7; // 周一起始
+  const daysIn=new Date(dtY,dtMo+1,0).getDate();
+  const prevDays=new Date(dtY,dtMo,0).getDate();
+  const g=document.getElementById('dt-grid');g.innerHTML='';
+  for(let i=0;i<42;i++){
+    let d,cls='dt-day',mo=dtMo,yr=dtY;
+    if(i<lead){d=prevDays-lead+1+i;cls+=' mut';}
+    else if(i>=lead+daysIn){d=i-lead-daysIn+1;cls+=' mut';}
+    else{d=i-lead+1; if(d===dtD)cls+=' sel';}
+    const el=document.createElement('div');el.className=cls;el.textContent=d;
+    if(!cls.includes('mut'))el.onclick=function(){dtD=d;dtRenderCal();};
+    g.appendChild(el);
+  }
+}
+function dtCol(id,max,val,setter){
+  const c=document.getElementById(id);c.innerHTML='';
+  for(let i=0;i<max;i++){
+    const el=document.createElement('div');el.textContent=dtPad(i);
+    if(i===val){el.className='sel';}
+    el.onclick=function(){setter(i);dtRenderTime();};
+    c.appendChild(el);
+  }
+  const sel=c.querySelector('.sel'); if(sel) sel.scrollIntoView({block:'center'});
+}
+function dtRenderTime(){
+  document.getElementById('dt-time-head').textContent=dtPad(dtH)+':'+dtPad(dtMi)+':'+dtPad(dtS);
+  dtCol('dt-hh',24,dtH,function(v){dtH=v;});
+  dtCol('dt-mm',60,dtMi,function(v){dtMi=v;});
+  dtCol('dt-ss',60,dtS,function(v){dtS=v;});
+}
+function dtConfirm(){
+  const val=dtY+'-'+dtPad(dtMo+1)+'-'+dtPad(dtD)+' '+dtPad(dtH)+':'+dtPad(dtMi)+':'+dtPad(dtS);
+  dtState[dtField]=val;
+  const seg=document.getElementById('mafia-dt-'+dtField);
+  seg.textContent=val;seg.classList.remove('placeholder');
+  dtCloseP();
+}
+document.addEventListener('mousedown',function(e){
+  const p=document.getElementById('dt-picker');const box=document.getElementById('mafia-dtrange');
+  if(p&&p.classList.contains('show')&&!p.contains(e.target)&&box&&!box.contains(e.target))dtCloseP();
+});
+
+// ─── 马甲包管理：普通打包（自动打包行，演示机制）───
+let mafiaBuildRow=null;
+function mafiaAskBuild(el){mafiaBuildRow=el.closest('tr');openM('m-mafia-build');}
+function mafiaConfirmBuild(){
+  closeM('m-mafia-build');
+  if(!mafiaBuildRow){return;}
+  const cell=mafiaBuildRow.children[11]; // 打包进度
+  cell.className='';cell.style.color='#fa8c16';cell.style.fontWeight='500';cell.textContent='正在打包';
+  const row=mafiaBuildRow;mafiaBuildRow=null;
+  toast('已开始打包');
+  setTimeout(function(){const c=row.children[11];c.style.color='#52c41a';c.textContent='打包完成';},2000);
 }
 
 // ─── 账号管理：软删除 + 二次确认 + 本人保护 ───

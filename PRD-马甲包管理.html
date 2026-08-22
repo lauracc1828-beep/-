@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PRD · 马甲包管理（一期·本地上传）</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;background:#f5f6fa;color:#333;font-size:14px;line-height:1.7}
+.page{max-width:960px;margin:0 auto;padding:40px 20px}
+h1{font-size:26px;font-weight:700;color:#1a1a2e;margin-bottom:6px}
+.meta{color:#888;font-size:13px;margin-bottom:32px;display:flex;gap:20px;flex-wrap:wrap}
+.meta span{display:flex;align-items:center;gap:4px}
+h2{font-size:18px;font-weight:700;color:#0961BD;margin:40px 0 16px;padding-bottom:8px;border-bottom:2px solid #e8f0ff}
+h3{font-size:15px;font-weight:600;color:#262626;margin:28px 0 12px}
+p{margin-bottom:12px;color:#444}
+ul{margin:0 0 12px 22px}
+li{margin-bottom:6px;color:#444}
+.note{background:#fff7e6;border-left:3px solid #fa8c16;padding:10px 14px;border-radius:4px;margin:12px 0;font-size:13px;color:#7d4f00}
+.info{background:#e6f4ff;border-left:3px solid #0961BD;padding:10px 14px;border-radius:4px;margin:12px 0;font-size:13px;color:#003a8c}
+.tip{background:#f6ffed;border-left:3px solid #52c41a;padding:10px 14px;border-radius:4px;margin:12px 0;font-size:13px;color:#135200}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13px;background:#fff;border-radius:6px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+th{background:#f0f5ff;padding:10px 14px;text-align:left;font-weight:600;color:#0961BD;border-bottom:2px solid #d6e4ff;white-space:nowrap}
+td{padding:9px 14px;border-bottom:1px solid #f0f0f0;vertical-align:top}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#fafcff}
+td:first-child{white-space:nowrap;font-weight:500}
+.tag{display:inline-block;padding:1px 8px;border-radius:10px;font-size:11px;font-weight:500}
+.tag-req{background:#fff0f0;color:#cf1322;border:1px solid #ffa39e}
+.tag-opt{background:#f6ffed;color:#389e0d;border:1px solid #b7eb8f}
+.tag-fixed{background:#f0f0f0;color:#595959;border:1px solid #d9d9d9}
+.tag-auto{background:#e6f4ff;color:#0961BD;border:1px solid #91caff}
+.toc{background:#fff;border-radius:8px;padding:20px 24px;margin-bottom:32px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.toc h3{margin:0 0 12px;font-size:14px;color:#888}
+.toc ol{padding-left:20px}
+.toc li{margin-bottom:6px}
+.toc a{color:#0961BD;text-decoration:none;font-size:13px}
+.toc a:hover{text-decoration:underline}
+.section-card{background:#fff;border-radius:8px;padding:28px 32px;margin-bottom:24px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.flow-wrap{background:#f8f9ff;border-radius:8px;padding:20px;margin:16px 0;overflow-x:auto;text-align:center}
+code{background:#f5f5f5;border-radius:3px;padding:1px 6px;font-size:12px;color:#c41d7f;font-family:monospace}
+</style>
+</head>
+<body>
+<div class="page">
+
+<h1>马甲包管理 — 一期需求文档（本地上传）</h1>
+<div class="meta">
+  <span>版本：v1.2</span>
+  <span>作者：Laura</span>
+  <span>更新日期：2026-08-22</span>
+</div>
+
+<div class="toc">
+  <h3>目录</h3>
+  <ol>
+    <li><a href="#s1">一、背景与目标</a></li>
+    <li><a href="#s2">二、一期范围与边界</a></li>
+    <li><a href="#s3">三、功能设计</a></li>
+    <li><a href="#s4">四、系统解析 APK 与校验</a></li>
+    <li><a href="#s5">五、保存后列表呈现</a></li>
+    <li><a href="#s6">六、与推广渠道管理的联动</a></li>
+    <li><a href="#s7">七、业务流程图</a></li>
+    <li><a href="#s8">八、异常与边界</a></li>
+  </ol>
+</div>
+
+<!-- 一 -->
+<div class="section-card" id="s1">
+<h2>一、背景与目标</h2>
+<p>本需求为<b>新建菜单</b>「系统管理 - 马甲包管理」（此前不存在），用于管理供推广渠道使用的 APK 马甲包。本期新建该菜单及其列表页与表单框架。</p>
+<p>因推广渠道管理侧（安装类型包含 APK 时的「选择马甲包」）当前急需可供选择的成品 APK 包，功能按两期上线：</p>
+<ul>
+  <li><b>一期（本次）：</b>搭建菜单与表单框架，仅上线<b>「上传」</b>功能——本地上传成品 APK 包，上传后进入列表，供推广渠道管理「选择马甲包」调用。</li>
+  <li><b>二期（后续）：</b>完整打包功能（「新增」入口），不在本文档范围内。</li>
+</ul>
+<div class="info">目标：让运营能把现成的 APK 成品包录入系统，即刻成为推广渠道管理的可选马甲包。</div>
+</div>
+
+<!-- 二 -->
+<div class="section-card" id="s2">
+<h2>二、一期范围与边界</h2>
+<h3>本期做</h3>
+<ul>
+  <li>新建「系统管理 → 马甲包管理」菜单及列表页。</li>
+  <li>新增「上传」按钮及上传弹窗，支持本地上传单个 <code>.apk</code> 成品包，系统解析包信息并入列表。</li>
+  <li>上传记录支持「编辑」（可重新上传替换 APK）与「删除」（二次确认）。</li>
+</ul>
+<h3>本期不做 / 界面处置</h3>
+<ul>
+  <li>完整打包功能为二期：列表操作区「<b>新增</b>」按钮本期<b>置灰禁用</b>，「<b>操作说明</b>」按钮<b>隐藏</b>。</li>
+  <li>不改动推广渠道管理「选择马甲包」功能（该联动已具备，见第六节）。</li>
+  <li>暂仅支持 APK 包类型。</li>
+</ul>
+<div class="note">来源区分：上传记录在「备注」栏默认标记 <code>本地上传</code>。原型统一维护在 <code>prototype.html</code>（系统管理 → 马甲包管理）。</div>
+</div>
+
+<!-- 三 -->
+<div class="section-card" id="s3">
+<h2>三、功能设计</h2>
+
+<h3>3.1 菜单与入口</h3>
+<p>新建菜单：<b>系统管理 → 马甲包管理</b>。进入为列表页，含筛选区（地区 / 商户 / 推广渠道 / 打包进度 / 包类型 / 后台显示名称 / 最后操作人 / 创建时间）与数据列表。</p>
+<p>列表页右上操作区含<b>「上传」</b>按钮，点击弹出「上传马甲包」弹窗；「新增」按钮本期置灰禁用（二期打包功能），「操作说明」按钮隐藏。</p>
+
+<h3>3.2 上传表单字段</h3>
+<p>「上传马甲包」弹窗字段如下：</p>
+<table>
+  <thead><tr><th>字段</th><th>控件</th><th>必填</th><th>选项 / 说明</th></tr></thead>
+  <tbody>
+    <tr><td>地区</td><td>下拉</td><td><span class="tag tag-req">必填</span></td><td>选择所属地区，如「巴西」。</td></tr>
+    <tr><td>商户</td><td>下拉</td><td><span class="tag tag-req">必填</span></td><td>选择所属商户号，如「762」。选项随地区联动。</td></tr>
+    <tr><td>推广渠道</td><td>下拉</td><td><span class="tag tag-req">必填</span></td><td>选择归属推广渠道，如「官方渠道」。用于「选择马甲包」的匹配。</td></tr>
+    <tr><td>包类型</td><td>下拉</td><td><span class="tag tag-req">必填</span></td><td>下拉选择，当前选项仅 <code>APK</code> 一项。</td></tr>
+    <tr><td>后台显示名称</td><td>输入框</td><td><span class="tag tag-req">必填</span></td><td>运营自定义的识别名，展示在列表「后台显示名称」及前台「选择马甲包」下拉中。<b>全局不允许重复</b>（保存时校验，编辑时排除自身）。</td></tr>
+    <tr><td>上传APK包</td><td>文件选择</td><td><span class="tag tag-req">必填</span></td><td>本地选择单个 <code>.apk</code> 文件；仅支持 .apk 格式，单个不超过 <b>100MB</b>。上传后系统解析（见第四节）。</td></tr>
+  </tbody>
+</table>
+<div class="info">包名称（如 <code>com.xxx</code>）、APP名称<b>不在表单中手填</b>，由系统解析 APK 得到；<b>包ID 由系统生成</b>（非 APK 解析）。均无需人工录入（见第四节）。<span class="tag tag-auto">自动</span></div>
+<div class="note">表单不含「备注」字段：备注由系统自动填写为 <code>本地上传</code>（用于区分来源），无需运营录入。</div>
+
+<h3>3.3 编辑</h3>
+<p>列表中本地上传记录的「编辑」操作，<b>弹窗字段与上传弹窗完全一致</b>，并预填该条已有信息（地区、商户、推广渠道、包类型、后台显示名称）。</p>
+<ul>
+  <li><b>允许重新上传 APK 包</b>替换：重新选择文件后系统重新解析，回填新的包名称、包ID；不重新上传则保留原包信息。</li>
+  <li>保存后<b>原地更新</b>该行，并刷新「最后操作时间」。</li>
+  <li>包类型固定 APK 不可改；包名称由解析生成、只读。</li>
+</ul>
+
+<h3>3.4 删除</h3>
+<p>点击「删除」弹出<b>二次确认</b>，确认后移除该条记录。确认弹框文案（沿用现有风格）：</p>
+<div class="note">标题「温馨提示」；正文「确认是否要删除该条配置信息？」；按钮「取消 / 确定」。</div>
+
+<h3>3.5 操作区图标</h3>
+<p>本地上传记录的操作列含两个图标：<b>✎ 编辑</b>、<b>🗑 删除</b>。图标鼠标移入显示文字说明（「编辑」「删除」）。</p>
+<div class="note">列表列结构预留二期打包功能所需的字段与操作（如打包相关图标），本期不实现；本地上传记录不涉及打包，操作仅编辑、删除。</div>
+
+<h3>3.6 下载地址交互</h3>
+<p>列表「下载地址」列显示为省略形式（<code>https://...</code>），并提供：</p>
+<ul>
+  <li><b>悬浮完整地址：</b>鼠标移入以浮层显示完整下载地址（如 <code>https://upload-us.q-4-g-r.com/s4/6112906/KK678.com_400196.apk</code>）。</li>
+  <li><b>复制图标：</b>地址后置复制图标，点击复制完整地址并提示「链接已复制」。</li>
+</ul>
+
+<h3>3.7 保存校验与空状态提示</h3>
+<p>点击「保存」时逐项校验，任一未通过则<b>阻断保存</b>并给出对应提示（Toast）；提示后停留在弹窗，待修正：</p>
+<table>
+  <thead><tr><th>空状态 / 错误场景</th><th>提示文案</th></tr></thead>
+  <tbody>
+    <tr><td>地区未选择</td><td>请选择地区</td></tr>
+    <tr><td>商户未选择</td><td>请选择商户</td></tr>
+    <tr><td>推广渠道未选择</td><td>请选择推广渠道</td></tr>
+    <tr><td>包类型未选择</td><td>请选择包类型</td></tr>
+    <tr><td>后台显示名称未填写</td><td>请填写后台显示名称</td></tr>
+    <tr><td>后台显示名称与已有记录重复</td><td>后台显示名称已存在，请修改</td></tr>
+    <tr><td>未上传 APK 文件（或未通过解析）</td><td>请先上传合法的 APK 文件</td></tr>
+    <tr><td>APK 非法 / 损坏（解析失败）</td><td>解析失败：文件损坏或非合法 APK，请重新上传</td></tr>
+    <tr><td>文件格式非 .apk / 超过 100MB</td><td>选择文件时即拦截，提示格式或大小限制</td></tr>
+  </tbody>
+</table>
+</div>
+
+<!-- 四 -->
+<div class="section-card" id="s4">
+<h2>四、系统解析 APK 与校验</h2>
+<p>用户选择 APK 文件后，系统对文件进行合法性校验与信息解析：</p>
+<h3>4.1 解析成功</h3>
+<p>校验通过后，系统从 APK <b>解析</b>出包名称、APP名称，并由系统<b>生成</b>包ID、存储生成下载地址，一并回填至记录（表单区提示解析出的包名称 / APP名称，无需人工输入）：</p>
+<table>
+  <thead><tr><th>字段</th><th>来源</th><th>用途</th></tr></thead>
+  <tbody>
+    <tr><td>包名称</td><td><span class="tag tag-auto">解析</span> APK 包名（packageName）</td><td>列表「包名称」列，如 <code>com.braz.kk678apk</code>。</td></tr>
+    <tr><td>APP名称</td><td><span class="tag tag-auto">解析</span> APK 应用标签（label）</td><td>列表「APP名称」列。</td></tr>
+    <tr><td>包ID</td><td><span class="tag tag-fixed">系统生成</span> 非 APK 解析</td><td>列表「包ID」列，记录唯一标识。</td></tr>
+    <tr><td>下载地址</td><td><span class="tag tag-fixed">系统生成</span> 文件存入对象存储后的 URL</td><td>列表「下载地址」列，供下载安装与前台调用。</td></tr>
+  </tbody>
+</table>
+<div class="tip">关于「本地上传是否有下载地址」：<b>有。</b>系统接收 APK 后存入服务器 / 对象存储并生成可访问 URL，写入「下载地址」列——即用户 / 推广渠道实际下载安装的地址。</div>
+<div class="note"><b>母包版本</b>为二期打包功能相关字段，本地上传记录不适用，该列显示 <code>- -</code>（详见第五节）。</div>
+
+<h3>4.2 解析失败</h3>
+<p>当文件非合法 APK（格式错误、损坏、无法读取包信息等）时，<b>给出错误提示并阻断保存</b>，提示文案示例：<code>解析失败：文件损坏或非合法 APK，请重新上传。</code>用户需重新选择文件方可继续。</p>
+</div>
+
+<!-- 五 -->
+<div class="section-card" id="s5">
+<h2>五、保存后列表呈现</h2>
+<p>点击「保存」，校验通过后新记录插入列表，字段取值规则：</p>
+<table>
+  <thead><tr><th>列表列</th><th>本地上传取值</th></tr></thead>
+  <tbody>
+    <tr><td>地区 / 商户 / 推广渠道 / 后台显示名称</td><td>来自上传表单填写</td></tr>
+    <tr><td>包名称 / APP名称 / 包ID</td><td>系统解析 APK 得到</td></tr>
+    <tr><td>包类型</td><td>APK</td></tr>
+    <tr><td>下载地址</td><td>系统生成的存储 URL</td></tr>
+    <tr><td>备注</td><td><code>本地上传</code>（系统自动填写，非表单录入）</td></tr>
+    <tr><td>创建时间 / 最后操作时间 / 操作人</td><td>系统按当前时间与登录账号记录</td></tr>
+    <tr><td><b>打包进度</b></td><td><code>- -</code>（二期打包功能字段，本地上传无打包过程）</td></tr>
+    <tr><td><b>母包版本</b></td><td><code>- -</code>（二期打包功能字段，本地上传不适用）</td></tr>
+    <tr><td><b>APP图标（下载）</b></td><td><code>- -</code>（二期打包功能字段；本地上传图标已内嵌于 APK，无单独图标资源）</td></tr>
+  </tbody>
+</table>
+<div class="info"><b>二期打包功能相关字段</b>对本地上传记录统一显示 <code>- -</code>：打包进度、母包版本、APP图标（下载）。其余字段照常。筛选区「打包进度」相应含 <code>- -</code> 选项，用于筛出本地上传记录。</div>
+</div>
+
+<!-- 六 -->
+<div class="section-card" id="s6">
+<h2>六、与推广渠道管理的联动</h2>
+<p>推广渠道管理中「安装类型」包含 APK 时的「选择马甲包」联动功能<b>已具备，本期无需改动</b>。</p>
+<div class="info">说明：本列表中上传成功的 APK 包，在满足匹配条件（地区 / 商户 / 推广渠道一致）后，<b>自动成为「选择马甲包」下拉中的可选项</b>，无需额外操作。参见《PRD · 推广渠道管理模块》。</div>
+</div>
+
+<!-- 七 -->
+<div class="section-card" id="s7">
+<h2>七、业务流程图</h2>
+<div class="flow-wrap">
+<svg width="760" height="470" viewBox="0 0 760 470" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,'PingFang SC','Microsoft YaHei',sans-serif">
+  <defs>
+    <marker id="arw" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#0961BD"/>
+    </marker>
+    <marker id="arwR" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#cf1322"/>
+    </marker>
+  </defs>
+
+  <!-- start -->
+  <rect x="300" y="16" width="160" height="40" rx="20" fill="#0961BD"/>
+  <text x="380" y="41" fill="#fff" font-size="14" text-anchor="middle">运营点击「上传」</text>
+  <line x1="380" y1="56" x2="380" y2="82" stroke="#0961BD" stroke-width="2" marker-end="url(#arw)"/>
+
+  <!-- fill form -->
+  <rect x="270" y="84" width="220" height="46" rx="6" fill="#e6f4ff" stroke="#91caff"/>
+  <text x="380" y="103" fill="#003a8c" font-size="13" text-anchor="middle">填写：地区/商户/推广渠道</text>
+  <text x="380" y="121" fill="#003a8c" font-size="13" text-anchor="middle">后台显示名称</text>
+  <line x1="380" y1="130" x2="380" y2="156" stroke="#0961BD" stroke-width="2" marker-end="url(#arw)"/>
+
+  <!-- upload apk -->
+  <rect x="285" y="158" width="190" height="40" rx="6" fill="#e6f4ff" stroke="#91caff"/>
+  <text x="380" y="183" fill="#003a8c" font-size="13" text-anchor="middle">本地选择 .apk 文件</text>
+  <line x1="380" y1="198" x2="380" y2="224" stroke="#0961BD" stroke-width="2" marker-end="url(#arw)"/>
+
+  <!-- decision -->
+  <polygon points="380,226 470,268 380,310 290,268" fill="#fff7e6" stroke="#ffd591"/>
+  <text x="380" y="264" fill="#7d4f00" font-size="13" text-anchor="middle">解析 APK</text>
+  <text x="380" y="282" fill="#7d4f00" font-size="13" text-anchor="middle">是否合法？</text>
+
+  <!-- fail branch -->
+  <line x1="470" y1="268" x2="600" y2="268" stroke="#cf1322" stroke-width="2" marker-end="url(#arwR)"/>
+  <text x="530" y="260" fill="#cf1322" font-size="12" text-anchor="middle">否</text>
+  <rect x="602" y="246" width="150" height="44" rx="6" fill="#fff2f0" stroke="#ffccc7"/>
+  <text x="677" y="265" fill="#cf1322" font-size="12" text-anchor="middle">错误提示，</text>
+  <text x="677" y="281" fill="#cf1322" font-size="12" text-anchor="middle">阻断保存 · 重传</text>
+
+  <!-- success -->
+  <text x="360" y="330" fill="#389e0d" font-size="12" text-anchor="middle">是</text>
+  <line x1="380" y1="310" x2="380" y2="338" stroke="#0961BD" stroke-width="2" marker-end="url(#arw)"/>
+  <rect x="255" y="340" width="250" height="46" rx="6" fill="#f6ffed" stroke="#b7eb8f"/>
+  <text x="380" y="359" fill="#135200" font-size="13" text-anchor="middle">解析包名/APP名 · 生成包ID</text>
+  <text x="380" y="377" fill="#135200" font-size="13" text-anchor="middle">存储生成下载地址</text>
+  <line x1="380" y1="386" x2="380" y2="410" stroke="#0961BD" stroke-width="2" marker-end="url(#arw)"/>
+
+  <!-- into list -->
+  <rect x="230" y="412" width="300" height="46" rx="6" fill="#0961BD"/>
+  <text x="380" y="431" fill="#fff" font-size="13" text-anchor="middle">入列表：打包进度「- -」· 备注「本地上传」</text>
+  <text x="380" y="449" fill="#cfe6ff" font-size="12" text-anchor="middle">→ 满足匹配即成为「选择马甲包」可选项</text>
+</svg>
+</div>
+</div>
+
+<!-- 八 -->
+<div class="section-card" id="s8">
+<h2>八、异常与边界</h2>
+<table>
+  <thead><tr><th>场景</th><th>处理</th></tr></thead>
+  <tbody>
+    <tr><td>非 .apk 文件 / 超过 100MB</td><td>选择时即拦截，提示格式或大小限制，不进入解析。</td></tr>
+    <tr><td>APK 损坏 / 无法解析包信息</td><td>提示「解析失败：文件损坏或非合法 APK，请重新上传」，阻断保存。</td></tr>
+    <tr><td>必填项未填（显示名称 / 未上传文件）</td><td>提示对应必填校验，阻断保存。</td></tr>
+    <tr><td>解析出的包名称等与已有记录重复</td><td><b>允许重复</b>，不校验、不拦截（包名称、APP名称等可重复）。</td></tr>
+    <tr><td>后台显示名称与已有记录重复</td><td><b>不允许</b>：拦截并提示「后台显示名称已存在，请修改」。</td></tr>
+    <tr><td>上传后需修改</td><td>「编辑」弹窗预填信息，字段同上传弹窗，可重新上传 APK 替换后保存；「删除」二次确认后移除。</td></tr>
+    <tr><td>编辑时重新上传解析失败</td><td>同上传：提示错误、阻断保存，保留原记录不变。</td></tr>
+  </tbody>
+</table>
+<div class="info">唯一性约束：仅<b>后台显示名称</b>全局唯一；包名称、APP名称等其余字段允许重复。</div>
+</div>
+
+</div>
+</body>
+</html>
