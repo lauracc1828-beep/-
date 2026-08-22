@@ -84,12 +84,12 @@ code{background:#f5f5f5;border-radius:3px;padding:1px 6px;font-size:12px;color:#
 <ul>
   <li>新建「系统管理 → 马甲包管理」菜单及列表页。</li>
   <li>新增「上传」按钮及上传弹窗，支持本地上传单个 <code>.apk</code> 成品包，系统解析包信息并入列表。</li>
-  <li>上传记录支持「编辑」（可重新上传替换 APK）与「删除」（二次确认）。</li>
+  <li>上传记录支持「编辑」（可重新上传替换 APK）与「删除」（二次确认 + 关联校验）。</li>
+  <li><b>补做</b>推广渠道管理「选择马甲包」与本菜单的联动（见第六节）。</li>
 </ul>
 <h3>本期不做 / 界面处置</h3>
 <ul>
   <li>完整打包功能为二期：列表操作区「<b>新增</b>」按钮本期<b>置灰禁用</b>，「<b>操作说明</b>」按钮<b>隐藏</b>。</li>
-  <li>不改动推广渠道管理「选择马甲包」功能（该联动已具备，见第六节）。</li>
   <li>暂仅支持 APK 包类型。</li>
 </ul>
 <div class="note">来源区分：上传记录在「备注」栏默认标记 <code>本地上传</code>。原型统一维护在 <code>prototype.html</code>（系统管理 → 马甲包管理）。</div>
@@ -122,14 +122,19 @@ code{background:#f5f5f5;border-radius:3px;padding:1px 6px;font-size:12px;color:#
 <h3>3.3 编辑</h3>
 <p>列表中本地上传记录的「编辑」操作，<b>弹窗字段与上传弹窗完全一致</b>，并预填该条已有信息（地区、商户、推广渠道、包类型、后台显示名称）。</p>
 <ul>
-  <li><b>允许重新上传 APK 包</b>替换：重新选择文件后系统重新解析，回填新的包名称、包ID；不重新上传则保留原包信息。</li>
+  <li><b>允许重新上传 APK 包</b>替换：重新选择文件后系统重新解析，回填新的包名称、APP名称（<b>包ID 不变</b>，仍为该记录原有系统 ID）；不重新上传则保留原包信息。</li>
   <li>保存后<b>原地更新</b>该行，并刷新「最后操作时间」。</li>
   <li>包类型固定 APK 不可改；包名称由解析生成、只读。</li>
 </ul>
 
 <h3>3.4 删除</h3>
-<p>点击「删除」弹出<b>二次确认</b>，确认后移除该条记录。确认弹框文案（沿用现有风格）：</p>
+<p>点击「删除」弹出<b>二次确认</b>。确认弹框文案（沿用现有风格）：</p>
 <div class="note">标题「温馨提示」；正文「确认是否要删除该条配置信息？」；按钮「取消 / 确定」。</div>
+<p>点击「确定」后<b>先做关联校验</b>：检查是否有推广渠道或官方渠道关联了该 APK 包——</p>
+<ul>
+  <li><b>无关联：</b>删除该记录。</li>
+  <li><b>有关联：</b>不允许删除，提示「该包已被推广渠道或官方渠道关联，不允许删除」，记录保留。</li>
+</ul>
 
 <h3>3.5 操作区图标</h3>
 <p>本地上传记录的操作列含两个图标：<b>✎ 编辑</b>、<b>🗑 删除</b>。图标鼠标移入显示文字说明（「编辑」「删除」）。</p>
@@ -142,20 +147,20 @@ code{background:#f5f5f5;border-radius:3px;padding:1px 6px;font-size:12px;color:#
   <li><b>复制图标：</b>地址后置复制图标，点击复制完整地址并提示「链接已复制」。</li>
 </ul>
 
-<h3>3.7 保存校验与空状态提示</h3>
-<p>点击「保存」时逐项校验，任一未通过则<b>阻断保存</b>并给出对应提示（Toast）；提示后停留在弹窗，待修正：</p>
+<h3>3.7 校验与错误提示</h3>
+<p>保存与删除时逐项校验，未通过则<b>阻断操作</b>并给出对应提示（Toast）；保存类提示后停留在弹窗，待修正：</p>
 <table>
-  <thead><tr><th>空状态 / 错误场景</th><th>提示文案</th></tr></thead>
+  <thead><tr><th>触发时机</th><th>校验 / 错误场景</th><th>提示文案</th></tr></thead>
   <tbody>
-    <tr><td>地区未选择</td><td>请选择地区</td></tr>
-    <tr><td>商户未选择</td><td>请选择商户</td></tr>
-    <tr><td>推广渠道未选择</td><td>请选择推广渠道</td></tr>
-    <tr><td>包类型未选择</td><td>请选择包类型</td></tr>
-    <tr><td>后台显示名称未填写</td><td>请填写后台显示名称</td></tr>
-    <tr><td>后台显示名称与已有记录重复</td><td>后台显示名称已存在，请修改</td></tr>
-    <tr><td>未上传 APK 文件（或未通过解析）</td><td>请先上传合法的 APK 文件</td></tr>
-    <tr><td>APK 非法 / 损坏（解析失败）</td><td>解析失败：文件损坏或非合法 APK，请重新上传</td></tr>
-    <tr><td>文件格式非 .apk / 超过 100MB</td><td>选择文件时即拦截，提示格式或大小限制</td></tr>
+    <tr><td>保存</td><td>地区未选择</td><td>请选择地区</td></tr>
+    <tr><td>保存</td><td>商户未选择</td><td>请选择商户</td></tr>
+    <tr><td>保存</td><td>包类型未选择</td><td>请选择包类型</td></tr>
+    <tr><td>保存</td><td>后台显示名称未填写</td><td>请填写后台显示名称</td></tr>
+    <tr><td>保存</td><td>后台显示名称与已有记录重复</td><td>后台显示名称已存在，请修改</td></tr>
+    <tr><td>保存</td><td>未上传 APK 文件（或未通过解析）</td><td>请先上传合法的 APK 文件</td></tr>
+    <tr><td>保存</td><td>APK 非法 / 损坏（解析失败）</td><td>解析失败：文件损坏或非合法 APK，请重新上传</td></tr>
+    <tr><td>选择文件</td><td>格式非 .apk / 超过 100MB</td><td>即时拦截，提示格式或大小限制</td></tr>
+    <tr><td>删除</td><td>该包已被推广渠道或官方渠道关联</td><td>该包已被推广渠道或官方渠道关联，不允许删除</td></tr>
   </tbody>
 </table>
 </div>
@@ -171,7 +176,7 @@ code{background:#f5f5f5;border-radius:3px;padding:1px 6px;font-size:12px;color:#
   <tbody>
     <tr><td>包名称</td><td><span class="tag tag-auto">解析</span> APK 包名（packageName）</td><td>列表「包名称」列，如 <code>com.braz.kk678apk</code>。</td></tr>
     <tr><td>APP名称</td><td><span class="tag tag-auto">解析</span> APK 应用标签（label）</td><td>列表「APP名称」列。</td></tr>
-    <tr><td>包ID</td><td><span class="tag tag-fixed">系统生成</span> 非 APK 解析</td><td>列表「包ID」列，记录唯一标识。</td></tr>
+    <tr><td>包ID</td><td><span class="tag tag-fixed">系统生成</span> 非 APK 解析</td><td>列表「包ID」列，记录唯一标识。<b>生成规则：6 位数字，以 100 开头，从 <code>100001</code> 起依次自增</b>（100001、100002、100003…）。编辑重新上传不改变已有包ID。</td></tr>
     <tr><td>下载地址</td><td><span class="tag tag-fixed">系统生成</span> 文件存入对象存储后的 URL</td><td>列表「下载地址」列，供下载安装与前台调用。</td></tr>
   </tbody>
 </table>
@@ -191,7 +196,8 @@ code{background:#f5f5f5;border-radius:3px;padding:1px 6px;font-size:12px;color:#
   <tbody>
     <tr><td>地区 / 商户 / 后台显示名称</td><td>来自上传表单填写</td></tr>
     <tr><td>推广渠道</td><td><code>- -</code>（本期暂未启用）</td></tr>
-    <tr><td>包名称 / APP名称 / 包ID</td><td>系统解析 APK 得到</td></tr>
+    <tr><td>包名称 / APP名称</td><td>系统解析 APK 得到</td></tr>
+    <tr><td>包ID</td><td>系统生成（6 位数字，100001 起自增）</td></tr>
     <tr><td>包类型</td><td>APK</td></tr>
     <tr><td>下载地址</td><td>系统生成的存储 URL</td></tr>
     <tr><td>备注</td><td><code>本地上传</code>（系统自动填写，非表单录入）</td></tr>
@@ -207,8 +213,15 @@ code{background:#f5f5f5;border-radius:3px;padding:1px 6px;font-size:12px;color:#
 <!-- 六 -->
 <div class="section-card" id="s6">
 <h2>六、与推广渠道管理的联动</h2>
-<p>推广渠道管理中「安装类型」包含 APK 时的「选择马甲包」联动功能<b>已具备，本期无需改动</b>。</p>
-<div class="info">说明：本列表中上传成功的 APK 包，在满足匹配条件（地区 / 商户 一致；推广渠道本期暂未启用，暂不参与匹配）后，<b>自动成为「选择马甲包」下拉中的可选项</b>，无需额外操作。参见《PRD · 推广渠道管理模块》。</div>
+<p>推广渠道管理中「安装类型」包含 APK 时提供「选择马甲包」入口。<b>本次需求需补做该入口与本菜单的联动。</b></p>
+<h3>6.1 联动逻辑</h3>
+<ul>
+  <li>「选择马甲包」下拉的数据源为本菜单的马甲包列表：读取满足匹配条件的 APK 包供选择。</li>
+  <li>匹配条件：<b>地区、商户一致</b>（推广渠道本期暂未启用，暂不参与匹配）。</li>
+  <li>下拉项展示「后台显示名称」；选中后带出该包的下载地址与包名称，供渠道安装配置使用。</li>
+  <li>本菜单上传成功的 APK 包<b>即时可选</b>，无需额外发布操作。</li>
+</ul>
+<div class="info">删除约束：已被推广渠道或官方渠道关联的马甲包不允许删除（见 3.4）。参见《PRD · 推广渠道管理模块》。</div>
 </div>
 
 <!-- 七 -->
