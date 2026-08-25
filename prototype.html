@@ -3846,6 +3846,7 @@ function openAddActivity(){
   var auditGift0=document.querySelector('input[name="aa-charge-audit"][value="gift"]'); if(auditGift0) auditGift0.checked=true;
   var dayMin0=document.getElementById('aa-charge-daymin'); if(dayMin0) dayMin0.value='';
   var resetNone0=document.getElementById('aa-reset-n-none'); if(resetNone0) resetNone0.checked=true;
+  if(typeof aaChargeEditLock==='function') aaChargeEditLock(false); // 新增态:领取时间/活动条件可编辑
   // reset type to mystery + member fields
   var typeEl=document.getElementById('aa-type');
   if(typeEl){ typeEl.value='mystery'; aaTypeChange('mystery'); }
@@ -4546,7 +4547,7 @@ function aaChargeMakeTierRow(){
   var row=document.createElement('div');
   row.className='aa-charge-tier-row';
   row.style.cssText='display:flex;gap:10px;align-items:center;margin-bottom:8px';
-  row.innerHTML='<input class="aa-s-inp charge-c1" style="width:150px" placeholder="0.00" oninput="updateBannerPreview()">'
+  row.innerHTML='<input class="aa-s-inp charge-c1" style="width:150px" placeholder="0.00" oninput="updateBannerPreview()" onblur="aaChargeDaysCheck(this)">'
     +'<input class="aa-s-inp charge-c2" style="width:150px" placeholder="0.00" oninput="updateBannerPreview()">'
     +'<span class="charge-tier-btns" style="display:flex;gap:10px">'
     +'<button type="button" onclick="aaChargeTierAdd(this)" style="width:30px;height:30px;border:1px solid #d9d9d9;background:#fff;border-radius:4px;cursor:pointer;font-size:16px;line-height:1">+</button>'
@@ -4565,6 +4566,14 @@ function aaChargeTierAdd(btn){
 function aaChargeTierDel(btn){
   var list=document.getElementById('aa-charge-tier-list');
   if(list && list.children.length>1){ btn.closest('.aa-charge-tier-row').remove(); updateBannerPreview(); }
+}
+// 连续天数上限校验：连续充值天数不超过30天
+function aaChargeDaysCheck(inp){
+  var c=document.querySelector('input[name="aa-charge-cond"]:checked');
+  if(c && c.value==='days'){
+    var v=parseInt(inp.value)||0;
+    if(v>30){ toast('连续天数不能超过30天', true); }
+  }
 }
 function aaChargeUpdateTierPlaceholders(){
   var c=document.querySelector('input[name="aa-charge-cond"]:checked');
@@ -4590,10 +4599,22 @@ function openEditCharge(){
   updateBannerPreview();
   aaResetErrors();
   aaSetEditMode(true);
+  aaChargeEditLock(true);   // 编辑态:领取时间、活动条件不可修改
 }
 function openViewCharge(){
   openEditCharge();
   document.getElementById('aa-modal-title').textContent='查看活动';
+}
+// 编辑活动时锁定"领取时间"与"活动条件"(不可修改)
+function aaChargeEditLock(isEdit){
+  var els=[document.getElementById('aa-charge-ct-next'),document.getElementById('aa-charge-ct-realtime')];
+  document.querySelectorAll('input[name="aa-charge-cond"]').forEach(function(e){els.push(e);});
+  els.forEach(function(el){
+    if(!el) return;
+    el.disabled=isEdit;
+    var lb=el.closest('label');
+    if(lb){ lb.style.opacity=isEdit?'0.5':''; lb.style.cursor=isEdit?'not-allowed':''; lb.style.pointerEvents=isEdit?'none':''; }
+  });
 }
 function aaClaimToggle(val){
   const termSec = document.getElementById('aa-terminal-sec');
