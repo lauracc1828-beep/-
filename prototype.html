@@ -341,13 +341,29 @@ select.fs.ph{color:#bfbfbf}
 .aa-req-star.show{display:inline}
 .aa-err{color:#ff4d4f;font-size:12px;line-height:1.5;margin-top:6px;display:none}
 .aa-err.show{display:block}
+/* ── 活动 新建/编辑/查看 弹窗：整体字号缩小一号 + 行距对齐 ── */
+#m-add-activity .aa-fl,#m-view-activity .aa-fl,#m-view-member .aa-fl{font-size:12px}
+#m-add-activity .radio-item,#m-view-activity .radio-item,#m-view-member .radio-item{font-size:12px}
+#m-add-activity .fs,#m-add-activity .fin,#m-view-activity .fs,#m-view-activity .fin,#m-view-member .fs,#m-view-member .fin{font-size:12px}
+#m-add-activity .aa-tier-row,#m-add-activity .aa-tier-label,#m-add-activity .aa-tier-hd-name,#m-view-activity .aa-tier-row,#m-view-activity .aa-tier-label,#m-view-activity .aa-tier-hd-name{font-size:12px}
+#m-add-activity .aa-s-inp,#m-view-activity .aa-s-inp,#m-view-member .aa-s-inp{font-size:11px}
+#m-add-activity .aa-err,#m-view-activity .aa-err,#m-view-member .aa-err{font-size:11px}
+/* 覆盖内联字号，同步降一号 */
+#m-add-activity [style*="font-size:13px"],#m-view-activity [style*="font-size:13px"],#m-view-member [style*="font-size:13px"]{font-size:12px!important}
+#m-add-activity [style*="font-size:12px"],#m-view-activity [style*="font-size:12px"],#m-view-member [style*="font-size:12px"]{font-size:11px!important}
+/* 行距收紧、标签与控件对齐 */
+#m-add-activity .aa-fi,#m-view-activity .aa-fi,#m-view-member .aa-fi{margin-bottom:12px}
+/* 统一标签/单选组/单选项行高到32px，标签与内容首行垂直居中对齐 */
+#m-add-activity .radio-g,#m-view-activity .radio-g,#m-view-member .radio-g{height:32px}
+#m-add-activity .radio-item,#m-view-activity .radio-item,#m-view-member .radio-item{min-height:32px}
+#m-add-activity .aa-fl,#m-view-activity .aa-fl,#m-view-member .aa-fl{line-height:32px!important;width:160px;white-space:nowrap}
 .aa-field-invalid{border-color:#ff4d4f!important}
 .aa-info{color:#1890ff;font-size:12px;cursor:pointer;margin-left:4px;vertical-align:middle}
 
 
 /* ── tooltip (multiline hover) ── */
 .has-tip{position:relative;cursor:default;display:inline-flex;align-items:center}
-.has-tip{position:relative}.has-tip .tip-box{display:none;position:absolute;left:24px;top:-4px;z-index:9999;background:#333;color:#fff;font-size:12px;line-height:1.7;padding:8px 12px;border-radius:6px;white-space:pre-wrap;min-width:220px;max-width:340px;box-shadow:0 4px 12px rgba(0,0,0,.3);text-align:left}
+.has-tip{position:relative}.has-tip .tip-box{display:none;position:absolute;left:24px;top:-4px;z-index:9999;background:#333;color:#fff;font-size:12px;line-height:1.7;padding:8px 12px;border-radius:6px;white-space:nowrap;min-width:auto;max-width:none;box-shadow:0 4px 12px rgba(0,0,0,.3);text-align:left}
 .has-tip:hover .tip-box{display:block}
 /* ── date range picker style ── */
 .date-range-inp{display:inline-flex;align-items:center;border:1px solid #d9d9d9;border-radius:4px;padding:4px 10px;font-size:13px;background:#fff;gap:6px;cursor:pointer;color:rgba(0,0,0,.65);height:32px;box-sizing:border-box}
@@ -1010,7 +1026,7 @@ select.fs.ph{color:#bfbfbf}
         <div style="background:#fff;padding:12px 20px;border-bottom:1px solid #f0f0f0">
           <div class="filter-row" style="margin-bottom:0">
             <div class="filter-item"><span class="filter-label">活动分类：</span><select class="f-select"><option>全部</option><option>综合</option><option>存款</option></select></div>
-            <div class="filter-item"><span class="filter-label">活动类型：</span><select class="f-select"><option>全部</option><option>神秘彩金</option><option>签到</option><option>救援金</option><option>会员答谢</option></select></div>
+            <div class="filter-item"><span class="filter-label">活动类型：</span><select class="f-select"><option>全部</option><option>神秘彩金</option><option>签到</option><option>救援金</option><option>会员答谢</option><option>充值</option></select></div>
             <div class="filter-item"><span class="filter-label">活动名称：</span><input class="f-input" placeholder="请输入" style="min-width:130px"></div>
             <div class="filter-item"><span class="filter-label">活动状态：</span><select class="f-select"><option>全部</option><option>开启</option><option>关闭</option></select></div>
             <button class="btn btn-white" style="margin-left:4px">重置</button>
@@ -1114,11 +1130,20 @@ select.fs.ph{color:#bfbfbf}
                     <span class="tbl-icon tbl-icon-close has-tip tip-bottom" onclick="">⏻<span class="tip-box">关闭活动</span></span>
                   </div></td>
                 </tr>
+                <tr><td>10</td><td>综合</td><td>充值</td><td>首笔充值奖励</td>
+                  <td><label class="sw"><input type="checkbox" class="sw-input" checked><span class="sw-track"></span><span class="sw-knob"></span></label></td>
+                  <td>不重置</td><td>自动派发</td><td>系统(周期内)</td><td>64</td><td>52</td><td>2,600.00</td><td>2,380.00</td><td>220.00</td><td>10</td>
+                  <td><div style="display:flex;gap:5px">
+                    <span class="tbl-icon tbl-icon-view has-tip tip-bottom" onclick="openViewCharge()">👁<span class="tip-box">查看活动</span></span>
+                    <span class="tbl-icon tbl-icon-edit has-tip tip-bottom" onclick="openEditCharge()">✏️<span class="tip-box">修改活动</span></span>
+                    <span class="tbl-icon tbl-icon-close has-tip tip-bottom" onclick="">⏻<span class="tip-box">关闭活动</span></span>
+                  </div></td>
+                </tr>
               </tbody>
             </table>
           </div>
           <div class="pagination">
-            <div class="pg-info">共 9 条数据</div>
+            <div class="pg-info">共 10 条数据</div>
             <div class="pg-controls">
               <div class="pg-btn">‹</div>
               <div class="pg-btn active">1</div>
@@ -1206,6 +1231,7 @@ select.fs.ph{color:#bfbfbf}
               <option value="">请选择</option>
               <option value="mystery" selected>神秘彩金</option>
               <option value="member">会员答谢</option>
+              <option value="charge">充值</option>
             </select>
           </div>
         </div>
@@ -1260,13 +1286,12 @@ select.fs.ph{color:#bfbfbf}
             <div id="aa-reset-mystery" class="radio-g">
               <label class="radio-item"><input type="radio" name="aa-reset-m" value="once" checked onchange="updateRuleText()"> 一次性</label>
               <label class="radio-item"><input type="radio" name="aa-reset-m" value="loop" onchange="updateRuleText()"> 循环</label>
-              <span class="has-tip" style="margin-left:4px">ⓘ<span class="tip-box">一次性：一个会员只可以参与一次。周期长度为31天。
-循环：每31天一个周期，一个周期结束后自动进入下一个周期。</span></span>
+              <span class="has-tip" style="margin-left:4px">ⓘ<span class="tip-box">一次性：一个会员只可以参与一次。周期长度为31天。<br>循环：每31天一个周期，一个周期结束后自动进入下一个周期。</span></span>
             </div>
             <div id="aa-reset-normal" class="radio-g" style="display:none">
-              <label class="radio-item"><input type="radio" name="aa-reset-n" checked> 不重置</label>
-              <label class="radio-item"><input type="radio" name="aa-reset-n"> 每日</label>
-              <label class="radio-item"><input type="radio" name="aa-reset-n"> 每周</label>
+              <label class="radio-item"><input type="radio" name="aa-reset-n" id="aa-reset-n-none" value="none" checked> 不重置</label>
+              <label class="radio-item" id="aa-reset-n-day-lbl"><input type="radio" name="aa-reset-n" id="aa-reset-n-day" value="day"> 每日</label>
+              <label class="radio-item"><input type="radio" name="aa-reset-n" id="aa-reset-n-week" value="week"> 每周</label>
             </div>
             <!-- 会员答谢重置方式 -->
             <div id="aa-reset-member" style="display:none">
@@ -1357,11 +1382,12 @@ select.fs.ph{color:#bfbfbf}
               <label class="radio-item"><input type="radio" name="aa-expire" value="3" onchange="aaExpireToggle(this.value)"> 奖励保留天数自动派发</label>
               <label class="radio-item"><input type="radio" name="aa-expire" value="4" onchange="aaExpireToggle(this.value)"> 奖励保留天数作废</label>
             </div>
-            <div id="aa-expire-days-wrap" style="display:none;align-items:center;gap:8px;margin-top:8px;font-size:13px">
-              <span style="color:rgba(0,0,0,.88)">奖励领取过期天数：</span>
-              <input class="fin" type="number" id="aa-expire-days-inp" value="0" style="width:80px" oninput="updateRuleText()">
-            </div>
           </div>
+        </div>
+        <!-- 奖励领取过期天数 (作废选"保留天数"时显示，与其他字段同层级对齐) -->
+        <div class="aa-fi" id="aa-expire-days-wrap" style="display:none">
+          <span class="aa-fl">奖励领取过期天数：</span>
+          <div class="aa-fc" style="display:flex;align-items:center"><input class="fin" type="number" id="aa-expire-days-inp" value="0" style="width:300px;max-width:100%" oninput="updateRuleText()"></div>
         </div>
         <!-- 稽核倍数 -->
         <div class="aa-fi">
@@ -1458,6 +1484,77 @@ select.fs.ph{color:#bfbfbf}
             <div class="aa-fi" style="align-items:flex-start">
               <span class="aa-fl"></span>
               <div class="aa-fc" id="ma-cards-container" style="width:100%"></div>
+            </div>
+          </div>
+        </div>
+        <!-- ══ 充值专属配置区块 (仅活动类型=充值时显示) ══ -->
+        <div id="aa-charge-sec" style="display:none">
+          <!-- 领取时间 -->
+          <div class="aa-fi">
+            <span class="aa-fl" style="display:flex;align-items:center;justify-content:flex-end">领取时间<span class="has-tip" style="margin-left:2px;font-size:13px;color:#8c8c8c">ⓘ<span class="tip-box"><div>次日领取：满足条件的奖励于次日指定时间开放领取，配合"奖励作废"的保留天数规则。</div><div>实时领取：满足条件后即时开放领取，可能影响玩家次日留存。</div></span></span>：</span>
+            <div class="aa-fc">
+              <div class="radio-g">
+                <label class="radio-item"><input type="radio" name="aa-charge-claimtime" id="aa-charge-ct-next" value="next" onchange="aaChargeClaimTimeChange('next')"> 次日领取</label>
+                <label class="radio-item"><input type="radio" name="aa-charge-claimtime" id="aa-charge-ct-realtime" value="realtime" checked onchange="aaChargeClaimTimeChange('realtime')"> 实时领取（影响留存）</label>
+              </div>
+            </div>
+          </div>
+          <!-- 选择时间 (仅次日领取) -->
+          <div class="aa-fi" id="aa-charge-claimtime-row" style="display:none">
+            <span class="aa-fl">选择时间：</span>
+            <div class="aa-fc" style="display:flex;align-items:center;gap:8px">
+              <select class="fs" id="aa-charge-claim-hour" style="width:130px">
+                <option>00:00:00</option><option>01:00:00</option><option>02:00:00</option><option>03:00:00</option>
+                <option>04:00:00</option><option>05:00:00</option><option>06:00:00</option><option>07:00:00</option>
+                <option>08:00:00</option><option>09:00:00</option><option>10:00:00</option><option>11:00:00</option>
+                <option>12:00:00</option><option>13:00:00</option><option>14:00:00</option><option>15:00:00</option>
+                <option>16:00:00</option><option>17:00:00</option><option>18:00:00</option><option>19:00:00</option>
+                <option>20:00:00</option><option>21:00:00</option><option>22:00:00</option><option>23:00:00</option>
+              </select>
+              <span style="font-size:13px;color:rgba(0,0,0,.88)">以后可领取</span>
+            </div>
+          </div>
+          <!-- 活动条件 -->
+          <div class="aa-fi">
+            <span class="aa-fl" style="display:flex;align-items:center;justify-content:flex-end">活动条件<span class="has-tip" style="margin-left:2px;font-size:13px;color:#8c8c8c">ⓘ<span class="tip-box"><div>首笔充值：账号/周期内首笔充值达标即可获得奖励。</div><div>累计充值：周期内累计充值达到各阶梯金额，满足的档位皆可叠加领取。</div><div>连续天数充值：每日累计充值达门槛才计1个有效充值天数，达到连续天数即可获奖（仅实时领取）。</div></span></span>：</span>
+            <div class="aa-fc">
+              <div class="radio-g">
+                <label class="radio-item"><input type="radio" name="aa-charge-cond" value="first" checked onchange="aaChargeCondChange('first')"> 首笔充值</label>
+                <label class="radio-item"><input type="radio" name="aa-charge-cond" value="accum" onchange="aaChargeCondChange('accum')"> 累计充值</label>
+                <label class="radio-item"><input type="radio" name="aa-charge-cond" value="days" onchange="aaChargeCondChange('days')"> 连续天数充值</label>
+              </div>
+            </div>
+          </div>
+          <!-- 稽核方式 -->
+          <div class="aa-fi">
+            <span class="aa-fl">稽核方式：</span>
+            <div class="aa-fc">
+              <div class="radio-g">
+                <label class="radio-item" id="aa-charge-audit-gift-lbl"><input type="radio" name="aa-charge-audit" value="gift" checked> 赠送部分</label>
+                <label class="radio-item" id="aa-charge-audit-both-lbl"><input type="radio" name="aa-charge-audit" value="both"> 本金+赠送</label>
+              </div>
+            </div>
+          </div>
+          <!-- 连续充值天数设置 (仅连续天数充值) -->
+          <div class="aa-fi" id="aa-charge-daythreshold" style="display:none">
+            <span class="aa-fl" style="display:flex;align-items:center;justify-content:flex-end">连续充值天数设置<span class="has-tip" style="margin-left:2px;font-size:13px;color:#8c8c8c">ⓘ<span class="tip-box"><div style="font-weight:bold">连续充值天数：</div><div>1、当天累计充值金额≥最低充值金额才会计入连续充值天数</div><div>2、断充后，周期内连续充值天数需要从第一天重新开始</div></span></span>：</span>
+            <div class="aa-fc" style="display:flex;align-items:center;gap:6px;font-size:13px;min-height:32px">
+              <span>当日累计充值金额 ≥</span>
+              <input class="aa-s-inp" id="aa-charge-daymin" style="width:150px" placeholder="0.00">
+              <span>才会计入连续充值天数</span>
+            </div>
+          </div>
+          <!-- 奖励配置 -->
+          <div class="aa-fi" style="align-items:flex-start">
+            <span class="aa-fl" style="line-height:22px;padding-top:0"><span class="aa-req-star">*</span>奖励配置：</span>
+            <div class="aa-fc">
+              <!-- 阶梯表头 -->
+              <div style="display:flex;align-items:center;min-height:32px;gap:10px;margin-bottom:6px;font-size:13px;color:#595959;font-weight:500">
+                <span id="aa-charge-col1" style="width:150px">充值金额(≥)</span>
+                <span style="width:150px">奖励金额</span>
+              </div>
+              <div id="aa-charge-tier-list"></div>
+              <div class="aa-err" id="err-charge-reward">请完整填写奖励配置</div>
             </div>
           </div>
         </div>
@@ -3727,11 +3824,28 @@ function openAddActivity(){
   // reset logo
   document.querySelector('input[name="aa-logo-style"][value="sys"]').checked = true;
   aaLogoStyleToggle('sys');
+  // 默认选中第一个系统LOGO并同步宣传图
+  var logoItems0=document.querySelectorAll('#aa-logo-gallery .logo-img-item');
+  if(logoItems0.length){
+    logoItems0.forEach(function(it){ it.classList.remove('selected'); var r=it.querySelector('input'); if(r) r.checked=false; });
+    logoItems0[0].classList.add('selected');
+    var lr0=logoItems0[0].querySelector('input'); if(lr0) lr0.checked=true;
+    var firstIcon=logoItems0[0].querySelector('.logo-img-inner');
+    var bl0=document.getElementById('aa-banner-logo');
+    if(bl0&&firstIcon) bl0.textContent=firstIcon.textContent.trim();
+  }
   // reset detail page
   document.querySelector('input[name="aa-page-style"][value="skin"]').checked = true;
   aaDetailPageToggle('skin');
   // reset terminal checkboxes (新增时全不选)
   document.querySelectorAll('#aa-terminal-sec input[type=checkbox]').forEach(function(cb){ cb.checked=false; });
+  // reset charge fields (清空充值专属配置，避免残留)
+  var chargeList0=document.getElementById('aa-charge-tier-list'); if(chargeList0) chargeList0.innerHTML='';
+  var ctReal0=document.getElementById('aa-charge-ct-realtime'); if(ctReal0) ctReal0.checked=true;
+  var condFirst0=document.querySelector('input[name="aa-charge-cond"][value="first"]'); if(condFirst0) condFirst0.checked=true;
+  var auditGift0=document.querySelector('input[name="aa-charge-audit"][value="gift"]'); if(auditGift0) auditGift0.checked=true;
+  var dayMin0=document.getElementById('aa-charge-daymin'); if(dayMin0) dayMin0.value='';
+  var resetNone0=document.getElementById('aa-reset-n-none'); if(resetNone0) resetNone0.checked=true;
   // reset type to mystery + member fields
   var typeEl=document.getElementById('aa-type');
   if(typeEl){ typeEl.value='mystery'; aaTypeChange('mystery'); }
@@ -4065,6 +4179,7 @@ function aaNameToggle(val){
     const typeVal=typeEl?typeEl.value:'mystery';
     inp.disabled=true; inp.style.background='#f5f5f5';
     if(typeVal==='member') inp.value='会员答谢活动';
+    else if(typeVal==='charge') inp.value=aaChargeDefaultName();
     else inp.value='神秘彩金活动';
   } else {
     inp.disabled=false; inp.style.background='#fff'; inp.value='';
@@ -4134,6 +4249,22 @@ function updateRuleText(){
     l3.textContent='3. 彩金（不含本金）需'+auditN+'倍有效投注才能提现；';
     l4.textContent='4. 仅限账号本人进行正常的人为操作，否则将取消或扣除奖励、冻结、甚至拉入黑名单；';
     l5.textContent='5. 为避免文字理解差异，平台将保留本活动最终解释权。';
+  } else if(type==='charge'){
+    var condEl=document.querySelector('input[name="aa-charge-cond"]:checked');
+    var cond=condEl?condEl.value:'first';
+    var condWord=(cond==='accum')?'累计充值':((cond==='days')?'连续充值':'首笔充值');
+    var ctEl=document.querySelector('input[name="aa-charge-claimtime"]:checked');
+    var isNext=ctEl&&ctEl.value==='next';
+    var expTextC;
+    if(expireVal==='1') expTextC='过期后彩金将自动派发';
+    else if(expireVal==='2') expTextC='过期后彩金将作废';
+    else if(expireVal==='3') expTextC='彩金保留'+days+'天后自动派发';
+    else expTextC='彩金保留'+days+'天后作废';
+    l1.textContent='1. 本活动为'+condWord+'活动，会员'+condWord+'满足要求，可获得相应彩金；';
+    l2.textContent='2. 彩金需'+(isNext?'次日手动领取':'手动领取')+'，'+expTextC+'；';
+    l3.textContent='3. 彩金（不含本金）需'+auditN+'倍有效投注才能提现；';
+    l4.textContent='4. 仅限账号本人进行正常的人为操作，否则将取消或扣除奖励、冻结、甚至拉入黑名单；';
+    l5.textContent='5. 为避免文字理解差异，平台将保留本活动最终解释权。';
   } else {
     var mResetEl=document.querySelector('input[name="aa-reset-m"]:checked');
     var mReset=mResetEl?mResetEl.value:'once';
@@ -4199,6 +4330,19 @@ function updateBannerPreview(){
         +'<div>2. 每'+period+'重置</div>'
         +'<div>3. '+expText()+'</div>';
     }
+  } else if(type==='charge'){
+    var cNameInp=document.getElementById('aa-name-inp');
+    bannerTitle.textContent=(cNameInp&&cNameInp.value)?cNameInp.value:aaChargeDefaultName();
+    if(bannerRules){
+      var maxRew=0;
+      document.querySelectorAll('#aa-charge-tier-list .charge-c2').forEach(function(inp){ var v=parseFloat(inp.value)||0; if(v>maxRew) maxRew=v; });
+      var rnEl=document.querySelector('input[name="aa-reset-n"]:checked');
+      var rnMap={none:'不重置',day:'每日',week:'每周'};
+      var resetTxt=rnEl?(rnMap[rnEl.value]||'不重置'):'不重置';
+      bannerRules.innerHTML='<div>1. 最高奖励 '+fmtAmt(maxRew)+'</div>'
+        +'<div>2. '+resetTxt+'</div>'
+        +'<div>3. '+expText()+'</div>';
+    }
   } else {
     bannerTitle.textContent='神秘彩金活动';
     if(bannerRules){
@@ -4230,27 +4374,42 @@ function aaAllTier(checked){
 // 未来新增活动在此处添加一行，aaTypeChange 无需修改
 var ACTIVITY_EXPIRE_CONFIG = {
   mystery: { enabled: [1,2,3,4], default: 2 },  // 神秘彩金：全部可选
-  member:  { enabled: [1,2],     default: 2 }    // 会员答谢：1/2可选，3/4置灰
+  member:  { enabled: [1,2],     default: 2 },   // 会员答谢：1/2可选，3/4置灰
+  charge:  { enabled: [1,2,3,4], default: 1 }    // 充值：全部可选，默认过期自动派发
 };
 
 function aaTypeChange(val){
+  var typeSel=document.getElementById('aa-type');
+  if(typeSel && typeSel.value!==val) typeSel.value=val;
   const isMystery=(val==='mystery');
   const isMember=(val==='member');
+  const isCharge=(val==='charge');
   document.getElementById('aa-reset-mystery').style.display=isMystery?'flex':'none';
   document.getElementById('aa-reset-normal').style.display=(!isMystery&&!isMember)?'flex':'none';
   document.getElementById('aa-reset-member').style.display=isMember?'block':'none';
   document.getElementById('aa-mystery-days').style.display=isMystery?'block':'none';
   document.getElementById('aa-member-reward-sec').style.display=isMember?'block':'none';
+  var chargeSec=document.getElementById('aa-charge-sec');
+  if(chargeSec) chargeSec.style.display=isCharge?'block':'none';
   if(isMember){
     const resetSel=document.querySelector('input[name="aa-reset-mem"]:checked');
     const resetVal=resetSel?resetSel.value:'daily';
     aaMemberResetToggle(resetVal);
+  } else {
+    // 非会员答谢：隐藏会员日的时间/会员日子字段（避免残留）
+    ['ma-daily-field','ma-week-field','ma-month-field'].forEach(function(id){var e=document.getElementById(id); if(e) e.style.display='none';});
+  }
+  if(isCharge){
+    aaChargeInitTiers();
+    var condSel=document.querySelector('input[name="aa-charge-cond"]:checked');
+    aaChargeCondChange(condSel?condSel.value:'first');
   }
   // ── 领取方式约束 ──
   const autoLbl=document.getElementById('aa-claim-auto');
   const autoLabel=autoLbl&&autoLbl.closest('label');
   const manualLbl=document.getElementById('aa-claim-manual');
-  if(isMember){
+  if(isMember||isCharge){
+    // 会员答谢/充值：仅手动领取
     if(autoLbl){ autoLbl.disabled=true; }
     if(autoLabel){ autoLabel.style.opacity='0.4'; autoLabel.style.pointerEvents='none'; }
     if(manualLbl){ manualLbl.checked=true; aaClaimToggle('manual'); }
@@ -4272,10 +4431,169 @@ function aaTypeChange(val){
     var lbl = inp && inp.closest('label');
     var on = expCfg.enabled.indexOf(v) !== -1;
     if(inp){ inp.disabled = !on; }
-    if(lbl){ lbl.style.opacity = on ? '' : '0.4'; lbl.style.cursor = on ? '' : 'not-allowed'; }
+    if(lbl){ lbl.style.display=''; lbl.style.opacity = on ? '' : '0.4'; lbl.style.cursor = on ? '' : 'not-allowed'; }
   });
   var defInp = document.querySelector('input[name="aa-expire"][value="'+expCfg.default+'"]');
   if(defInp){ defInp.checked = true; aaExpireToggle(String(expCfg.default)); }
+  // 充值：按当前领取时间再约束奖励作废选项/过期天数/选择时间
+  if(isCharge){
+    var ctSel=document.querySelector('input[name="aa-charge-claimtime"]:checked');
+    aaChargeClaimTimeChange(ctSel?ctSel.value:'realtime');
+  }
+}
+
+// ═══════════ 充值活动 专属联动逻辑 ═══════════
+function aaChargeDefaultName(){
+  var c=document.querySelector('input[name="aa-charge-cond"]:checked');
+  var v=c?c.value:'first';
+  if(v==='accum') return '累计充值奖励';
+  if(v==='days')  return '连续充值奖励';
+  return '首笔充值奖励';
+}
+// 活动条件切换：稽核方式/领取时间/重置方式/奖励配置 联动
+function aaChargeCondChange(val){
+  var condR=document.querySelector('input[name="aa-charge-cond"][value="'+val+'"]');
+  if(condR) condR.checked=true;
+  var isDays=(val==='days');
+  var isAccum=(val==='accum');
+  // 连续充值天数设置（仅连续天数充值）
+  var dt=document.getElementById('aa-charge-daythreshold');
+  if(dt) dt.style.display=isDays?'flex':'none';
+  // 奖励配置第一列表头
+  var col1=document.getElementById('aa-charge-col1');
+  if(col1) col1.textContent=isDays?'连续充值天数':'充值金额(≥)';
+  // 稽核方式：累计充值只显示"赠送部分"，隐藏"本金+赠送"，且"赠送部分"默认选中并置灰
+  var auditBoth=document.querySelector('input[name="aa-charge-audit"][value="both"]');
+  var bothLbl=document.getElementById('aa-charge-audit-both-lbl');
+  var giftInp=document.querySelector('input[name="aa-charge-audit"][value="gift"]');
+  var giftLbl=document.getElementById('aa-charge-audit-gift-lbl');
+  if(isAccum){
+    if(giftInp){ giftInp.checked=true; giftInp.disabled=true; }
+    if(giftLbl){ giftLbl.style.opacity='0.5'; giftLbl.style.cursor='not-allowed'; }
+    if(auditBoth) auditBoth.disabled=true;
+    if(bothLbl) bothLbl.style.display='none';
+  } else {
+    if(giftInp) giftInp.disabled=false;
+    if(giftLbl){ giftLbl.style.opacity=''; giftLbl.style.cursor=''; }
+    if(auditBoth) auditBoth.disabled=false;
+    if(bothLbl) bothLbl.style.display='';
+  }
+  // 领取时间：连续天数充值强制"实时领取"（次日置灰）
+  var ctNext=document.getElementById('aa-charge-ct-next');
+  var ctNextLbl=ctNext&&ctNext.closest('label');
+  var ctReal=document.getElementById('aa-charge-ct-realtime');
+  if(isDays){
+    if(ctReal) ctReal.checked=true;
+    if(ctNext) ctNext.disabled=true;
+    if(ctNextLbl){ ctNextLbl.style.opacity='0.4'; ctNextLbl.style.cursor='not-allowed'; ctNextLbl.style.pointerEvents='none'; }
+    aaChargeClaimTimeChange('realtime');
+  } else {
+    if(ctNext) ctNext.disabled=false;
+    if(ctNextLbl){ ctNextLbl.style.opacity=''; ctNextLbl.style.cursor=''; ctNextLbl.style.pointerEvents=''; }
+  }
+  // 重置方式：连续天数充值禁用"每日"
+  var dayRadio=document.getElementById('aa-reset-n-day');
+  var dayLbl=document.getElementById('aa-reset-n-day-lbl');
+  if(isDays){
+    if(dayRadio){ if(dayRadio.checked){ var noneR=document.getElementById('aa-reset-n-none'); if(noneR) noneR.checked=true; } dayRadio.disabled=true; }
+    if(dayLbl){ dayLbl.style.opacity='0.4'; dayLbl.style.cursor='not-allowed'; dayLbl.style.pointerEvents='none'; }
+  } else {
+    if(dayRadio) dayRadio.disabled=false;
+    if(dayLbl){ dayLbl.style.opacity=''; dayLbl.style.cursor=''; dayLbl.style.pointerEvents=''; }
+  }
+  // 名称默认值 + 阶梯占位符 + 预览
+  var nameMode=document.querySelector('input[name="aa-name-t"]:checked');
+  if(nameMode&&nameMode.value==='sys') aaNameToggle('sys');
+  aaChargeUpdateTierPlaceholders();
+  updateRuleText(); updateBannerPreview();
+}
+// 领取时间切换：次日→奖励作废仅保留天数(默认自动派发,过期天数锁死2)+显示选择时间
+function aaChargeClaimTimeChange(val){
+  var ctR=document.querySelector('input[name="aa-charge-claimtime"][value="'+val+'"]');
+  if(ctR && !ctR.disabled) ctR.checked=true;
+  var isNext=(val==='next');
+  var ctRow=document.getElementById('aa-charge-claimtime-row');
+  if(ctRow) ctRow.style.display=isNext?'flex':'none';
+  var show = isNext ? [3,4] : [1,2,3,4];
+  [1,2,3,4].forEach(function(v){
+    var inp=document.querySelector('input[name="aa-expire"][value="'+v+'"]');
+    var lbl=inp&&inp.closest('label');
+    var on=show.indexOf(v)!==-1;
+    if(lbl) lbl.style.display=on?'':'none';
+    if(inp) inp.disabled=!on;
+  });
+  var daysInp=document.getElementById('aa-expire-days-inp');
+  if(isNext){
+    var checked=document.querySelector('input[name="aa-expire"]:checked');
+    if(!checked || checked.value==='1' || checked.value==='2'){
+      var r3=document.querySelector('input[name="aa-expire"][value="3"]');
+      if(r3) r3.checked=true;
+    }
+    var cur=document.querySelector('input[name="aa-expire"]:checked');
+    aaExpireToggle(cur?cur.value:'3');
+    if(daysInp){ daysInp.value='2'; daysInp.disabled=true; daysInp.style.background='#f5f5f5'; }
+  } else {
+    if(daysInp){ daysInp.disabled=false; daysInp.style.background=''; }
+    var cur2=document.querySelector('input[name="aa-expire"]:checked');
+    if(!cur2){ var r1=document.querySelector('input[name="aa-expire"][value="1"]'); if(r1) r1.checked=true; }
+    var cur3=document.querySelector('input[name="aa-expire"]:checked');
+    aaExpireToggle(cur3?cur3.value:'1');
+  }
+  updateRuleText(); updateBannerPreview();
+}
+// 奖励阶梯：初始化/增/删/占位符
+function aaChargeMakeTierRow(){
+  var row=document.createElement('div');
+  row.className='aa-charge-tier-row';
+  row.style.cssText='display:flex;gap:10px;align-items:center;margin-bottom:8px';
+  row.innerHTML='<input class="aa-s-inp charge-c1" style="width:150px" placeholder="0.00" oninput="updateBannerPreview()">'
+    +'<input class="aa-s-inp charge-c2" style="width:150px" placeholder="0.00" oninput="updateBannerPreview()">'
+    +'<span class="charge-tier-btns" style="display:flex;gap:10px">'
+    +'<button type="button" onclick="aaChargeTierAdd(this)" style="width:30px;height:30px;border:1px solid #d9d9d9;background:#fff;border-radius:4px;cursor:pointer;font-size:16px;line-height:1">+</button>'
+    +'<button type="button" onclick="aaChargeTierDel(this)" style="width:30px;height:30px;border:1px solid #d9d9d9;background:#fff;border-radius:4px;cursor:pointer;font-size:16px;line-height:1">−</button>'
+    +'</span>';
+  return row;
+}
+function aaChargeInitTiers(){
+  var list=document.getElementById('aa-charge-tier-list');
+  if(list && list.children.length===0){ list.appendChild(aaChargeMakeTierRow()); aaChargeUpdateTierPlaceholders(); }
+}
+function aaChargeTierAdd(btn){
+  var list=document.getElementById('aa-charge-tier-list');
+  if(list){ list.appendChild(aaChargeMakeTierRow()); aaChargeUpdateTierPlaceholders(); }
+}
+function aaChargeTierDel(btn){
+  var list=document.getElementById('aa-charge-tier-list');
+  if(list && list.children.length>1){ btn.closest('.aa-charge-tier-row').remove(); updateBannerPreview(); }
+}
+function aaChargeUpdateTierPlaceholders(){
+  var c=document.querySelector('input[name="aa-charge-cond"]:checked');
+  var isDays=c&&c.value==='days';
+  var list=document.getElementById('aa-charge-tier-list');
+  if(!list) return;
+  // 连续天数充值：奖励只允许一档，删除多余行并隐藏增删按钮
+  if(isDays){ while(list.children.length>1){ list.removeChild(list.lastElementChild); } }
+  list.querySelectorAll('.charge-c1').forEach(function(inp){ inp.placeholder=isDays?'连续天数':'0.00'; });
+  list.querySelectorAll('.charge-tier-btns').forEach(function(b){ b.style.display=isDays?'none':'flex'; });
+}
+// 列表：查看/修改 充值活动
+function openEditCharge(){
+  openAddActivity();
+  document.getElementById('aa-modal-title').textContent='修改活动';
+  var typeEl=document.getElementById('aa-type');
+  if(typeEl){ typeEl.value='charge'; aaTypeChange('charge'); }
+  var nameInp=document.getElementById('aa-name-inp');
+  if(nameInp){ nameInp.removeAttribute('disabled'); nameInp.value='首笔充值奖励'; nameInp.setAttribute('disabled',''); }
+  var list=document.getElementById('aa-charge-tier-list');
+  if(list){ list.innerHTML=''; [['30.00','5.00'],['100.00','20.00'],['500.00','120.00']].forEach(function(p){ var r=aaChargeMakeTierRow(); r.querySelector('.charge-c1').value=p[0]; r.querySelector('.charge-c2').value=p[1]; list.appendChild(r); }); aaChargeUpdateTierPlaceholders(); }
+  document.querySelectorAll('#aa-terminal-sec input[type=checkbox]').forEach(function(cb){ cb.checked=true; });
+  updateBannerPreview();
+  aaResetErrors();
+  aaSetEditMode(true);
+}
+function openViewCharge(){
+  openEditCharge();
+  document.getElementById('aa-modal-title').textContent='查看活动';
 }
 function aaClaimToggle(val){
   const termSec = document.getElementById('aa-terminal-sec');
@@ -4310,8 +4628,10 @@ function aaExpireToggle(val){
 function aaParticipantToggle(val){
   const note = document.getElementById('aa-new-member-note');
   const typeEl = document.getElementById('aa-type');
-  const isMember = typeEl && typeEl.value === 'member';
-  if(note) note.style.display=(val==='new'&&!isMember)?'block':'none';
+  const t = typeEl ? typeEl.value : '';
+  // 会员答谢、充值：新注册会员选中后不显示备注
+  const noNote = (t==='member' || t==='charge');
+  if(note) note.style.display=(val==='new'&&!noNote)?'block':'none';
 }
 function aaDetailPageToggle(val){
   const wrap = document.getElementById('aa-preview-btn-wrap');
