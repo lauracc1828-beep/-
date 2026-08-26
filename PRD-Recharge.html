@@ -3,20 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>充值活动 PRD v0.1</title>
+<title>充值活动 PRD v1.0</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'PingFang SC','Helvetica Neue',Arial,sans-serif;font-size:14px;color:#1a1a1a;background:#eef1f5;line-height:1.7}
+body{font-family:'PingFang SC','Helvetica Neue',Arial,sans-serif;font-size:14px;color:#1a1a1a;background:#eef1f5;line-height:1.75}
 .page{max-width:980px;margin:0 auto;padding:32px 24px 80px}
-.cover{background:linear-gradient(135deg,#0a2a6e 0%,#1a5fa8 60%,#3ab8d8 100%);border-radius:12px;padding:60px 48px;color:#fff;margin-bottom:28px;text-align:center}
+.cover{background:linear-gradient(135deg,#0a2a6e 0%,#1a5fa8 60%,#3ab8d8 100%);border-radius:12px;padding:56px 48px;color:#fff;margin-bottom:26px;text-align:center}
 .cover-title{font-size:32px;font-weight:700;letter-spacing:2px;margin-bottom:10px}
-.cover-sub{font-size:16px;opacity:.8;margin-bottom:28px}
+.cover-sub{font-size:16px;opacity:.8;margin-bottom:26px}
 .cover-meta{display:flex;justify-content:center;gap:36px;font-size:13px;opacity:.7}
-.toc{background:#fff;border-radius:10px;padding:22px 28px;margin-bottom:20px;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+.toc{background:#fff;border-radius:10px;padding:20px 28px;margin-bottom:18px;box-shadow:0 1px 6px rgba(0,0,0,.07)}
 .toc-title{font-size:15px;font-weight:600;color:#0b3f78;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid #dbe8f6}
 .toc ol{padding-left:20px;list-style:none}.toc li{margin:4px 0}.toc a{color:#0961BD;text-decoration:none;font-size:13px}.toc a:hover{text-decoration:underline}.toc ol ol{padding-left:16px}.toc ol ol li{margin:2px 0;opacity:.85}
-.section{background:#fff;border-radius:10px;padding:28px 32px;margin-bottom:16px;box-shadow:0 1px 6px rgba(0,0,0,.07)}
-h1{font-size:20px;font-weight:700;color:#08305c;padding-bottom:10px;border-bottom:2px solid #dbe8f6;margin-bottom:20px}
+.section{background:#fff;border-radius:10px;padding:26px 32px;margin-bottom:16px;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+h1{font-size:20px;font-weight:700;color:#08305c;padding-bottom:10px;border-bottom:2px solid #dbe8f6;margin-bottom:18px}
 h2{font-size:15px;font-weight:600;color:#0b3f78;margin:22px 0 10px;padding-left:10px;border-left:3px solid #1a5fa8}
 h3{font-size:14px;font-weight:600;color:#0961BD;margin:16px 0 8px}
 p{margin-bottom:10px;color:#333}ul,ol{padding-left:20px;margin-bottom:10px}li{margin-bottom:4px}
@@ -28,9 +28,7 @@ tr:nth-child(even) td{background:#fafbfc}
 .notice{display:flex;gap:10px;background:#fff8e8;border-left:4px solid #f0a800;border-radius:6px;padding:11px 15px;margin:12px 0;font-size:13px;color:#6a4a00}
 .notice-info{background:#edf2ff;border-color:#4a7aee;color:#1a3a8a}
 code{background:#eaf2fb;color:#0961BD;padding:1px 5px;border-radius:3px;font-size:12px;font-family:monospace}
-.fc-wrap{overflow:hidden;padding:20px 0}
-.todo{display:inline-block;background:#ffe6da;color:#b3300b;border-radius:4px;font-size:11px;font-weight:600;padding:1px 7px;margin-left:6px;vertical-align:middle}
-.todo-block{background:#fff4ef;border:1px dashed #e6a58c;border-radius:8px;padding:12px 16px;margin:10px 0;font-size:13px;color:#8a3d20}
+.fc-wrap{overflow:hidden;padding:18px 0}
 .pill{display:inline-block;font-size:12px;padding:1px 8px;border-radius:10px;border:1px solid;margin-right:2px;white-space:nowrap}
 .p-first{color:#0b3f78;border-color:#9cc4ea;background:#eef4fb}
 .p-accum{color:#7a4b00;border-color:#e0b878;background:#fdf3e3}
@@ -43,13 +41,8 @@ code{background:#eaf2fb;color:#0961BD;padding:1px 5px;border-radius:3px;font-siz
 
 <div class="cover">
   <div class="cover-title">充值活动</div>
-  <div class="cover-sub">PRD 产品需求文档（框架版）</div>
-  <div class="cover-meta"><span>版本：v0.1</span><span>更新日期：2026-08-25</span><span>作者：Laura</span></div>
-</div>
-
-<div class="notice notice-info" style="margin-bottom:20px">
-  <div>📝</div>
-  <div>本文档为<b>框架初稿</b>,仅列出目前已明确的活动主要逻辑,用于与开发对齐主流程与核心功能。标注 <span class="todo">待补充</span> 的部分为尚未确定、后续完善的内容。前台相关章节待前台参考图确定后补充。</div>
+  <div class="cover-sub">PRD 产品需求文档</div>
+  <div class="cover-meta"><span>版本：v1.0</span><span>更新日期：2026-08-26</span><span>作者：Laura</span></div>
 </div>
 
 <div class="toc">
@@ -58,34 +51,43 @@ code{background:#eaf2fb;color:#0961BD;padding:1px 5px;border-radius:3px;font-siz
     <li><a href="#s1">一、需求背景</a></li>
     <li><a href="#s2">二、名词解释</a></li>
     <li><a href="#s3">三、活动主流程图</a></li>
-    <li><a href="#s4">四、核心功能概览</a></li>
-    <li><a href="#s5">五、后台功能说明</a>
+    <li><a href="#s4">四、后台功能说明</a>
       <ol>
-        <li><a href="#s51">5.1 活动列表页</a></li>
-        <li><a href="#s52">5.2 新增/编辑活动弹框——字段总览</a></li>
-        <li><a href="#s53">5.3 充值专属字段与选项说明</a></li>
-        <li><a href="#s54">5.4 专属字段联动规则</a></li>
-        <li><a href="#s55">5.5 奖励配置与领取规则</a></li>
-        <li><a href="#s56">5.6 查看活动 / 公共配置校验</a></li>
+        <li><a href="#s41">4.1 活动列表页</a></li>
+        <li><a href="#s42">4.2 新增/编辑活动弹框——字段总览</a></li>
+        <li><a href="#s43">4.3 充值专属字段与选项说明</a></li>
+        <li><a href="#s44">4.4 专属字段联动规则</a></li>
+        <li><a href="#s45">4.5 奖励配置与校验规则</a></li>
+        <li><a href="#s46">4.6 统计口径与重置周期</a></li>
+        <li><a href="#s47">4.7 奖励领取、账变与提现打码</a></li>
+        <li><a href="#s48">4.8 奖励处理时序（作废/派发）</a></li>
+        <li><a href="#s49">4.9 编辑限制</a></li>
       </ol>
     </li>
-    <li><a href="#s6">六、前台功能说明</a></li>
-    <li><a href="#s7">七、中文 / 葡语字段对照表</a></li>
-    <li><a href="#s8">八、版本记录</a></li>
+    <li><a href="#s5">五、前台功能说明</a>
+      <ol>
+        <li><a href="#s51">5.1 页面结构</a></li>
+        <li><a href="#s52">5.2 档位列表展示规则</a></li>
+        <li><a href="#s53">5.3 领取按钮状态</a></li>
+        <li><a href="#s54">5.4 连续天数页交互</a></li>
+        <li><a href="#s55">5.5 待领取 / 已领取 / 跨周期领取入口</a></li>
+      </ol>
+    </li>
+    <li><a href="#s6">六、中文 / 葡语字段对照表</a></li>
+    <li><a href="#s7">七、版本记录</a></li>
   </ol>
 </div>
 
 <!-- 一 -->
 <div class="section" id="s1">
   <h1>一、需求背景</h1>
-  <p>充值活动是平台以"充值"为核心奖励条件的存款激励活动,复刻参考平台的"充值活动2",作为综合类活动新增到现有活动列表菜单中(平台第 3 个此类活动,前两个为神秘彩金、会员答谢)。运营人员可按不同活动条件配置奖励规则,引导玩家充值。</p>
-  <p>本活动支持三种活动条件,覆盖不同运营目标:</p>
+  <p>充值活动是平台以"充值"为核心奖励条件的存款激励活动,作为综合类活动新增到现有活动列表菜单中(与神秘彩金、会员答谢并列)。运营人员可按不同活动条件配置阶梯奖励规则,引导会员完成充值,提升首充转化、充值总额与充值留存。</p>
+  <p>本活动支持三种活动条件,面向不同运营目标:</p>
   <ul>
-    <li><strong>首笔充值:</strong>针对新玩家/周期内首笔充值,提升首充转化。</li>
-    <li><strong>累计充值:</strong>周期内累计充值达阶梯即可叠加领取,拉动充值总额。</li>
-    <li><strong>连续天数充值:</strong>以连续充值天数为条件,培养持续充值习惯、提升留存。</li>
+    <li><strong>首笔充值：</strong>面向周期内的首笔充值,提升首充转化。</li>
+    <li><strong>累计充值：</strong>周期内累计充值达阶梯即可叠加领取,拉动充值总额。</li>
+    <li><strong>连续天数充值：</strong>以连续充值天数为条件,培养持续充值习惯、提升留存。</li>
   </ul>
-  <div class="todo-block"><b>待补充:</b>具体运营目标与量化指标(转化率/ARPU/留存等)、上线地区与商户范围、与现有充值页/其他活动的关系与互斥规则。</div>
 </div>
 
 <!-- 二 -->
@@ -94,140 +96,105 @@ code{background:#eaf2fb;color:#0961BD;padding:1px 5px;border-radius:3px;font-siz
   <table>
     <thead><tr><th>术语</th><th>说明</th></tr></thead>
     <tbody>
-      <tr><td>活动条件</td><td>获得奖励的达标维度,三选一:首笔充值 / 累计充值 / 连续天数充值</td></tr>
-      <tr><td>领取时间</td><td>奖励开放领取的时机:次日领取(次日指定时间后开放)/ 实时领取(满足后即时开放)</td></tr>
-      <tr><td>重置方式</td><td>奖励统计的周期口径:不重置 / 每日 / 每周,到周期即重新统计(不展开子字段)</td></tr>
-      <tr><td>稽核方式</td><td>提现打码的计算基数:赠送部分(仅赠送金额)/ 本金+赠送(本金与赠送合计)</td></tr>
-      <tr><td>稽核倍数</td><td>领取后提现前须完成的打码倍数:打码基数 × 稽核倍数 = 所需有效投注额</td></tr>
-      <tr><td>连续充值天数</td><td>当日累计充值达到设定门槛才计 1 个有效充值天数;断充后周期内连续天数从第一天重新开始</td></tr>
-      <tr><td>奖励作废</td><td>未领取奖励的处理方式:过期自动派发 / 过期作废 / 保留天数自动派发 / 保留天数作废</td></tr>
-      <tr><td>选择时间(次日领取)</td><td>次日领取时,奖励于次日的该时间点后开放领取</td></tr>
-      <tr><td>申领终端 / 申领限制 / 参与层级</td><td>沿用现有活动定义(领取端类型、额外申领门槛、可见层级)</td></tr>
+      <tr><td>活动条件</td><td>获得奖励的达标维度,三选一：首笔充值 / 累计充值 / 连续天数充值</td></tr>
+      <tr><td>领取时间</td><td>奖励开放领取的时机：次日领取（次日指定时间后开放）/ 实时领取（满足后即时开放）</td></tr>
+      <tr><td>重置方式</td><td>奖励统计的周期口径：不重置 / 每日 / 每周，到周期即重新统计</td></tr>
+      <tr><td>稽核方式</td><td>提现打码的计算基数：赠送部分（仅赠送金额）/ 本金+赠送（本金与赠送合计）</td></tr>
+      <tr><td>稽核倍数</td><td>领取后提现前须完成的打码倍数：打码基数 × 稽核倍数 = 所需有效投注额</td></tr>
+      <tr><td>连续充值天数</td><td>当日累计充值达到设定门槛才计 1 个有效充值天数；断充后周期内连续天数从第 1 天重新开始</td></tr>
+      <tr><td>奖励作废</td><td>未领取奖励的处理方式：过期自动派发 / 过期作废 / 保留天数自动派发 / 保留天数作废</td></tr>
+      <tr><td>选择时间</td><td>次日领取时，奖励于次日的该时间点后开放领取</td></tr>
+      <tr><td>申领终端 / 申领限制 / 参与层级</td><td>沿用现有活动定义（领取端类型、额外申领门槛、可见层级）</td></tr>
     </tbody>
   </table>
 </div>
 
-<!-- 三 主流程图 -->
+<!-- 三 流程图 -->
 <div class="section" id="s3">
   <h1>三、活动主流程图</h1>
-  <p>下图为已明确的核心主流程,用于与开发对齐;分支细节(各活动条件的达标判定、跨周期领取入口)见第五章。</p>
   <div class="fc-wrap">
   <svg viewBox="0 0 680 700" width="100%" xmlns="http://www.w3.org/2000/svg" style="max-width:680px;display:block;margin:0 auto;font-family:'PingFang SC',Arial,sans-serif">
-    <defs>
-      <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,1 L9,5 L0,9 z" fill="#888"/></marker>
-    </defs>
-    <!-- START -->
+    <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,1 L9,5 L0,9 z" fill="#888"/></marker></defs>
     <rect x="180" y="20" width="240" height="38" rx="19" fill="#0a2a6e"/>
-    <text x="300" y="44" text-anchor="middle" fill="#fff" font-size="13" font-weight="600">玩家进入充值活动页</text>
+    <text x="300" y="44" text-anchor="middle" fill="#fff" font-size="13" font-weight="600">会员进入充值活动页</text>
     <line x1="300" y1="58" x2="300" y2="78" stroke="#888" stroke-width="2" marker-end="url(#ah)"/>
-    <!-- 充值 -->
     <rect x="180" y="78" width="240" height="40" rx="6" fill="#eaf2fb" stroke="#9cc4ea"/>
-    <text x="300" y="103" text-anchor="middle" fill="#0b3f78" font-size="13">玩家发起充值</text>
+    <text x="300" y="103" text-anchor="middle" fill="#0b3f78" font-size="13">会员发起充值</text>
     <line x1="300" y1="118" x2="300" y2="138" stroke="#888" stroke-width="2" marker-end="url(#ah)"/>
-    <!-- D1 满足活动条件 -->
     <polygon points="300,138 420,190 300,242 180,190" fill="#fff4e0" stroke="#e0b878"/>
     <text x="300" y="186" text-anchor="middle" fill="#7a4b00" font-size="13" font-weight="600">满足活动条件?</text>
     <text x="300" y="203" text-anchor="middle" fill="#7a4b00" font-size="10">首笔 / 累计档 / 连续天数</text>
-    <!-- 否 -->
     <line x1="420" y1="190" x2="470" y2="190" stroke="#888" stroke-width="2" marker-end="url(#ah)"/>
     <text x="443" y="182" text-anchor="middle" fill="#b3300b" font-size="11">否</text>
     <rect x="470" y="168" width="190" height="44" rx="6" fill="#fdecec" stroke="#e0a0a0"/>
-    <text x="565" y="194" text-anchor="middle" fill="#a33" font-size="12">未达标:显示进度 / 置灰</text>
-    <!-- 是 -->
+    <text x="565" y="194" text-anchor="middle" fill="#a33" font-size="12">未达标：显示进度 / 置灰</text>
     <line x1="300" y1="242" x2="300" y2="262" stroke="#888" stroke-width="2" marker-end="url(#ah)"/>
     <text x="312" y="256" fill="#0a7d3e" font-size="11">是</text>
-    <!-- P2 生成可领奖励 -->
     <rect x="170" y="262" width="260" height="40" rx="6" fill="#eaf2fb" stroke="#9cc4ea"/>
-    <text x="300" y="287" text-anchor="middle" fill="#0b3f78" font-size="13">生成可领取奖励(按档位阶梯)</text>
+    <text x="300" y="287" text-anchor="middle" fill="#0b3f78" font-size="13">生成可领取奖励（按档位）</text>
     <line x1="300" y1="302" x2="300" y2="322" stroke="#888" stroke-width="2" marker-end="url(#ah)"/>
-    <!-- P3 开放领取 -->
     <rect x="150" y="322" width="300" height="50" rx="6" fill="#eaf2fb" stroke="#9cc4ea"/>
     <text x="300" y="343" text-anchor="middle" fill="#0b3f78" font-size="13">开放领取</text>
-    <text x="300" y="360" text-anchor="middle" fill="#5a6169" font-size="11">实时:即时  /  次日:到"选择时间"后</text>
+    <text x="300" y="360" text-anchor="middle" fill="#5a6169" font-size="11">实时：即时  /  次日：到"选择时间"后</text>
     <line x1="300" y1="372" x2="300" y2="392" stroke="#888" stroke-width="2" marker-end="url(#ah)"/>
-    <!-- P4 手动领取 -->
     <rect x="180" y="392" width="240" height="40" rx="6" fill="#eaf2fb" stroke="#9cc4ea"/>
-    <text x="300" y="417" text-anchor="middle" fill="#0b3f78" font-size="13">玩家手动领取</text>
+    <text x="300" y="417" text-anchor="middle" fill="#0b3f78" font-size="13">会员手动领取</text>
     <line x1="300" y1="432" x2="300" y2="452" stroke="#888" stroke-width="2" marker-end="url(#ah)"/>
-    <!-- P5 到账 -->
     <rect x="150" y="452" width="300" height="50" rx="6" fill="#e8f7ef" stroke="#8fceb0"/>
     <text x="300" y="473" text-anchor="middle" fill="#0a5c3a" font-size="13">奖励到账</text>
-    <text x="300" y="490" text-anchor="middle" fill="#0a5c3a" font-size="11">赠送金额按稽核倍数完成打码后可提现</text>
+    <text x="300" y="490" text-anchor="middle" fill="#0a5c3a" font-size="11">按稽核方式完成稽核倍数打码后可提现</text>
     <line x1="300" y1="502" x2="300" y2="524" stroke="#888" stroke-width="2" marker-end="url(#ah)"/>
-    <!-- D3 有效期内领取 -->
     <polygon points="300,524 420,576 300,628 180,576" fill="#fff4e0" stroke="#e0b878"/>
     <text x="300" y="580" text-anchor="middle" fill="#7a4b00" font-size="13" font-weight="600">有效期内领取?</text>
-    <!-- 否 -->
     <line x1="420" y1="576" x2="470" y2="576" stroke="#888" stroke-width="2" marker-end="url(#ah)"/>
     <text x="443" y="568" text-anchor="middle" fill="#b3300b" font-size="11">否</text>
     <rect x="470" y="546" width="200" height="60" rx="6" fill="#fdecec" stroke="#e0a0a0"/>
-    <text x="570" y="570" text-anchor="middle" fill="#a33" font-size="11">按"奖励作废"设置处理:</text>
+    <text x="570" y="570" text-anchor="middle" fill="#a33" font-size="11">按"奖励作废"设置处理：</text>
     <text x="570" y="586" text-anchor="middle" fill="#a33" font-size="11">过期自动派发 / 过期作废 /</text>
     <text x="570" y="600" text-anchor="middle" fill="#a33" font-size="11">保留天数自动派发 / 作废</text>
-    <!-- 是 -->
     <line x1="300" y1="628" x2="300" y2="650" stroke="#888" stroke-width="2" marker-end="url(#ah)"/>
     <text x="312" y="644" fill="#0a7d3e" font-size="11">是</text>
     <rect x="210" y="650" width="180" height="38" rx="19" fill="#0a7d3e"/>
     <text x="300" y="674" text-anchor="middle" fill="#fff" font-size="13" font-weight="600">奖励发放完成</text>
   </svg>
   </div>
-  <div class="todo-block"><b>待补充:</b>连续天数充值的"断充重置"细分流程、跨周期未领奖励的领取入口流程(见 5.5)、异常/风控分支。</div>
 </div>
 
-<!-- 四 核心功能概览 -->
+<!-- 四 后台 -->
 <div class="section" id="s4">
-  <h1>四、核心功能概览</h1>
-  <p>用于与开发快速对齐范围,详细规则见第五章。</p>
+  <h1>四、后台功能说明</h1>
+
+  <h2 id="s41">4.1 活动列表页</h2>
+  <p>充值活动纳入现有活动列表（与神秘彩金、会员答谢同一菜单）。活动类型筛选与列表新增"充值"；列表行支持查看 / 修改 / 开启关闭。列表字段沿用现有活动：活动分类、活动类型、活动名称、活动状态、重置方式、派发方式、审核方式、参与人数、派发奖励数、派发奖励金额、已领取金额、未领取金额、显示排序、操作。</p>
+
+  <h2 id="s42">4.2 新增/编辑活动弹框——字段总览</h2>
+  <p>字段分两类：<b>公共字段</b>沿用现有活动（详见《神秘彩金活动 PRD》《会员答谢活动 PRD》对应章节）；<b>充值专属字段</b>见 4.3。公共字段在充值下的取值如下：</p>
   <table>
-    <thead><tr><th>模块</th><th>核心功能</th><th>状态</th></tr></thead>
-    <tbody>
-      <tr><td>活动类型</td><td>在现有活动列表新增"充值"活动类型(第 3 个),复用现有活动列表与公共配置</td><td>已明确</td></tr>
-      <tr><td>活动条件</td><td>首笔充值 / 累计充值 / 连续天数充值,三选一,各自达标判定与奖励呈现不同</td><td>已明确</td></tr>
-      <tr><td>领取时间</td><td>实时领取 / 次日领取(次日含"选择时间")</td><td>已明确</td></tr>
-      <tr><td>奖励配置</td><td>首笔/累计为多档阶梯;连续天数为单档</td><td>已明确</td></tr>
-      <tr><td>专属字段联动</td><td>活动条件、领取时间对稽核方式/重置方式/奖励作废等的联动约束</td><td>已明确(见 5.4)</td></tr>
-      <tr><td>领取与打码</td><td>手动领取;赠送部分或本金+赠送按稽核倍数打码后提现</td><td>已明确</td></tr>
-      <tr><td>累计逐档领取边界</td><td>领取是否扣减累计、是否按序、高档能否继续解锁</td><td><span class="todo">待开发确认</span></td></tr>
-      <tr><td>前台页面与交互</td><td>三种条件的前台样式、领取按钮状态、跨周期领取入口</td><td><span class="todo">待补充</span></td></tr>
-    </tbody>
-  </table>
-</div>
-
-<!-- 五 后台 -->
-<div class="section" id="s5">
-  <h1>五、后台功能说明</h1>
-
-  <h2 id="s51">5.1 活动列表页</h2>
-  <p>沿用现有活动列表(与神秘彩金、会员答谢同一菜单)。活动类型筛选与列表新增"充值";列表行支持查看 / 修改 / 开启关闭。列表字段沿用现有(活动分类、类型、名称、状态、重置方式、派发方式、审核方式、参与人数、派发奖励数/金额、已领取/未领取金额、显示排序、操作)。</p>
-  <div class="todo-block"><b>待补充:</b>充值活动是否需要新增专属列表列或统计口径(如按活动条件区分的数据)。</div>
-
-  <h2 id="s52">5.2 新增/编辑活动弹框——字段总览</h2>
-  <p>字段分两类:<b>公共字段</b>沿用现有活动(详见《神秘彩金活动 PRD》《会员答谢活动 PRD》的对应章节),<b>充值专属字段</b>见 5.3。</p>
-  <table>
-    <thead><tr><th>公共字段(沿用现有活动)</th><th>充值下的取值 / 说明</th></tr></thead>
+    <thead><tr><th>公共字段</th><th>充值下的取值 / 说明</th></tr></thead>
     <tbody>
       <tr><td>活动分类</td><td>综合</td></tr>
-      <tr><td>活动名称</td><td>系统默认 / 自定义;系统默认随活动条件:首笔充值奖励 / 累计充值奖励 / 连续充值奖励</td></tr>
+      <tr><td>活动名称</td><td>系统默认 / 自定义；系统默认随活动条件：首笔充值奖励 / 累计充值奖励 / 连续充值奖励</td></tr>
       <tr><td>活动时间</td><td>永久 / 自定义</td></tr>
-      <tr><td>重置方式</td><td>不重置 / 每日 / 每周(连续天数充值时"每日"不可选,见 5.4)</td></tr>
-      <tr><td>派发方式 / 审核方式 / 派奖时间</td><td>自动派发 / 系统(周期内) / 立即到账(其余置灰)</td></tr>
-      <tr><td>领取方式</td><td>固定"手动领取"(自动领取置灰)</td></tr>
-      <tr><td>奖励作废</td><td>过期自动派发 / 过期作废 / 保留天数自动派发 / 保留天数作废(+ 过期天数);次日领取时的约束见 5.4</td></tr>
-      <tr><td>稽核倍数 / 参与条件</td><td>稽核倍数默认 1;参与条件:全部会员 / 新注册会员</td></tr>
+      <tr><td>重置方式</td><td>不重置 / 每日 / 每周（连续天数充值时"每日"不可选，见 4.4）</td></tr>
+      <tr><td>派发方式 / 审核方式 / 派奖时间</td><td>自动派发 / 系统（周期内）/ 立即到账（其余选项置灰）</td></tr>
+      <tr><td>领取方式</td><td>固定"手动领取"（自动领取置灰）</td></tr>
+      <tr><td>奖励作废</td><td>过期自动派发 / 过期作废 / 保留天数自动派发 / 保留天数作废（+ 奖励领取过期天数）；次日领取时的约束见 4.4</td></tr>
+      <tr><td>稽核倍数</td><td>默认 1</td></tr>
+      <tr><td>参与条件</td><td>全部会员 / 新注册会员（活动时间内注册玩家）</td></tr>
       <tr><td>申领终端 / 申领限制 / 稽核限定平台 / 参与层级</td><td>沿用现有活动</td></tr>
-      <tr><td>规则说明 / 显示排序 / 活动详情页 / 背景样式 / LOGO / 宣传图预览</td><td>沿用现有活动</td></tr>
+      <tr><td>规则说明 / 显示排序 / 活动详情页选择 / 背景样式 / LOGO样式 / 宣传图预览</td><td>沿用现有活动</td></tr>
     </tbody>
   </table>
 
-  <h2 id="s53">5.3 充值专属字段与选项说明</h2>
-  <p>相较现有活动,充值新增以下 4 个专属字段(位于"参与条件"之后、"申领终端"之前):</p>
+  <h2 id="s43">4.3 充值专属字段与选项说明</h2>
+  <p>相较现有活动，充值新增 4 个专属字段，位于"参与条件"之后、"申领终端"之前。</p>
 
   <h3>① 领取时间</h3>
   <table>
     <thead><tr><th>选项</th><th>说明</th></tr></thead>
     <tbody>
-      <tr><td>次日领取</td><td>满足条件的奖励于<b>次日"选择时间"</b>之后开放领取;选中后出现"选择时间 [时:分:秒] 以后可领取"配置,且约束奖励作废(见 5.4)</td></tr>
-      <tr><td>实时领取(影响留存)</td><td>满足条件后<b>即时</b>开放领取</td></tr>
+      <tr><td>次日领取</td><td>满足条件的奖励于<b>次日"选择时间"</b>之后开放领取；选中后出现"选择时间 [时:分:秒] 以后可领取"配置，且约束奖励作废（见 4.4）</td></tr>
+      <tr><td>实时领取（影响留存）</td><td>满足条件后<b>即时</b>开放领取</td></tr>
     </tbody>
   </table>
 
@@ -235,9 +202,9 @@ code{background:#eaf2fb;color:#0961BD;padding:1px 5px;border-radius:3px;font-siz
   <table>
     <thead><tr><th>选项</th><th>说明</th></tr></thead>
     <tbody>
-      <tr><td><span class="pill p-first">首笔充值</span></td><td>账号(周期内)首笔充值达到档位金额即获对应奖励</td></tr>
-      <tr><td><span class="pill p-accum">累计充值</span></td><td>周期内累计充值达到各阶梯金额,满足的档位<b>皆可叠加领取</b></td></tr>
-      <tr><td><span class="pill p-days">连续天数充值</span></td><td>当日累计充值达门槛才计 1 个有效充值天数,达到连续天数即获奖;强制实时领取、重置无每日、奖励仅一档(见 5.4)</td></tr>
+      <tr><td><span class="pill p-first">首笔充值</span></td><td>活动期间（周期内）的首笔充值达到档位金额即获对应奖励，与是否为账号历史首充无关；按首笔充值金额匹配达到的最高单档发放，不叠加</td></tr>
+      <tr><td><span class="pill p-accum">累计充值</span></td><td>周期内累计充值达到各阶梯金额，满足的档位皆可叠加领取；累计口径为充值总额（只增不减），领取奖励不扣减累计</td></tr>
+      <tr><td><span class="pill p-days">连续天数充值</span></td><td>当日累计充值达门槛才计 1 个有效充值天数，达到连续天数即获奖；领取时间强制实时、重置方式无"每日"、奖励仅一档（见 4.4）</td></tr>
     </tbody>
   </table>
 
@@ -246,33 +213,33 @@ code{background:#eaf2fb;color:#0961BD;padding:1px 5px;border-radius:3px;font-siz
     <thead><tr><th>选项</th><th>说明</th></tr></thead>
     <tbody>
       <tr><td>赠送部分</td><td>仅赠送金额计入稽核倍数打码</td></tr>
-      <tr><td>本金+赠送</td><td>本金与赠送金额合计计入打码</td></tr>
+      <tr><td>本金+赠送</td><td>本金与赠送金额合计计入稽核倍数打码</td></tr>
     </tbody>
   </table>
-  <p class="legend">注:活动条件=累计充值时,稽核方式仅显示"赠送部分",默认选中且置灰。</p>
+  <p class="legend">活动条件=累计充值时，稽核方式仅显示"赠送部分"，默认选中且置灰。</p>
 
-  <h3>④ 连续充值天数设置(仅"连续天数充值"显示)</h3>
-  <p>配置"当日累计充值金额 ≥ N 才会计入连续充值天数";规则:①当天累计充值 ≥ 最低充值金额才计入连续天数;②断充后,周期内连续充值天数从第一天重新开始。</p>
+  <h3>④ 连续充值天数设置（仅"连续天数充值"显示）</h3>
+  <p>配置"当日累计充值金额 ≥ N 才会计入连续充值天数"。规则：①当天累计充值 ≥ 门槛金额才计入 1 个有效充值天数；②断充后，周期内连续充值天数从第 1 天重新开始。门槛金额为空时保存自动恢复默认 0.00。</p>
 
   <h3>⑤ 奖励配置</h3>
   <table>
     <thead><tr><th>活动条件</th><th>阶梯列</th><th>档位数</th></tr></thead>
     <tbody>
-      <tr><td>首笔充值 / 累计充值</td><td>充值金额(≥) → 奖励金额</td><td>可配多档(增删)</td></tr>
-      <tr><td>连续天数充值</td><td>连续充值天数 → 奖励金额</td><td><b>仅一档</b>(无增删按钮)</td></tr>
+      <tr><td>首笔充值 / 累计充值</td><td>充值金额（≥）→ 奖励金额</td><td>可配多档（可增删）</td></tr>
+      <tr><td>连续天数充值</td><td>连续充值天数 → 奖励金额</td><td>仅一档（无增删按钮）</td></tr>
     </tbody>
   </table>
 
-  <h2 id="s54">5.4 专属字段联动规则</h2>
+  <h2 id="s44">4.4 专属字段联动规则</h2>
   <h3>表一 · 按「活动条件」联动</h3>
   <table>
     <thead><tr><th>联动项</th><th>首笔充值</th><th>累计充值</th><th>连续天数充值</th></tr></thead>
     <tbody>
-      <tr><td>领取时间</td><td>次日 / 实时</td><td>次日 / 实时</td><td><b>强制实时</b>(次日置灰)</td></tr>
-      <tr><td>重置方式</td><td>不重置/每日/每周</td><td>不重置/每日/每周</td><td><b>每日置灰</b>(仅不重置/每周)</td></tr>
-      <tr><td>稽核方式</td><td>赠送部分 / 本金+赠送</td><td><b>仅赠送部分</b>(选中且置灰)</td><td>赠送部分 / 本金+赠送</td></tr>
+      <tr><td>领取时间</td><td>次日 / 实时</td><td>次日 / 实时</td><td><b>强制实时</b>（次日置灰）</td></tr>
+      <tr><td>重置方式</td><td>不重置 / 每日 / 每周</td><td>不重置 / 每日 / 每周</td><td><b>每日置灰</b>（仅不重置 / 每周）</td></tr>
+      <tr><td>稽核方式</td><td>赠送部分 / 本金+赠送</td><td><b>仅赠送部分</b>（选中且置灰）</td><td>赠送部分 / 本金+赠送</td></tr>
       <tr><td>连续充值天数设置</td><td>隐藏</td><td>隐藏</td><td><b>显示</b></td></tr>
-      <tr><td>奖励配置</td><td>充值金额→奖励(多档)</td><td>充值金额→奖励(多档,叠加领取)</td><td>连续天数→奖励(单档)</td></tr>
+      <tr><td>奖励配置</td><td>充值金额→奖励（多档）</td><td>充值金额→奖励（多档，叠加领取）</td><td>连续天数→奖励（单档）</td></tr>
       <tr><td>系统默认名称</td><td>首笔充值奖励</td><td>累计充值奖励</td><td>连续充值奖励</td></tr>
     </tbody>
   </table>
@@ -280,55 +247,144 @@ code{background:#eaf2fb;color:#0961BD;padding:1px 5px;border-radius:3px;font-siz
   <table>
     <thead><tr><th>联动项</th><th>次日领取</th><th>实时领取</th></tr></thead>
     <tbody>
-      <tr><td>奖励作废可选项</td><td>仅"保留天数自动派发 / 保留天数作废"(过期自动派发、过期作废隐藏)</td><td>四项全可选</td></tr>
+      <tr><td>奖励作废可选项</td><td>仅"保留天数自动派发 / 保留天数作废"（过期自动派发、过期作废隐藏）</td><td>四项全可选</td></tr>
       <tr><td>奖励作废默认</td><td>保留天数自动派发</td><td>过期自动派发</td></tr>
       <tr><td>奖励领取过期天数</td><td>锁定 = 2 且置灰</td><td>选保留天数时可编辑</td></tr>
-      <tr><td>选择时间(XX 以后可领取)</td><td>显示</td><td>隐藏</td></tr>
+      <tr><td>选择时间（XX 以后可领取）</td><td>显示</td><td>隐藏</td></tr>
     </tbody>
   </table>
 
-  <h2 id="s55">5.5 奖励配置与领取规则</h2>
-  <h3>累计充值·逐档领取</h3>
-  <p>累计口径为周期内充值总额(只增不减);各档独立、一次性:累计达到某档即该档可领,已领档不可重复领,更高档随累计继续解锁,满足的档皆可叠加领取。</p>
-  <div class="todo-block"><b>待开发确认(竞品调研中):</b>① 领取后累计是否被扣减(预期不扣);② 是否强制按顺序领取;③ 先领低档后高档能否正常解锁;④ 未领低档直接累计到高档能否一次叠加领。以调研结论为准后写死本节。</div>
-  <h3>跨周期未领奖励的领取入口</h3>
-  <p>与"奖励作废"设置相关:</p>
-  <ul>
-    <li><b>过期自动派发 / 过期作废:</b>触发时机为活动重置/结束,重置那一刻自动派发到账户或作废,<b>无需玩家去领</b>。</li>
-    <li><b>保留天数自动派发 / 作废:</b>与重置无关,奖励跨周期保留 N 天;主活动页已进入新周期时,未领的旧奖励需通过<b>独立入口领取</b>。</li>
-  </ul>
-  <div class="todo-block"><b>待补充:</b>保留天数类的"跨周期领取入口"具体形态(领取记录 / 我的彩金 / 待领取)及其交互,待前台确定。</div>
+  <h2 id="s45">4.5 奖励配置与校验规则</h2>
+  <table>
+    <thead><tr><th>字段</th><th>规则</th><th>错误提示</th></tr></thead>
+    <tbody>
+      <tr><td>充值金额（首笔/累计）</td><td>必须大于 0 且为整数（空或 0 或非整数均不通过）</td><td>充值金额必须大于0且为整数</td></tr>
+      <tr><td>充值金额（多档）</td><td>各档充值金额严格升序（下一档须大于上一档，相等不通过）</td><td>各档充值金额需严格升序（下一档须大于上一档）</td></tr>
+      <tr><td>奖励金额（所有条件）</td><td>必须大于 0（空或 0 均不通过）</td><td>奖励金额必须大于0</td></tr>
+      <tr><td>连续充值天数</td><td>整数，2 ≤ N ≤ 30</td><td>连续天数不能小于2天 / 连续天数不能超过30天</td></tr>
+      <tr><td>连续充值天数门槛</td><td>非必填，为空保存时恢复默认 0.00</td><td>—</td></tr>
+    </tbody>
+  </table>
+  <p class="legend">其余公共必选项（活动名称自定义、活动时间自定义、申领终端、申领限制数值、稽核限定平台、规则说明自定义等）沿用现有活动的必填校验与提示；显示排序为空默认 1、参与层级未选默认"全部层级"。</p>
 
-  <h2 id="s56">5.6 查看活动 / 公共配置校验</h2>
-  <div class="todo-block"><b>待补充:</b>查看活动弹框(只读态)字段展示、公共配置项必填校验与错误提示——沿用现有活动规则,细节后续补充/引用现有 PRD。</div>
+  <h2 id="s46">4.6 统计口径与重置周期</h2>
+  <ul>
+    <li><b>统计起点：</b>统计从活动创建/生效时间起算，活动生效之前的历史充值不计入本活动。</li>
+    <li><b>重置周期：</b>重置方式决定首充/累计/连续的统计周期——不重置（持续累计）、每日（每天归零重新统计）、每周（每周归零重新统计）。连续天数充值不支持"每日"。</li>
+  </ul>
+
+  <h2 id="s47">4.7 奖励领取、账变与提现打码</h2>
+  <ul>
+    <li><b>领取方式：</b>固定手动领取。</li>
+    <li><b>领取判定：</b>会员点击领取时，按<b>申领终端限制、申领限制</b>等公共规则进行判定与拦截提示（沿用现有活动的判定逻辑与提示文案）；不满足时按对应提示拦截，满足后方可领取。</li>
+    <li><b>累计多档领取：</b>各档为独立奖励、独立账变。点击领取时，一次领取当前所有"已达标未领"的档位（前台合并显示为可领取总额），领取后按档生成多条账变；不支持仅领取某一档、跳过其他档。</li>
+    <li><b>提现打码：</b>领取的奖励须按稽核方式（赠送部分 或 本金+赠送）完成稽核倍数对应的有效投注后方可提现。</li>
+  </ul>
+
+  <h2 id="s48">4.8 奖励处理时序（作废/派发）</h2>
+  <table>
+    <thead><tr><th>奖励作废设置</th><th>处理时机</th><th>结果</th></tr></thead>
+    <tbody>
+      <tr><td>过期自动派发 / 过期作废</td><td>绑定活动重置 / 结束边界，即时处理（如每日重置：参与当天未领，次日重置即处理）</td><td>自动派发=到账；过期作废=作废不入账</td></tr>
+      <tr><td>保留天数自动派发 / 保留天数作废</td><td>绑定保留天数，<b>参与活动当天不计入</b>；自动处理日 = 参与日 + 1 + 保留天数。保留期内会员可手动领取</td><td>逾期未领：自动派发=到账；作废=作废不入账</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="s49">4.9 编辑限制</h2>
+  <p>编辑（修改/查看）已创建的充值活动时，<b>活动分类、活动类型、领取时间、活动条件不可修改</b>（置灰）；其余字段可编辑。</p>
 </div>
 
-<!-- 六 前台 -->
+<!-- 五 前台 -->
+<div class="section" id="s5">
+  <h1>五、前台功能说明</h1>
+
+  <h2 id="s51">5.1 页面结构</h2>
+  <p>三种活动条件的前台页面样式不同，需分别设计：</p>
+  <ul>
+    <li><b>首笔充值 / 累计充值：</b>顶部 banner + 当前可领取总额徽标 + 进度文案（累计另显示"累计充值"金额与"还差 X 到档 Y"）+ 档位列表（充值金额 | 奖励金额）+ 领取按钮 + 活动规则。</li>
+    <li><b>连续天数充值：</b>顶部 banner（连续 N 天 + 大奖金额）+ "中断连续将重置进度"提示 + 连续进度（x/N）+ 天数轨道（天数标签 + 可滑动天数格 + 最后一天固定展示大奖）+ 领取按钮 + 活动规则。</li>
+  </ul>
+
+  <h2 id="s52">5.2 档位列表展示规则</h2>
+  <p>首笔 / 累计模式下，页面中的档位列表（充值金额 → 奖励金额）为<b>静态展示</b>：各档位行样式固定，不随达标 / 可领 / 已领状态置灰或高亮。领取状态统一通过以下元素体现，而非改变档位行样式：</p>
+  <ul>
+    <li>顶部"当前可领取总额"（累计满足多档时为各档合计）。</li>
+    <li>进度文案："还差 X 到下一档 Y"、"今日可领 X"。</li>
+    <li>领取按钮的可点 / 置灰状态。</li>
+  </ul>
+
+  <h2 id="s53">5.3 领取按钮状态</h2>
+  <table>
+    <thead><tr><th>状态</th><th>触发</th><th>表现</th></tr></thead>
+    <tbody>
+      <tr><td>未达标</td><td>未达最低档/门槛</td><td>可领取总额 0，按钮置灰</td></tr>
+      <tr><td>可领取</td><td>已达标、在开放时间内、未领</td><td>按钮高亮"领取"</td></tr>
+      <tr><td>已领取</td><td>已领取</td><td>按钮置灰"已领取"</td></tr>
+      <tr><td>次日待领</td><td>次日领取、当天达标未到"选择时间"</td><td>按钮置灰，显示"次日 XX 后可领"；到点后转"可领取"</td></tr>
+      <tr><td>已过期</td><td>逾期未领（过期作废 / 保留天数作废）</td><td>奖励从页面/待领取移除</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="s54">5.4 连续天数页交互</h2>
+  <ul>
+    <li><b>进度：</b>显示 x/N；当日累计充值达门槛，当天格标记为已完成（"今天"标签标识当日）；未达门槛则当天不计入。</li>
+    <li><b>天数标签：</b>天数较多时，天数按段展示为标签，点击标签快速定位到对应天数段。</li>
+    <li><b>天数轨道：</b>第 1 ~ N-1 天为可左右滑动的天数格，滑动不受天数标签限制（标签仅作快捷跳转）；<b>最后一天（第 N 天）固定在最右侧</b>，展示大奖金额。</li>
+    <li><b>领取与重置：</b>达到第 N 天即可领取整份大奖，领取后按钮显示为"已领取"；断充后连续进度从第 1 天重新开始。</li>
+    <li><b>去充值跳转：</b>连续天数未完成时，页面按钮为"去充值"，点击跳转到充值页，引导会员继续充值以延续连续天数；连续完成后按钮变为"领取"。</li>
+  </ul>
+
+  <h2 id="s55">5.5 待领取 / 已领取 / 跨周期领取入口</h2>
+  <ul>
+    <li><b>待领取：</b>列出各活动未领取奖励，累计多档的每一档各占一行；提供"全部领取"一并领取。</li>
+    <li><b>已领取记录：</b>按时间列出已领取记录，累计多档各占一行（独立账变）。</li>
+    <li><b>跨周期领取入口：</b>保留天数类奖励与活动周期无关，可跨周期保留。当主活动页已进入新周期时，未领取的旧奖励仍在"待领取"入口内可领，直至保留期满按设置自动派发或作废。</li>
+  </ul>
+</div>
+
+<!-- 六 中葡对照 -->
 <div class="section" id="s6">
-  <h1>六、前台功能说明</h1>
-  <div class="todo-block"><b>整章待补充(待前台参考图):</b>入口与页面结构、三种活动条件各自的页面样式、领取按钮状态(未达标 / 可领取 / 已领取 / 次日待领 / 已过期)、领取交互、连续天数进度与断充展示、跨周期领取入口。</div>
-  <p>目前已明确、待前台设计承接的要点:</p>
-  <ul>
-    <li>三种活动条件页面样式不同(需分别设计)。</li>
-    <li>领取按钮至少覆盖:未达标 / 可领取 / 已领取 / 次日待领(倒计时)/ 已过期 等状态。</li>
-    <li>连续天数充值需展示连续进度,并体现断充重置。</li>
-    <li>次日领取需体现"到选择时间后可领"的开放逻辑。</li>
-  </ul>
+  <h1>六、中文 / 葡语字段对照表</h1>
+  <p>前台文案中葡对照（葡语为参考客户端原文）：</p>
+  <table>
+    <thead><tr><th>中文</th><th>葡语（参考原文）</th></tr></thead>
+    <tbody>
+      <tr><td>可领取</td><td>Coletável</td></tr>
+      <tr><td>领取</td><td>Receber</td></tr>
+      <tr><td>已领取</td><td>Resgatado</td></tr>
+      <tr><td>全部领取</td><td>Coletar Tudo</td></tr>
+      <tr><td>充值金额</td><td>Montante do depósito</td></tr>
+      <tr><td>奖励金额</td><td>Valor da recompensa</td></tr>
+      <tr><td>累计充值</td><td>Dep. Acum.</td></tr>
+      <tr><td>今日可领 R$X</td><td>Pode ser coletado hoje R$X</td></tr>
+      <tr><td>还差 R$X 到 R$Y</td><td>Falta R$X até o Prêmio R$Y</td></tr>
+      <tr><td>所有充值挑战已完成！</td><td>Todos os desafios de recarga concluídos!</td></tr>
+      <tr><td>每日充值 X</td><td>Deposite X diário</td></tr>
+      <tr><td>连续 N 天</td><td>Sequência de N dias</td></tr>
+      <tr><td>赢取大奖</td><td>Ganhe o Grande Prêmio</td></tr>
+      <tr><td>超级大奖</td><td>MEGA RECOMPENSA</td></tr>
+      <tr><td>中断连续将重置进度</td><td>Interromper a sequência reiniciará seu progresso</td></tr>
+      <tr><td>还差 N 天，立即领取！</td><td>Faltam N dias. Resgate na hora!</td></tr>
+      <tr><td>充值挑战完成！今日领取奖励！</td><td>Desafio de depósito concluído! Resgate sua recompensa hoje!</td></tr>
+      <tr><td>充值 x/N</td><td>Depósito x/N</td></tr>
+      <tr><td>今天</td><td>Hoje</td></tr>
+      <tr><td>活动规则</td><td>Regras do evento</td></tr>
+      <tr><td>待领取</td><td>Pendente</td></tr>
+      <tr><td>已领取记录</td><td>Histórico</td></tr>
+      <tr><td>暂无记录</td><td>Sem Registros</td></tr>
+      <tr><td>时间 / 活动名称 / 奖励 / 来源</td><td>Tempo / Nome do Evento / Evento de Recompensa / Fonte</td></tr>
+    </tbody>
+  </table>
 </div>
 
-<!-- 七 中葡对照 -->
+<!-- 七 版本记录 -->
 <div class="section" id="s7">
-  <h1>七、中文 / 葡语字段对照表</h1>
-  <div class="todo-block"><b>待补充:</b>前台文案确定后补充中葡对照(葡语须使用参考图原文,不自译)。</div>
-</div>
-
-<!-- 八 版本记录 -->
-<div class="section" id="s8">
-  <h1>八、版本记录</h1>
+  <h1>七、版本记录</h1>
   <table>
     <thead><tr><th>版本</th><th>日期</th><th>修订说明</th><th>作者</th></tr></thead>
     <tbody>
-      <tr><td>v0.1</td><td>2026-08-25</td><td>框架初稿:列出已明确的活动主逻辑(活动条件、领取时间、稽核方式、奖励配置、专属字段联动、主流程图),其余标待补充</td><td>Laura</td></tr>
+      <tr><td>v0.1</td><td>2026-08-25</td><td>框架初稿</td><td>Laura</td></tr>
+      <tr><td>v1.0</td><td>2026-08-26</td><td>补全后台功能（字段与选项说明、专属字段联动、奖励配置与校验、统计口径、领取与账变、奖励处理时序、编辑限制）与前台功能（页面结构、档位展示规则、领取按钮状态、连续天数交互、待领取/已领取/跨周期入口）及中葡对照表</td><td>Laura</td></tr>
     </tbody>
   </table>
 </div>
