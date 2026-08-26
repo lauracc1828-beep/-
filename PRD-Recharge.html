@@ -34,6 +34,13 @@ code{background:#eaf2fb;color:#0961BD;padding:1px 5px;border-radius:3px;font-siz
 .p-accum{color:#7a4b00;border-color:#e0b878;background:#fdf3e3}
 .p-days{color:#0a5c3a;border-color:#8fceb0;background:#e8f7ef}
 .legend{font-size:12px;color:#888;margin-top:8px}
+.temp-callout{background:#fff3ec;border:2px solid #e8722e;border-radius:10px;padding:16px 20px;margin:16px 0}
+.temp-callout .th{font-size:16px;font-weight:700;color:#c0480e;margin-bottom:8px}
+.temp-callout table{margin-top:10px}
+.temp-callout thead tr{background:#fbe4d5}
+.temp-callout th{color:#a83a08;border-color:#e6bfa4}
+.badge-normal{display:inline-block;background:#e8f4ea;color:#0a7d3e;border:1px solid #a9d8b8;border-radius:4px;font-size:12px;padding:1px 7px;font-weight:600}
+.badge-temp{display:inline-block;background:#fdecec;color:#c0341d;border:1px solid #e6a5a5;border-radius:4px;font-size:12px;padding:1px 7px;font-weight:600}
 </style>
 </head>
 <body>
@@ -62,6 +69,10 @@ code{background:#eaf2fb;color:#0961BD;padding:1px 5px;border-radius:3px;font-siz
         <li><a href="#s47">4.7 奖励领取、账变与提现打码</a></li>
         <li><a href="#s48">4.8 奖励处理时序（作废/派发）</a></li>
         <li><a href="#s49">4.9 编辑限制</a></li>
+        <li><a href="#s4a">4.10 临时限制（待领取页上线前）</a></li>
+        <li><a href="#s4b">4.11 奖励状态流转</a></li>
+        <li><a href="#s4c">4.12 异常与边界处理</a></li>
+        <li><a href="#s4d">4.13 权限说明</a></li>
       </ol>
     </li>
     <li><a href="#s5">五、前台功能说明</a>
@@ -81,7 +92,7 @@ code{background:#eaf2fb;color:#0961BD;padding:1px 5px;border-radius:3px;font-siz
 <!-- 一 -->
 <div class="section" id="s1">
   <h1>一、需求背景</h1>
-  <p>充值活动是平台以"充值"为核心奖励条件的存款激励活动,作为综合类活动新增到现有活动列表菜单中(与神秘彩金、会员答谢并列)。运营人员可按不同活动条件配置阶梯奖励规则,引导会员完成充值,提升首充转化、充值总额与充值留存。</p>
+  <p>充值活动是平台以"充值"为核心奖励条件的存款激励活动,作为综合类活动新增到现有活动列表菜单中。运营人员可按不同活动条件配置阶梯奖励规则,引导会员完成充值,提升首充转化、充值总额与充值留存。</p>
   <p>本活动支持三种活动条件,面向不同运营目标:</p>
   <ul>
     <li><strong>首笔充值：</strong>面向周期内的首笔充值,提升首充转化。</li>
@@ -165,15 +176,15 @@ code{background:#eaf2fb;color:#0961BD;padding:1px 5px;border-radius:3px;font-siz
   <h1>四、后台功能说明</h1>
 
   <h2 id="s41">4.1 活动列表页</h2>
-  <p>充值活动纳入现有活动列表（与神秘彩金、会员答谢同一菜单）。活动类型筛选与列表新增"充值"；列表行支持查看 / 修改 / 开启关闭。列表字段沿用现有活动：活动分类、活动类型、活动名称、活动状态、重置方式、派发方式、审核方式、参与人数、派发奖励数、派发奖励金额、已领取金额、未领取金额、显示排序、操作。</p>
+  <p>充值活动纳入现有活动列表菜单。活动类型筛选与列表新增"充值"；列表行支持查看 / 修改 / 开启关闭。列表字段沿用现有活动列表：活动分类、活动类型、活动名称、活动状态、重置方式、派发方式、审核方式、参与人数、派发奖励数、派发奖励金额、已领取金额、未领取金额、显示排序、操作。</p>
 
   <h2 id="s42">4.2 新增/编辑活动弹框——字段总览</h2>
-  <p>字段分两类：<b>公共字段</b>沿用现有活动（详见《神秘彩金活动 PRD》《会员答谢活动 PRD》对应章节）；<b>充值专属字段</b>见 4.3。公共字段在充值下的取值如下：</p>
+  <p>字段分两类：<b>公共字段</b>沿用平台活动公共配置（判定逻辑、必填校验与提示均沿用公共配置）；<b>充值专属字段</b>见 4.3。公共字段在充值下的取值如下：</p>
   <table>
     <thead><tr><th>公共字段</th><th>充值下的取值 / 说明</th></tr></thead>
     <tbody>
       <tr><td>活动分类</td><td>综合</td></tr>
-      <tr><td>活动名称</td><td>系统默认 / 自定义；系统默认随活动条件：首笔充值奖励 / 累计充值奖励 / 连续充值奖励</td></tr>
+      <tr><td>活动名称</td><td>系统默认 / 自定义。系统默认名称同时随<b>活动条件</b>与<b>重置方式</b>变化：不重置为基础名（首笔充值奖励 / 累计充值奖励 / 连续充值奖励）；每日、每周在基础名前加"每日"/"每周"前缀（如"每日累计充值奖励""每周连续充值奖励"）。切换活动条件或重置方式时，系统默认名称随之刷新；对照见 4.4 表一说明与第六章中葡对照</td></tr>
       <tr><td>活动时间</td><td>永久 / 自定义</td></tr>
       <tr><td>重置方式</td><td>不重置 / 每日 / 每周（连续天数充值时"每日"不可选，见 4.4）</td></tr>
       <tr><td>派发方式 / 审核方式 / 派奖时间</td><td>自动派发 / 系统（周期内）/ 立即到账（其余选项置灰）</td></tr>
@@ -240,9 +251,10 @@ code{background:#eaf2fb;color:#0961BD;padding:1px 5px;border-radius:3px;font-siz
       <tr><td>稽核方式</td><td>赠送部分 / 本金+赠送</td><td><b>仅赠送部分</b>（选中且置灰）</td><td>赠送部分 / 本金+赠送</td></tr>
       <tr><td>连续充值天数设置</td><td>隐藏</td><td>隐藏</td><td><b>显示</b></td></tr>
       <tr><td>奖励配置</td><td>充值金额→奖励（多档）</td><td>充值金额→奖励（多档，叠加领取）</td><td>连续天数→奖励（单档）</td></tr>
-      <tr><td>系统默认名称</td><td>首笔充值奖励</td><td>累计充值奖励</td><td>连续充值奖励</td></tr>
+      <tr><td>系统默认名称（不重置）</td><td>首笔充值奖励</td><td>累计充值奖励</td><td>连续充值奖励</td></tr>
     </tbody>
   </table>
+  <p class="legend">系统默认名称随重置方式变化：不重置为基础名（首笔/累计/连续充值奖励）；每日、每周在基础名前加前缀"每日"/"每周"，例如"每日累计充值奖励""每周连续充值奖励"。中葡对照见第六章。</p>
   <h3>表二 · 按「领取时间」联动</h3>
   <table>
     <thead><tr><th>联动项</th><th>次日领取</th><th>实时领取</th></tr></thead>
@@ -253,6 +265,7 @@ code{background:#eaf2fb;color:#0961BD;padding:1px 5px;border-radius:3px;font-siz
       <tr><td>选择时间（XX 以后可领取）</td><td>显示</td><td>隐藏</td></tr>
     </tbody>
   </table>
+  <p class="legend">注：表二为 <span class="badge-normal">正常方案</span> 下"领取时间→奖励作废"的完整联动；<b>每日/每周重置</b>时以 4.10 <span class="badge-temp">本期临时方案</span> 为准（锁定实时领取、奖励作废仅"过期"两项）。</p>
 
   <h2 id="s45">4.5 奖励配置与校验规则</h2>
   <table>
@@ -261,7 +274,7 @@ code{background:#eaf2fb;color:#0961BD;padding:1px 5px;border-radius:3px;font-siz
       <tr><td>充值金额（首笔/累计）</td><td>必须大于 0 且为整数（空或 0 或非整数均不通过）</td><td>充值金额必须大于0且为整数</td></tr>
       <tr><td>充值金额（多档）</td><td>各档充值金额严格升序（下一档须大于上一档，相等不通过）</td><td>各档充值金额需严格升序（下一档须大于上一档）</td></tr>
       <tr><td>奖励金额（所有条件）</td><td>必须大于 0（空或 0 均不通过）</td><td>奖励金额必须大于0</td></tr>
-      <tr><td>连续充值天数</td><td>整数，2 ≤ N ≤ 30</td><td>连续天数不能小于2天 / 连续天数不能超过30天</td></tr>
+      <tr><td>连续充值天数</td><td>整数，N ≥ 2；重置=每周时 N ≤ 7，其余（不重置）N ≤ 30</td><td>连续天数不能小于2天 / 连续天数不能超过7天（每周）/ 连续天数不能超过30天</td></tr>
       <tr><td>连续充值天数门槛</td><td>非必填，为空保存时恢复默认 0.00</td><td>—</td></tr>
     </tbody>
   </table>
@@ -292,6 +305,49 @@ code{background:#eaf2fb;color:#0961BD;padding:1px 5px;border-radius:3px;font-siz
 
   <h2 id="s49">4.9 编辑限制</h2>
   <p>编辑（修改/查看）已创建的充值活动时，<b>活动分类、活动类型、领取时间、活动条件不可修改</b>（置灰）；其余字段可编辑。</p>
+
+  <h2 id="s4a">4.10 领取时间 / 奖励作废 —— 正常方案 与 本期临时方案 ★</h2>
+  <p>领取时间与奖励作废的联动存在两套口径：<span class="badge-normal">正常方案</span> 为待领取页上线后的完整能力；<span class="badge-temp">本期临时方案</span> 为当前实际生效的配置限制。全文凡涉及每日/每周重置下的领取时间与奖励作废，均以本节为准。</p>
+  <div class="temp-callout">
+    <div class="th">⚠ 本期临时方案（待领取页上线前 · 当前生效）</div>
+    <p><b>背景：</b>"待领取"跨周期领取入口尚未上线。若<b>每日 / 每周重置</b>的活动使用"次日领取"或"保留天数"作废，会产生这样的奖励——活动重置进入新周期后，它仍在保留期内、但主页已是新周期、又没有待领取入口，<b>导致玩家无处领取</b>（保留天数作废还会直接损失）。</p>
+    <p><b>临时措施：</b>对每日/每周重置的充值活动限制配置，使其只用"重置即处理、不跨周期"的安全组合：</p>
+    <table>
+      <thead><tr><th>重置方式</th><th><span class="badge-normal">正常方案</span>（待领取页上线后）</th><th><span class="badge-temp">本期临时方案</span>（当前生效）</th></tr></thead>
+      <tbody>
+        <tr><td>不重置</td><td>领取时间：次日 / 实时；奖励作废：四项均可选</td><td>与正常方案一致（不受限；主页可持续领取，不存在跨周期问题）</td></tr>
+        <tr><td>每日 / 每周</td><td>领取时间：次日 / 实时；奖励作废：四项均可选（跨周期未领奖励在"待领取"入口领取）</td><td><b>领取时间锁定"实时领取"（禁用次日）；奖励作废仅可选"过期自动派发 / 过期作废"（禁用两个"保留天数"选项）</b></td></tr>
+        <tr><td>连续天数充值<br>（强制实时）</td><td>不重置 / 每周；奖励作废四项可选</td><td>每周时奖励作废仅"过期"两项；不重置不受限</td></tr>
+      </tbody>
+    </table>
+    <p style="margin-top:10px"><b>移除条件：</b>"待领取"跨周期领取入口（第 5.5 节）上线后，移除本临时限制，恢复正常方案的完整配置。</p>
+  </div>
+
+  <h2 id="s4b">4.11 奖励状态流转</h2>
+  <table>
+    <thead><tr><th>当前状态</th><th>触发</th><th>流转至</th></tr></thead>
+    <tbody>
+      <tr><td>未达标</td><td>充值达到档位/门槛</td><td>可领取</td></tr>
+      <tr><td>可领取（实时）</td><td>会员手动领取且通过领取判定</td><td>已领取（到账，进入打码）</td></tr>
+      <tr><td>可领取（次日）</td><td>未到"选择时间"</td><td>次日待领 → 到点后转"可领取"</td></tr>
+      <tr><td>可领取 / 待领取</td><td>有效期内未领取</td><td>按奖励作废设置处理：过期自动派发/保留天数自动派发→到账；过期作废/保留天数作废→作废</td></tr>
+      <tr><td>连续天数·进行中</td><td>当日累计充值达门槛</td><td>有效充值天数 +1；断充则重置为 0</td></tr>
+      <tr><td>已领取</td><td>完成稽核倍数打码</td><td>可提现</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="s4c">4.12 异常与边界处理</h2>
+  <ul>
+    <li><b>领取判定不通过：</b>不满足申领终端限制、申领限制等条件时，拦截领取并按公共配置的提示文案提示（沿用公共配置）。</li>
+    <li><b>重复领取：</b>已领取的档位不可重复领取（按钮置灰/显示已领取）；累计已领档不再计入可领总额。</li>
+    <li><b>活动关闭 / 下线：</b>活动关闭后不再产生新奖励；已产生未领取的奖励按"奖励作废"设置处理（沿用公共规则）。</li>
+    <li><b>连续断充：</b>当日累计充值未达门槛不计入有效充值天数；断充后周期内连续天数从第 1 天重新开始。</li>
+    <li><b>累计口径：</b>领取奖励不扣减累计；统计起点为活动生效时间，活动生效前的历史充值不计入。</li>
+    <li><b>并发 / 网络异常：</b>领取结果以后台最终判定为准，前台按后台返回结果展示（沿用公共处理）。</li>
+  </ul>
+
+  <h2 id="s4d">4.13 权限说明</h2>
+  <p>充值活动的新增、编辑、查看、开启/关闭等后台操作权限，沿用现有后台活动模块的权限体系（按角色/账号权限控制），本活动不新增独立权限项。</p>
 </div>
 
 <!-- 五 前台 -->
@@ -299,6 +355,7 @@ code{background:#eaf2fb;color:#0961BD;padding:1px 5px;border-radius:3px;font-siz
   <h1>五、前台功能说明</h1>
 
   <h2 id="s51">5.1 页面结构</h2>
+  <p><b>活动标题：</b>前台页面展示的活动标题取自后台"活动名称"配置（系统默认或自定义），与 4.2 / 4.4 的系统默认标题一致——系统默认时随活动条件与重置方式变化（不重置为基础名，每日/每周带"每日"/"每周"前缀），前台按客户端语言显示对应中文/葡语文案（对照见第六章）。</p>
   <p>三种活动条件的前台页面样式不同，需分别设计：</p>
   <ul>
     <li><b>首笔充值 / 累计充值：</b>顶部 banner + 当前可领取总额徽标 + 进度文案（累计另显示"累计充值"金额与"还差 X 到档 Y"）+ 档位列表（充值金额 | 奖励金额）+ 领取按钮 + 活动规则。</li>
@@ -340,6 +397,7 @@ code{background:#eaf2fb;color:#0961BD;padding:1px 5px;border-radius:3px;font-siz
     <li><b>已领取记录：</b>按时间列出已领取记录，累计多档各占一行（独立账变）。</li>
     <li><b>跨周期领取入口：</b>保留天数类奖励与活动周期无关，可跨周期保留。当主活动页已进入新周期时，未领取的旧奖励仍在"待领取"入口内可领，直至保留期满按设置自动派发或作废。</li>
   </ul>
+  <p class="legend">说明：本节为 <span class="badge-normal">正常方案</span>（待领取页上线后）的能力。<span class="badge-temp">本期临时方案</span> 下，每日/每周重置已禁用"次日领取/保留天数"（见 4.10），不会产生跨周期滞留的奖励；"待领取"跨周期入口与本节能力随待领取页一并上线，届时移除 4.10 临时限制。</p>
 </div>
 
 <!-- 六 中葡对照 -->
@@ -349,6 +407,14 @@ code{background:#eaf2fb;color:#0961BD;padding:1px 5px;border-radius:3px;font-siz
   <table>
     <thead><tr><th>中文</th><th>葡语（参考原文）</th></tr></thead>
     <tbody>
+      <tr><td>首笔充值奖励（不重置）</td><td>Recompensa pela primeira recarga</td></tr>
+      <tr><td>每日首笔充值奖励</td><td>Recompensa diária pela primeira recarga</td></tr>
+      <tr><td>每周首笔充值奖励</td><td>Recompensa semanal pela primeira recarga</td></tr>
+      <tr><td>累计充值奖励（不重置）</td><td>Recompensa por recarga acumulada</td></tr>
+      <tr><td>每日累计充值奖励</td><td>Recompensa diária por recarga acumulada</td></tr>
+      <tr><td>每周累计充值奖励</td><td>Recompensa semanal por recarga acumulada</td></tr>
+      <tr><td>连续充值奖励（不重置）</td><td>Bônus por sequência de depósitos</td></tr>
+      <tr><td>每周连续充值奖励</td><td>Bônus por sequência de depósitos semanais</td></tr>
       <tr><td>可领取</td><td>Coletável</td></tr>
       <tr><td>领取</td><td>Receber</td></tr>
       <tr><td>已领取</td><td>Resgatado</td></tr>
@@ -356,7 +422,8 @@ code{background:#eaf2fb;color:#0961BD;padding:1px 5px;border-radius:3px;font-siz
       <tr><td>充值金额</td><td>Montante do depósito</td></tr>
       <tr><td>奖励金额</td><td>Valor da recompensa</td></tr>
       <tr><td>累计充值</td><td>Dep. Acum.</td></tr>
-      <tr><td>今日可领 R$X</td><td>Pode ser coletado hoje R$X</td></tr>
+      <tr><td>今日可领 R$X(实时领取)</td><td>Pode ser coletado hoje R$X</td></tr>
+      <tr><td>明天 XX:XX:XX 之后可领取 R$X(次日领取)</td><td>Você poderá receber R$X após amanhã XX:XX:XX</td></tr>
       <tr><td>还差 R$X 到 R$Y</td><td>Falta R$X até o Prêmio R$Y</td></tr>
       <tr><td>所有充值挑战已完成！</td><td>Todos os desafios de recarga concluídos!</td></tr>
       <tr><td>每日充值 X</td><td>Deposite X diário</td></tr>

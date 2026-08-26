@@ -1289,9 +1289,9 @@ select.fs.ph{color:#bfbfbf}
               <span class="has-tip" style="margin-left:4px">ⓘ<span class="tip-box">一次性：一个会员只可以参与一次。周期长度为31天。<br>循环：每31天一个周期，一个周期结束后自动进入下一个周期。</span></span>
             </div>
             <div id="aa-reset-normal" class="radio-g" style="display:none">
-              <label class="radio-item"><input type="radio" name="aa-reset-n" id="aa-reset-n-none" value="none" checked> 不重置</label>
-              <label class="radio-item" id="aa-reset-n-day-lbl"><input type="radio" name="aa-reset-n" id="aa-reset-n-day" value="day"> 每日</label>
-              <label class="radio-item"><input type="radio" name="aa-reset-n" id="aa-reset-n-week" value="week"> 每周</label>
+              <label class="radio-item"><input type="radio" name="aa-reset-n" id="aa-reset-n-none" value="none" checked onchange="aaChargeResetChange()"> 不重置</label>
+              <label class="radio-item" id="aa-reset-n-day-lbl"><input type="radio" name="aa-reset-n" id="aa-reset-n-day" value="day" onchange="aaChargeResetChange()"> 每日</label>
+              <label class="radio-item"><input type="radio" name="aa-reset-n" id="aa-reset-n-week" value="week" onchange="aaChargeResetChange()"> 每周</label>
             </div>
             <!-- 会员答谢重置方式 -->
             <div id="aa-reset-member" style="display:none">
@@ -4436,20 +4436,18 @@ function aaTypeChange(val){
   });
   var defInp = document.querySelector('input[name="aa-expire"][value="'+expCfg.default+'"]');
   if(defInp){ defInp.checked = true; aaExpireToggle(String(expCfg.default)); }
-  // 充值：按当前领取时间再约束奖励作废选项/过期天数/选择时间
-  if(isCharge){
-    var ctSel=document.querySelector('input[name="aa-charge-claimtime"]:checked');
-    aaChargeClaimTimeChange(ctSel?ctSel.value:'realtime');
-  }
+  // 充值：按当前重置方式+领取时间约束奖励作废选项/过期天数/选择时间(含临时限制)
+  if(isCharge){ aaChargeResetChange(); }
 }
 
 // ═══════════ 充值活动 专属联动逻辑 ═══════════
 function aaChargeDefaultName(){
   var c=document.querySelector('input[name="aa-charge-cond"]:checked');
   var v=c?c.value:'first';
-  if(v==='accum') return '累计充值奖励';
-  if(v==='days')  return '连续充值奖励';
-  return '首笔充值奖励';
+  var base = v==='accum'?'累计充值奖励':(v==='days'?'连续充值奖励':'首笔充值奖励');
+  var reset=aaChargeResetVal();
+  var prefix = reset==='day'?'每日':(reset==='week'?'每周':'');   // 每日/每周在原名前加前缀
+  return prefix+base;
 }
 // 活动条件切换：稽核方式/领取时间/重置方式/奖励配置 联动
 function aaChargeCondChange(val){
@@ -4487,7 +4485,6 @@ function aaChargeCondChange(val){
     if(ctReal) ctReal.checked=true;
     if(ctNext) ctNext.disabled=true;
     if(ctNextLbl){ ctNextLbl.style.opacity='0.4'; ctNextLbl.style.cursor='not-allowed'; ctNextLbl.style.pointerEvents='none'; }
-    aaChargeClaimTimeChange('realtime');
   } else {
     if(ctNext) ctNext.disabled=false;
     if(ctNextLbl){ ctNextLbl.style.opacity=''; ctNextLbl.style.cursor=''; ctNextLbl.style.pointerEvents=''; }
@@ -4506,16 +4503,42 @@ function aaChargeCondChange(val){
   var nameMode=document.querySelector('input[name="aa-name-t"]:checked');
   if(nameMode&&nameMode.value==='sys') aaNameToggle('sys');
   aaChargeUpdateTierPlaceholders();
-  updateRuleText(); updateBannerPreview();
+  aaChargeResetChange();   // 应用"重置方式"相关的领取时间/奖励作废临时限制
 }
-// 领取时间切换：次日→奖励作废仅保留天数(默认自动派发,过期天数锁死2)+显示选择时间
+// 读取充值重置方式
+function aaChargeResetVal(){ var r=document.querySelector('input[name="aa-reset-n"]:checked'); return r?r.value:'none'; }
+// ★临时方案(待领取页上线前):重置=每日/每周 → 领取时间锁实时、禁用次日;奖励作废仅"过期两项"
+function aaChargeResetChange(){
+  var typeEl=document.getElementById('aa-type');
+  if(!typeEl||typeEl.value!=='charge') return;
+  var reset=aaChargeResetVal(); var isReset=(reset==='day'||reset==='week');
+  var condEl=document.querySelector('input[name="aa-charge-cond"]:checked');
+  var isDays=condEl&&condEl.value==='days';
+  var forceRealtime = isReset||isDays;
+  var ctNext=document.getElementById('aa-charge-ct-next'); var ctNextLbl=ctNext&&ctNext.closest('label');
+  if(forceRealtime){
+    var ctReal=document.getElementById('aa-charge-ct-realtime'); if(ctReal) ctReal.checked=true;
+    if(ctNext) ctNext.disabled=true;
+    if(ctNextLbl){ ctNextLbl.style.opacity='0.4'; ctNextLbl.style.cursor='not-allowed'; ctNextLbl.style.pointerEvents='none'; }
+  } else {
+    if(ctNext) ctNext.disabled=false;
+    if(ctNextLbl){ ctNextLbl.style.opacity=''; ctNextLbl.style.cursor=''; ctNextLbl.style.pointerEvents=''; }
+  }
+  // 系统默认名称随重置方式刷新(每日/每周加前缀)
+  var nameMode=document.querySelector('input[name="aa-name-t"]:checked');
+  if(nameMode&&nameMode.value==='sys') aaNameToggle('sys');
+  var ct=document.querySelector('input[name="aa-charge-claimtime"]:checked');
+  aaChargeClaimTimeChange(ct?ct.value:'realtime');
+}
+// 领取时间切换:奖励作废可选项 = 每日/每周(临时)→仅过期两项[1,2];不重置+次日→保留天数[3,4];不重置+实时→四项
 function aaChargeClaimTimeChange(val){
+  var reset=aaChargeResetVal(); var isReset=(reset==='day'||reset==='week');
   var ctR=document.querySelector('input[name="aa-charge-claimtime"][value="'+val+'"]');
   if(ctR && !ctR.disabled) ctR.checked=true;
-  var isNext=(val==='next');
+  var isNext=(val==='next') && !isReset;   // 每日/每周不允许次日
   var ctRow=document.getElementById('aa-charge-claimtime-row');
   if(ctRow) ctRow.style.display=isNext?'flex':'none';
-  var show = isNext ? [3,4] : [1,2,3,4];
+  var show = isReset ? [1,2] : (isNext ? [3,4] : [1,2,3,4]);
   [1,2,3,4].forEach(function(v){
     var inp=document.querySelector('input[name="aa-expire"][value="'+v+'"]');
     var lbl=inp&&inp.closest('label');
@@ -4526,19 +4549,16 @@ function aaChargeClaimTimeChange(val){
   var daysInp=document.getElementById('aa-expire-days-inp');
   if(isNext){
     var checked=document.querySelector('input[name="aa-expire"]:checked');
-    if(!checked || checked.value==='1' || checked.value==='2'){
-      var r3=document.querySelector('input[name="aa-expire"][value="3"]');
-      if(r3) r3.checked=true;
-    }
+    if(!checked || show.indexOf(parseInt(checked.value))===-1){ var r3=document.querySelector('input[name="aa-expire"][value="3"]'); if(r3) r3.checked=true; }
     var cur=document.querySelector('input[name="aa-expire"]:checked');
     aaExpireToggle(cur?cur.value:'3');
     if(daysInp){ daysInp.value='2'; daysInp.disabled=true; daysInp.style.background='#f5f5f5'; }
   } else {
     if(daysInp){ daysInp.disabled=false; daysInp.style.background=''; }
     var cur2=document.querySelector('input[name="aa-expire"]:checked');
-    if(!cur2){ var r1=document.querySelector('input[name="aa-expire"][value="1"]'); if(r1) r1.checked=true; }
+    if(!cur2 || show.indexOf(parseInt(cur2.value))===-1){ var def=document.querySelector('input[name="aa-expire"][value="'+show[0]+'"]'); if(def) def.checked=true; }
     var cur3=document.querySelector('input[name="aa-expire"]:checked');
-    aaExpireToggle(cur3?cur3.value:'1');
+    aaExpireToggle(cur3?cur3.value:String(show[0]));
   }
   updateRuleText(); updateBannerPreview();
 }
@@ -4570,9 +4590,11 @@ function aaChargeTierDel(btn){
 // 连续天数上限校验：连续充值天数不超过30天
 function aaChargeDaysCheck(inp){
   var c=document.querySelector('input[name="aa-charge-cond"]:checked');
-  if(c && c.value==='days'){
-    var v=parseInt(inp.value)||0;
-    if(v>30){ toast('连续天数不能超过30天', true); }
+  if(c && c.value==='days' && inp.value.trim()!==''){
+    var v=parseInt(inp.value,10);
+    var max=aaChargeResetVal()==='week'?7:30;   // 每周上限7天,其余30天
+    if(!isNaN(v)&&v>max){ toast('连续天数不能超过'+max+'天', true); }
+    else if(!isNaN(v)&&v<2){ toast('连续天数不能小于2天', true); }
   }
 }
 function aaChargeUpdateTierPlaceholders(){
@@ -4699,7 +4721,7 @@ function aaSave(){
     if(!firstErr) firstErr={scroll:scrollId||fieldId||errId, msg:msg||(document.getElementById(errId)?document.getElementById(errId).textContent:'')};
   }
   // 清空历史错误
-  ['err-name','err-time','err-terminal','err-r-times','err-r-amt','err-plat','err-rule'].forEach(function(id){var e=document.getElementById(id); if(e) e.classList.remove('show');});
+  ['err-name','err-time','err-terminal','err-r-times','err-r-amt','err-plat','err-rule','err-charge-reward'].forEach(function(id){var e=document.getElementById(id); if(e) e.classList.remove('show');});
   document.querySelectorAll('#m-add-activity .aa-field-invalid').forEach(function(f){f.classList.remove('aa-field-invalid');});
 
   // 1. 活动名称=自定义 → 必填
@@ -4748,6 +4770,36 @@ function aaSave(){
   if(ruleCustom&&ruleCustom.style.display!=='none'){
     if(!ruleCustom.value.trim()) fail('err-rule','请输入自定义活动规则','aa-rule-custom');
   }
+  // 6.5 充值：奖励配置校验（按竞品文案）
+  var typeChargeEl=document.getElementById('aa-type');
+  if(typeChargeEl && typeChargeEl.value==='charge'){
+    var condSel=document.querySelector('input[name="aa-charge-cond"]:checked');
+    var chIsDays=condSel && condSel.value==='days';
+    var chRows=document.querySelectorAll('#aa-charge-tier-list .aa-charge-tier-row');
+    var prevAmt=null;
+    for(var ci=0;ci<chRows.length;ci++){
+      var cc1=chRows[ci].querySelector('.charge-c1');
+      var cc2=chRows[ci].querySelector('.charge-c2');
+      var cv1=cc1?cc1.value.trim():'', cv2=cc2?cc2.value.trim():'';
+      if(chIsDays){
+        // 连续天数：整数，≥2天；每周上限7天,其余上限30天
+        var dn=parseInt(cv1,10);
+        var dmax=aaChargeResetVal()==='week'?7:30;
+        if(cv1===''||isNaN(dn)||dn<2){ if(cc1) cc1.classList.add('aa-field-invalid'); fail('err-charge-reward','连续天数不能小于2天',null,'err-charge-reward'); break; }
+        if(dn>dmax){ if(cc1) cc1.classList.add('aa-field-invalid'); fail('err-charge-reward','连续天数不能超过'+dmax+'天',null,'err-charge-reward'); break; }
+      } else {
+        // 充值金额：大于0且为整数；空/0/非整数 → "充值金额必须大于0且为整数"
+        var n1=Number(cv1);
+        if(cv1===''||!(n1>0)||!Number.isInteger(n1)){ if(cc1) cc1.classList.add('aa-field-invalid'); fail('err-charge-reward','充值金额必须大于0且为整数',null,'err-charge-reward'); break; }
+        // 多档严格升序
+        if(prevAmt!==null && !(n1>prevAmt)){ if(cc1) cc1.classList.add('aa-field-invalid'); fail('err-charge-reward','各档充值金额需严格升序(下一档须大于上一档)',null,'err-charge-reward'); break; }
+        prevAmt=n1;
+      }
+      // 奖励金额：大于0；空/0 → "奖励金额必须大于0"
+      var n2=Number(cv2);
+      if(cv2===''||!(n2>0)){ if(cc2) cc2.classList.add('aa-field-invalid'); fail('err-charge-reward','奖励金额必须大于0',null,'err-charge-reward'); break; }
+    }
+  }
 
   if(firstErr){
     var el=document.getElementById(firstErr.scroll);
@@ -4765,6 +4817,9 @@ function aaSave(){
   // 7. 显示排序：为空默认1
   var sortInp=document.getElementById('aa-sort-inp');
   if(sortInp&&!sortInp.value.trim()) sortInp.value='1';
+  // 7.5 充值·连续天数门槛：为空恢复默认0.00
+  var chDayMin=document.getElementById('aa-charge-daymin');
+  if(chDayMin&&chDayMin.value.trim()==='') chDayMin.value='0.00';
   // 8. 背景样式=自定义未上传 → 回退系统默认并勾选默认背景图
   var bgMode=document.querySelector('input[name="aa-bg-style"]:checked');
   var bgPrev=document.getElementById('aa-bg-custom-preview');
