@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>充值活动 PRD v1.2</title>
+<title>充值活动 PRD v1.3</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'PingFang SC','Helvetica Neue',Arial,sans-serif;font-size:14px;color:#1a1a1a;background:#eef1f5;line-height:1.75}
@@ -49,7 +49,7 @@ code{background:#eaf2fb;color:#0961BD;padding:1px 5px;border-radius:3px;font-siz
 <div class="cover">
   <div class="cover-title">充值活动</div>
   <div class="cover-sub">PRD 产品需求文档</div>
-  <div class="cover-meta"><span>版本：v1.2</span><span>更新日期：2026-08-27</span><span>作者：Laura</span></div>
+  <div class="cover-meta"><span>版本：v1.3</span><span>更新日期：2026-08-27</span><span>作者：Laura</span></div>
 </div>
 
 <div class="toc">
@@ -79,9 +79,10 @@ code{background:#eaf2fb;color:#0961BD;padding:1px 5px;border-radius:3px;font-siz
       <ol>
         <li><a href="#s51">5.1 页面结构</a></li>
         <li><a href="#s52">5.2 档位列表展示规则</a></li>
-        <li><a href="#s53">5.3 领取按钮状态</a></li>
-        <li><a href="#s54">5.4 连续天数页交互</a></li>
-        <li><a href="#s55">5.5 待领取 / 已领取 / 跨周期领取入口</a></li>
+        <li><a href="#s53">5.3 提示文案与金额口径（首笔 / 累计）</a></li>
+        <li><a href="#s54">5.4 领取按钮状态</a></li>
+        <li><a href="#s55">5.5 连续天数页交互</a></li>
+        <li><a href="#s56">5.6 待领取 / 已领取 / 跨周期领取入口</a></li>
       </ol>
     </li>
     <li><a href="#s6">六、中文 / 葡语字段对照表</a></li>
@@ -321,7 +322,7 @@ code{background:#eaf2fb;color:#0961BD;padding:1px 5px;border-radius:3px;font-siz
         <tr><td>连续天数充值<br>（强制实时）</td><td>不重置 / 每周；奖励作废四项可选</td><td>每周时奖励作废仅"过期"两项；不重置不受限</td></tr>
       </tbody>
     </table>
-    <p style="margin-top:10px"><b>移除条件：</b>"待领取"跨周期领取入口（第 5.5 节）上线后，移除本临时限制，恢复正常方案的完整配置。</p>
+    <p style="margin-top:10px"><b>移除条件：</b>"待领取"跨周期领取入口（第 5.6 节）上线后，移除本临时限制，恢复正常方案的完整配置。</p>
   </div>
 
   <h2 id="s4b">4.11 奖励状态流转</h2>
@@ -371,7 +372,48 @@ code{background:#eaf2fb;color:#0961BD;padding:1px 5px;border-radius:3px;font-siz
     <li>领取按钮的可点 / 不可点状态。</li>
   </ul>
 
-  <h2 id="s53">5.3 领取按钮状态</h2>
+  <h2 id="s53">5.3 提示文案与金额口径（首笔 / 累计）</h2>
+  <p>首笔 / 累计的领取提示均按<b>领取时间</b>呈现两种文案格式（葡文以参考客户端原文为准，见第六章）：</p>
+  <table>
+    <thead><tr><th>领取时间</th><th>中文</th><th>葡语（参考原文）</th></tr></thead>
+    <tbody>
+      <tr><td>实时领取</td><td>今日可领 R$X</td><td>Pode ser coletado hoje R$X</td></tr>
+      <tr><td>次日领取</td><td>次日 02:00:00 之后可领取 R$X</td><td>Você poderá receber R$X após amanhã 02:00:00</td></tr>
+    </tbody>
+  </table>
+  <p class="legend">X = 顶部"可领取"金额（即<b>待领取金额</b>，见 ③）。02:00:00 为周期发放 / 可领时间，以实际系统重置时间为准。</p>
+
+  <h3>① 首笔充值</h3>
+  <ul>
+    <li><b>顶部"可领取"金额</b> = 首充达标档对应奖励（单档，不叠加）；未达标 / 已领取时为 R$0,00。</li>
+    <li><b>中间提示（单行）</b>：按上表格式展示"今日可领 / 次日可领 R$X"。</li>
+    <li>次日领取时，当天即使达标也不可领取，仅展示次日可领金额。</li>
+  </ul>
+
+  <h3>② 累计充值（三状态、两行提示）</h3>
+  <p>顶部先显示"可领取"金额，正文显示一行"累计充值 R$acc"（acc = 周期内累计有效充值金额），其下为两行提示：</p>
+  <table>
+    <thead><tr><th>状态</th><th>第 1 行（进度）</th><th>第 2 行（领取）</th></tr></thead>
+    <tbody>
+      <tr><td>未开始（acc = 0）</td><td>还差 R$(下一档门槛 − acc) 即可获得 R$(下一档奖励)</td><td>今日可领 / 次日可领 R$0,00</td></tr>
+      <tr><td>进行中（0 &lt; acc &lt; 最高档）</td><td>已获得 R$(已达标奖励总额)，还差 R$(下一档门槛 − acc) 即得奖励 R$(下一档奖励)</td><td>今日可领 / 次日可领 R$(待领取金额)</td></tr>
+      <tr><td>全部完成（acc ≥ 最高档）</td><td>所有充值挑战已完成！</td><td>今日可领 / 次日可领 R$(待领取金额)</td></tr>
+    </tbody>
+  </table>
+
+  <h3>③ 金额口径（重点区分）</h3>
+  <table>
+    <thead><tr><th>字段</th><th>含义</th></tr></thead>
+    <tbody>
+      <tr><td>累计充值 acc</td><td>周期内会员累计有效充值金额</td></tr>
+      <tr><td><b>已获得</b>（下方提示）</td><td><b>已达标奖励总额</b> —— 门槛 ≤ acc 的所有档奖励之和，<b>包含已领取 + 待领取</b>（即当前周期内已符合条件派发的奖励总额）</td></tr>
+      <tr><td><b>顶部"可领取"金额</b></td><td><b>待领取金额</b> —— 已达标但尚未领取的奖励（今日可领 / 次日待领），<b>不含已领取部分</b>（= 已获得 − 已领取）</td></tr>
+      <tr><td>下一档</td><td>门槛 &gt; acc 的第一档；"还差" = 该档门槛 − acc；"即得奖励" = 该档奖励</td></tr>
+    </tbody>
+  </table>
+  <p class="legend">按钮可点条件：可领取金额 &gt; 0 且非次日待领（次日领取当天即使达标也不可点）；否则不可点。累计多档达标可叠加领取，已领取的档不再计入顶部"可领取"金额，但仍计入"已获得"。<b>示例</b>（档位 20→3 / 40→7 / 60→12）：进行中 acc = 40 时，已获得 = R$10,00（3 + 7，含已领取与待领取），若其中 R$3,00 已领取，则顶部可领取 = R$7,00。</p>
+
+  <h2 id="s54">5.4 领取按钮状态</h2>
   <p>按活动条件分两类。<b>首笔充值 / 累计充值</b>按钮只有两态，且<b>按钮文字始终为"领取"</b>（不出现其他文字）：</p>
   <table>
     <thead><tr><th>状态</th><th>触发</th><th>表现</th></tr></thead>
@@ -389,9 +431,9 @@ code{background:#eaf2fb;color:#0961BD;padding:1px 5px;border-radius:3px;font-siz
       <tr><td>已领取·不可点</td><td>已领取且周期尚未重置</td><td>按钮不可点，文字"已领取"；周期重置后回到"领取·不可点"</td></tr>
     </tbody>
   </table>
-  <p class="legend">奖励逾期（过期作废 / 保留天数作废）时，奖励从活动页与待领取入口移除。连续天数按钮交互详见 5.4。</p>
+  <p class="legend">奖励逾期（过期作废 / 保留天数作废）时，奖励从活动页与待领取入口移除。连续天数按钮交互详见 5.5。</p>
 
-  <h2 id="s54">5.4 连续天数页交互</h2>
+  <h2 id="s55">5.5 连续天数页交互</h2>
   <ul>
     <li><b>进度：</b>显示 x/N。当日累计充值达门槛，当天格计为已完成；未达门槛则当天不计入。</li>
     <li><b>天数格四种状态（样式须区分，具体颜色以设计稿为准）：</b>①<b>过去·已完成</b>（对勾，无边框）；②<b>当天·已完成</b>（对勾 + "今天"标识，<u>须与"过去·已完成"区分</u>）；③<b>当天·未完成 / 进行中</b>（进行中图标 + "今天"标识）；④<b>未开始</b>（锁图标）。当天达门槛时由状态③转为状态②。</li>
@@ -401,7 +443,7 @@ code{background:#eaf2fb;color:#0961BD;padding:1px 5px;border-radius:3px;font-siz
     <li><b>去充值跳转：</b>连续未达标期间，进度行内提供"去充值"按钮，点击跳转到充值页，引导会员继续充值以延续连续天数（此时主领取按钮为状态①不可点）。</li>
   </ul>
 
-  <h2 id="s55">5.5 待领取 / 已领取 / 跨周期领取入口</h2>
+  <h2 id="s56">5.6 待领取 / 已领取 / 跨周期领取入口</h2>
   <ul>
     <li><b>待领取：</b>列出各活动未领取奖励，累计多档的每一档各占一行；提供"全部领取"一并领取。</li>
     <li><b>已领取记录：</b>按时间列出已领取记录，累计多档各占一行（独立账变）。</li>
@@ -432,9 +474,11 @@ code{background:#eaf2fb;color:#0961BD;padding:1px 5px;border-radius:3px;font-siz
       <tr><td>充值金额</td><td>Montante do depósito</td></tr>
       <tr><td>奖励金额</td><td>Valor da recompensa</td></tr>
       <tr><td>累计充值</td><td>Dep. Acum.</td></tr>
-      <tr><td>今日可领 R$X(实时领取)</td><td>Pode ser coletado hoje R$X</td></tr>
-      <tr><td>明天 XX:XX:XX 之后可领取 R$X(次日领取)</td><td>Você poderá receber R$X após amanhã XX:XX:XX</td></tr>
-      <tr><td>还差 R$X 到 R$Y</td><td>Falta R$X até o Prêmio R$Y</td></tr>
+      <tr><td>今日可领 R$X（实时领取）</td><td>Pode ser coletado hoje R$X</td></tr>
+      <tr><td>次日 02:00:00 之后可领取 R$X（次日领取）</td><td>Você poderá receber R$X após amanhã 02:00:00</td></tr>
+      <tr><td>还差 R$X 即可获得 R$Y（累计·未开始）</td><td>Falta R$X para ganhar R$Y</td></tr>
+      <tr><td>已获得 R$X，还差 R$Y 即得奖励 R$Z（累计·进行中）</td><td>（待参考图原文补充，暂不自译）</td></tr>
+      <tr><td>还差 R$X 到 R$Y（连续·进度）</td><td>Falta R$X até o Prêmio R$Y</td></tr>
       <tr><td>所有充值挑战已完成！</td><td>Todos os desafios de recarga concluídos!</td></tr>
       <tr><td>每日充值 X</td><td>Deposite X diário</td></tr>
       <tr><td>连续 N 天</td><td>Sequência de N dias</td></tr>
@@ -463,7 +507,8 @@ code{background:#eaf2fb;color:#0961BD;padding:1px 5px;border-radius:3px;font-siz
       <tr><td>v0.1</td><td>2026-08-25</td><td>框架初稿</td><td>Laura</td></tr>
       <tr><td>v1.0</td><td>2026-08-26</td><td>补全后台功能（字段与选项说明、专属字段联动、奖励配置与校验、统计口径、领取与账变、奖励处理时序、编辑限制）与前台功能（页面结构、档位展示规则、领取按钮状态、连续天数交互、待领取/已领取/跨周期入口）及中葡对照表</td><td>Laura</td></tr>
       <tr><td>v1.1</td><td>2026-08-26</td><td>①4.1 活动列表字段按参考图修正为：序号、活动ID、活动分类、活动名称、活动类型、活动条件、参与会员、稽核倍数、活动时间、显示时间、开启时间、活动状态、置顶、操作人、操作时间、操作；"活动条件"展示首笔/累计/连续天数充值；②新增"多活动并存"说明：同一充值模板允许同时创建并生效多个活动，各活动独立配置、参与、发奖与统计，不限制同时仅一个生效</td><td>Laura</td></tr>
-      <tr><td>v1.2</td><td>2026-08-27</td><td>①连续天数天数格区分四种状态（过去已完成 / 当天已完成 / 当天未完成 / 未开始），当天已完成须与过去已完成区分；②领取按钮状态梳理：首笔/累计为两态（可点/不可点，文字始终"领取"），连续天数为三态（领取·可点 / 领取·不可点 / 已领取·不可点，"已领取"为唯一附加文字态）；③前台样式描述统一不注明颜色，仅说明状态，具体颜色以设计稿为准；同步 5.2、5.3、5.4</td><td>Laura</td></tr>
+      <tr><td>v1.2</td><td>2026-08-27</td><td>①连续天数天数格区分四种状态（过去已完成 / 当天已完成 / 当天未完成 / 未开始），当天已完成须与过去已完成区分；②领取按钮状态梳理：首笔/累计为两态（可点/不可点，文字始终"领取"），连续天数为三态（领取·可点 / 领取·不可点 / 已领取·不可点，"已领取"为唯一附加文字态）；③前台样式描述统一不注明颜色，仅说明状态，具体颜色以设计稿为准；同步 5.4、5.5、5.2</td><td>Laura</td></tr>
+      <tr><td>v1.3</td><td>2026-08-27</td><td>新增 5.3「提示文案与金额口径（首笔 / 累计）」：明确两种领取时间文案（实时"今日可领"/次日"次日 02:00:00 之后可领取"）、累计三状态两行提示，及金额口径重点区分——顶部"可领取"为待领取金额（不含已领取），下方"已获得"为已达标奖励总额（含已领取+待领取）；补充第六章中葡对照；原 5.3~5.5 顺延为 5.4~5.6</td><td>Laura</td></tr>
     </tbody>
   </table>
 </div>

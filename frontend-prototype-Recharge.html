@@ -68,7 +68,9 @@ body{background:#eef1f5;color:#1a1a1a;display:flex;justify-content:center;align-
 .prog .txt{flex:1;font-size:12px;color:#c8ccd4;line-height:1.4}
 .prog .badge{background:#1f7a4d;color:#c7f6dc;font-size:11px;border-radius:14px;padding:5px 11px;white-space:nowrap}
 .prog.done .badge{background:#2ec07a;color:#06381f}
-.prog .dep{background:#1f7a3d;color:#eafff0;font-size:12px;font-weight:700;border-radius:8px;padding:6px 12px;white-space:nowrap;cursor:pointer}
+.prog .dep{display:inline-flex;align-items:center;gap:5px;background:#1f7a3d;color:#eafff0;font-size:12px;font-weight:700;border-radius:8px;padding:6px 10px;white-space:nowrap;cursor:pointer}
+.prog .dep .dep-ic{font-size:13px;line-height:1}
+.prog .dep .dep-pg{background:rgba(0,0,0,.28);border-radius:6px;padding:1px 6px;font-size:11px;font-weight:800}
 .daytabs{display:flex;align-items:center;gap:8px;padding:2px 0 12px;flex-wrap:nowrap;overflow:hidden}
 .daytab{font-size:12px;padding:4px 11px;border-radius:13px;background:#20242c;color:#9aa0aa;cursor:pointer;white-space:nowrap}
 .daytab.on{background:#f5e000;color:#3a3300;font-weight:700}
@@ -221,7 +223,7 @@ function render(){
 }
 const nav=t=>`<div class="nav"><span class="back">‹</span>${t}</div>`;
 const rulesBlock=arr=>`<div class="rules"><div class="rt"><span class="dash">✂〰</span> 活动规则 <span class="dash">〰✂</span></div><div class="dt">活动详情:</div><ol>${arr.map(r=>`<li>${r}</li>`).join('')}</ol></div>`;
-const claimHint=amt=>S.claim==='next'?`明天 00:00:00 之后可领取 <b>${money(amt)}</b>`:`今日可领 <b>${money(amt)}</b>`;
+const claimHint=amt=>S.claim==='next'?`次日 02:00:00 之后可领取 <b>${money(amt)}</b>`:`今日可领 <b>${money(amt)}</b>`;
 
 function renderTiered(){
   const isFirst=S.mode==='first';
@@ -291,7 +293,7 @@ function renderSeq(){
   ).join('')}</div>`;
   const progTxt=claimed?'已领取,等待下一周期重置':(allDone?'连续挑战完成!今日可领取奖励!':`还差 ${n-done} 天,立即领取!`);
   // 进度行右侧:未达标显示"去充值"(点击跳转充值页);已达标/已领取显示"已达标"
-  const depBtn=(allDone||claimed)?`<span class="badge">已达标</span>`:`<span class="dep" onclick="goRecharge()">去充值</span>`;
+  const depBtn=(allDone||claimed)?`<span class="badge">已达标</span>`:`<span class="dep" onclick="goRecharge()"><span class="dep-ic">💰</span>去充值<span class="dep-pg">${done}/${n}</span></span>`;
   // 主按钮三态:①领取-不可点(未达标) ②领取-可点(已达标可领) ③已领取-不可点(已领取未重置)
   let btn;
   if(claimed){ btn=`<div class="btn done seqbtn">已领取</div>`; }
