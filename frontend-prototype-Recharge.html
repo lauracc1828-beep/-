@@ -68,6 +68,7 @@ body{background:#eef1f5;color:#1a1a1a;display:flex;justify-content:center;align-
 .prog .txt{flex:1;font-size:12px;color:#c8ccd4;line-height:1.4}
 .prog .badge{background:#1f7a4d;color:#c7f6dc;font-size:11px;border-radius:14px;padding:5px 11px;white-space:nowrap}
 .prog.done .badge{background:#2ec07a;color:#06381f}
+.prog .dep{background:#1f7a3d;color:#eafff0;font-size:12px;font-weight:700;border-radius:8px;padding:6px 12px;white-space:nowrap;cursor:pointer}
 .daytabs{display:flex;align-items:center;gap:8px;padding:2px 0 12px;flex-wrap:nowrap;overflow:hidden}
 .daytab{font-size:12px;padding:4px 11px;border-radius:13px;background:#20242c;color:#9aa0aa;cursor:pointer;white-space:nowrap}
 .daytab.on{background:#f5e000;color:#3a3300;font-weight:700}
@@ -90,8 +91,11 @@ body{background:#eef1f5;color:#1a1a1a;display:flex;justify-content:center;align-
 .cell.hoje .d{color:#f5e000;font-weight:700}
 .cell .todaymk{position:absolute;bottom:-19px;left:0;right:0;display:flex;flex-direction:column;align-items:center;gap:0;font-size:10px;color:#f5e000;line-height:1.05}
 .cell .todaymk .mkar{font-size:8px;line-height:1;color:#f5e000}
-.cell.done{background:#122a1c;border-color:#2ec07a}
+/* 过去·已完成:绿勾、无边框(扁平,与当天已完成的高亮卡区分) */
+.cell.done{background:#161922;border-color:transparent}
 .cell.done .ic{color:#2ec07a}
+/* 当天·已完成:与当天未完成相同的黄色高亮 + 黄色"今天",区别仅为卡片中间的绿色对勾 */
+.cell.hoje-done .ic{color:#2ec07a}
 .lastcell{flex-shrink:0;width:64px;height:62px;border-radius:11px;background:linear-gradient(160deg,#5a1a7e 0%,#8a3ad0 100%);border:1px solid #a45ae0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:#fff;box-shadow:0 0 12px rgba(138,58,208,.45)}
 .lastcell .ld{font-size:11px;color:#f0dcff}
 .lastcell .lic{font-size:15px;line-height:1}
@@ -139,7 +143,8 @@ body{background:#eef1f5;color:#1a1a1a;display:flex;justify-content:center;align-
       <button data-v="2" class="on">2 天(当前第 1 天 · 未完成)</button>
       <button data-v="4">4 天(当前第 3 天 · 未完成)</button>
       <button data-v="10">10 天(当前第 3 天 · 已完成)</button>
-      <button data-v="21">21 天(当前第 21 天 · 已完成)</button>
+      <button data-v="21">21 天(当前第 21 天 · 已完成 · 可领取)</button>
+      <button data-v="21c">21 天(已领取 · 未重置)</button>
     </div>
   </div>
 </div>
@@ -159,7 +164,7 @@ body{background:#eef1f5;color:#1a1a1a;display:flex;justify-content:center;align-
 </div>
 
 <script>
-const S={mode:'first',claim:'realtime',state:'claimable',days:'2',dayTab:0};
+const S={mode:'first',claim:'realtime',state:'claimable',days:'2',dayTab:0,seqClaimed:false};
 const FIRST_TIERS=[[20,5],[40,10],[60,15]];
 const ACCUM_TIERS=[[20,3],[40,7],[60,12]];
 // 状态集(首笔2种 / 累计3种)
@@ -180,7 +185,7 @@ const RULES_SEQ=[
  '彩金需手动领取,(不含本金)需完成稽核倍数才能提现;',
  '为避免文字理解差异,平台保留本活动最终解释权。'];
 // done=实际已完成天数;today=哪天是"今天"(始终标记,0 表示无);today 是否已完成由 done 决定
-const SEQ={ '2':{n:2,done:0,today:1}, '4':{n:4,done:2,today:3}, '10':{n:10,done:3,today:3}, '21':{n:21,done:21,today:0} };
+const SEQ={ '2':{n:2,done:0,today:1}, '4':{n:4,done:2,today:3}, '10':{n:10,done:3,today:3}, '21':{n:21,done:21,today:0}, '21c':{n:21,done:21,today:0} };
 const SEQ_PRIZE=7, SEQ_DAILY=10;
 const money=n=>'R$'+Number(n).toFixed(2).replace('.',',');
 
@@ -260,13 +265,21 @@ function renderSeq(){
   const needScroll=segEnd>6;                 // 仅>6时固定6格并可滑动
   let tabs=[]; for(let s=1;s<=segEnd;s+=6) tabs.push([s,Math.min(s+5,segEnd)]);
   if(S.dayTab>=tabs.length)S.dayTab=0;
+  const claimed=(S.days==='21c')||S.seqClaimed;   // 连续奖励已领取且未重置
   let cells='';
   for(let dd=1;dd<=segEnd;dd++){
     const isToday=(dd===today && today>0);
+    const isDone=(dd<=done);
     let cls='cell',icon;
-    if(dd<=done){ cls+=' done'; icon='<span class="ic">✓</span>'; }          // 已完成
-    else if(isToday){ cls+=' hoje'; icon='<span class="ic">🔥</span>'; }      // 今天且未完成(进行中)
-    else { icon='<span class="ic lock">🔒</span>'; }                          // 未开始
+    if(isToday){
+      cls+=' hoje';
+      if(isDone){ cls+=' hoje-done'; icon='<span class="ic">✓</span>'; }      // 当天·已完成(黄色高亮+绿勾)
+      else { icon='<span class="ic">🔥</span>'; }                              // 当天·未完成(进行中)
+    } else if(isDone){
+      cls+=' done'; icon='<span class="ic">✓</span>';                          // 过去·已完成(绿色卡)
+    } else {
+      icon='<span class="ic lock">🔒</span>';                                 // 未开始(锁)
+    }
     // "今天"标记:卡片外部下方 ▲ + 今天
     const mk=isToday?'<span class="todaymk"><span class="mkar">▲</span>今天</span>':'';
     cells+=`<div class="${cls}" data-day="${dd}"><span class="d">${dd}</span>${icon}${mk}</div>`;
@@ -276,20 +289,26 @@ function renderSeq(){
   const tabsHtml=`<div class="daytabs">${tabs.map((t,i)=>
     `<div class="daytab ${i===S.dayTab?'on':''}" data-i="${i}" data-start="${t[0]}">${t[0]}-${t[1]}${i===S.dayTab?'天':''}</div>`
   ).join('')}</div>`;
-  const progTxt=allDone?'连续挑战完成!今日可领取奖励!':`还差 ${n-done} 天,立即领取!`;
-  // 未完成:显示"去充值",点击跳转充值页;已完成:显示"领取"
-  const btn=allDone?`<div class="btn on seqbtn" onclick="openCongrats(${SEQ_PRIZE})">领取</div>`:`<div class="btn on seqbtn" onclick="goRecharge()">去充值</div>`;
+  const progTxt=claimed?'已领取,等待下一周期重置':(allDone?'连续挑战完成!今日可领取奖励!':`还差 ${n-done} 天,立即领取!`);
+  // 进度行右侧:未达标显示"去充值"(点击跳转充值页);已达标/已领取显示"已达标"
+  const depBtn=(allDone||claimed)?`<span class="badge">已达标</span>`:`<span class="dep" onclick="goRecharge()">去充值</span>`;
+  // 主按钮三态:①领取-不可点(未达标) ②领取-可点(已达标可领) ③已领取-不可点(已领取未重置)
+  let btn;
+  if(claimed){ btn=`<div class="btn done seqbtn">已领取</div>`; }
+  else if(allDone){ btn=`<div class="btn on seqbtn" onclick="seqClaim()">领取</div>`; }
+  else { btn=`<div class="btn off seqbtn">领取</div>`; }
   return nav('充值连续挑战')
    + `<div class="seqhead"><span class="tag">超级大奖</span><div><div class="t1">每日充值 ${money(SEQ_DAILY)}<br>连续 ${n} 天</div><div class="t2">赢取大奖</div></div><div class="prize">${money(SEQ_PRIZE)}</div></div>`
    + `<div class="seqnote">中断连续将重置进度</div>`
    + `<div class="body">`
-   +   `<div class="prog ${allDone?'done':''}"><div class="ring" style="--p:${pct}%"><i>${done}/${n}</i></div><span class="txt">${progTxt}</span><span class="badge">充值 ${done}/${n}</span></div>`
+   +   `<div class="prog ${allDone||claimed?'done':''}"><div class="ring" style="--p:${pct}%"><i>${done}/${n}</i></div><span class="txt">${progTxt}</span>${depBtn}</div>`
    +   tabsHtml
    +   `<div class="track"><div class="cells${needScroll?' six':''}">${cells}</div>${lastCell}</div>`
    +   btn
    +   rulesBlock(RULES_SEQ)
    + `</div>`;
 }
+function seqClaim(){ openCongrats(SEQ_PRIZE); S.seqClaimed=true; render(); }
 function bindTabs(){
   document.querySelectorAll('#screen .daytab').forEach(t=>{
     const start=t.dataset.start;
@@ -325,7 +344,7 @@ function syncPanel(){
 }
 segClick('seg-mode','mode',()=>{ if(S.mode==='days'){S.dayTab=0;} else {buildState();} });
 segClick('seg-claim','claim');
-segClick('seg-days','days',()=>{S.dayTab=0;});
+segClick('seg-days','days',()=>{S.dayTab=0;S.seqClaimed=false;});
 buildState();syncPanel();render();
 </script>
 </body>
