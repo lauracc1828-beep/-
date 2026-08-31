@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>充值活动 PRD v1.3</title>
+<title>充值活动 PRD v1.4</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'PingFang SC','Helvetica Neue',Arial,sans-serif;font-size:14px;color:#1a1a1a;background:#eef1f5;line-height:1.75}
@@ -49,7 +49,7 @@ code{background:#eaf2fb;color:#0961BD;padding:1px 5px;border-radius:3px;font-siz
 <div class="cover">
   <div class="cover-title">充值活动</div>
   <div class="cover-sub">PRD 产品需求文档</div>
-  <div class="cover-meta"><span>版本：v1.3</span><span>更新日期：2026-08-27</span><span>作者：Laura</span></div>
+  <div class="cover-meta"><span>版本：v1.4</span><span>更新日期：2026-08-27</span><span>作者：Laura</span></div>
 </div>
 
 <div class="toc">
@@ -378,28 +378,29 @@ code{background:#eaf2fb;color:#0961BD;padding:1px 5px;border-radius:3px;font-siz
     <thead><tr><th>领取时间</th><th>中文</th><th>葡语（参考原文）</th></tr></thead>
     <tbody>
       <tr><td>实时领取</td><td>今日可领 R$X</td><td>Pode ser coletado hoje R$X</td></tr>
-      <tr><td>次日领取</td><td>次日 02:00:00 之后可领取 R$X</td><td>Você poderá receber R$X após amanhã 02:00:00</td></tr>
+      <tr><td>次日领取</td><td>次日 〔选择时间〕 之后可领取 R$X</td><td>Você poderá receber R$X após amanhã 〔选择时间〕</td></tr>
     </tbody>
   </table>
-  <p class="legend">X = 顶部"可领取"金额（即<b>待领取金额</b>，见 ③）。02:00:00 为周期发放 / 可领时间，以实际系统重置时间为准。</p>
+  <p class="legend">X = 顶部"可领取"金额（即<b>待领取金额</b>，见 ③）。<b>〔选择时间〕= 后台"次日领取·选择时间"（4.4）的配置值</b>（如 02:00:00），首笔与累计一致。凡"次日可领 R$金额"的提示均须带上该时间点。</p>
 
   <h3>① 首笔充值</h3>
   <ul>
     <li><b>顶部"可领取"金额</b> = 首充达标档对应奖励（单档，不叠加）；未达标 / 已领取时为 R$0,00。</li>
-    <li><b>中间提示（单行）</b>：按上表格式展示"今日可领 / 次日可领 R$X"。</li>
-    <li>次日领取时，当天即使达标也不可领取，仅展示次日可领金额。</li>
+    <li><b>中间提示（单行）</b>：按领取时间展示——实时"今日可领 R$X"；次日"次日 〔选择时间〕 之后可领取 R$X"（〔选择时间〕取后台配置）。</li>
+    <li>次日领取时，当天即使达标也不可领取，仅展示"次日 〔选择时间〕 之后可领取 R$X"。</li>
   </ul>
 
   <h3>② 累计充值（三状态、两行提示）</h3>
   <p>顶部先显示"可领取"金额，正文显示一行"累计充值 R$acc"（acc = 周期内累计有效充值金额），其下为两行提示：</p>
   <table>
-    <thead><tr><th>状态</th><th>第 1 行（进度）</th><th>第 2 行（领取）</th></tr></thead>
+    <thead><tr><th>状态</th><th>第 1 行（进度）</th><th>第 2 行（领取）·实时</th><th>第 2 行（领取）·次日</th></tr></thead>
     <tbody>
-      <tr><td>未开始（acc = 0）</td><td>还差 R$(下一档门槛 − acc) 即可获得 R$(下一档奖励)</td><td>今日可领 / 次日可领 R$0,00</td></tr>
-      <tr><td>进行中（0 &lt; acc &lt; 最高档）</td><td>已获得 R$(已达标奖励总额)，还差 R$(下一档门槛 − acc) 即得奖励 R$(下一档奖励)</td><td>今日可领 / 次日可领 R$(待领取金额)</td></tr>
-      <tr><td>全部完成（acc ≥ 最高档）</td><td>所有充值挑战已完成！</td><td>今日可领 / 次日可领 R$(待领取金额)</td></tr>
+      <tr><td>未开始（acc = 0）</td><td>还差 R$(下一档门槛 − acc) 即可获得 R$(下一档奖励)</td><td>今日可领 R$0,00</td><td>次日 〔选择时间〕 之后可领取 R$0,00</td></tr>
+      <tr><td>进行中（0 &lt; acc &lt; 最高档）</td><td>已获得 R$(已达标奖励总额)，还差 R$(下一档门槛 − acc) 即得奖励 R$(下一档奖励)</td><td>今日可领 R$(待领取金额)</td><td>次日 〔选择时间〕 之后可领取 R$(待领取金额)</td></tr>
+      <tr><td>全部完成（acc ≥ 最高档）</td><td>所有充值挑战已完成！</td><td>今日可领 R$(待领取金额)</td><td>次日 〔选择时间〕 之后可领取 R$(待领取金额)</td></tr>
     </tbody>
   </table>
+  <p class="legend">第 2 行按后台"领取时间"配置二选一：实时领取显示"今日可领"式，次日领取显示"次日 〔选择时间〕 之后可领取"式；〔选择时间〕为后台"次日领取·选择时间"配置值。</p>
 
   <h3>③ 金额口径（重点区分）</h3>
   <table>
@@ -475,7 +476,7 @@ code{background:#eaf2fb;color:#0961BD;padding:1px 5px;border-radius:3px;font-siz
       <tr><td>奖励金额</td><td>Valor da recompensa</td></tr>
       <tr><td>累计充值</td><td>Dep. Acum.</td></tr>
       <tr><td>今日可领 R$X（实时领取）</td><td>Pode ser coletado hoje R$X</td></tr>
-      <tr><td>次日 02:00:00 之后可领取 R$X（次日领取）</td><td>Você poderá receber R$X após amanhã 02:00:00</td></tr>
+      <tr><td>次日 〔选择时间〕 之后可领取 R$X（次日领取，时间取后台配置）</td><td>Você poderá receber R$X após amanhã 〔选择时间〕（参考原文示例 02:00:00）</td></tr>
       <tr><td>还差 R$X 即可获得 R$Y（累计·未开始）</td><td>Falta R$X para ganhar R$Y</td></tr>
       <tr><td>已获得 R$X，还差 R$Y 即得奖励 R$Z（累计·进行中）</td><td>（待参考图原文补充，暂不自译）</td></tr>
       <tr><td>还差 R$X 到 R$Y（连续·进度）</td><td>Falta R$X até o Prêmio R$Y</td></tr>
@@ -509,6 +510,7 @@ code{background:#eaf2fb;color:#0961BD;padding:1px 5px;border-radius:3px;font-siz
       <tr><td>v1.1</td><td>2026-08-26</td><td>①4.1 活动列表字段按参考图修正为：序号、活动ID、活动分类、活动名称、活动类型、活动条件、参与会员、稽核倍数、活动时间、显示时间、开启时间、活动状态、置顶、操作人、操作时间、操作；"活动条件"展示首笔/累计/连续天数充值；②新增"多活动并存"说明：同一充值模板允许同时创建并生效多个活动，各活动独立配置、参与、发奖与统计，不限制同时仅一个生效</td><td>Laura</td></tr>
       <tr><td>v1.2</td><td>2026-08-27</td><td>①连续天数天数格区分四种状态（过去已完成 / 当天已完成 / 当天未完成 / 未开始），当天已完成须与过去已完成区分；②领取按钮状态梳理：首笔/累计为两态（可点/不可点，文字始终"领取"），连续天数为三态（领取·可点 / 领取·不可点 / 已领取·不可点，"已领取"为唯一附加文字态）；③前台样式描述统一不注明颜色，仅说明状态，具体颜色以设计稿为准；同步 5.4、5.5、5.2</td><td>Laura</td></tr>
       <tr><td>v1.3</td><td>2026-08-27</td><td>新增 5.3「提示文案与金额口径（首笔 / 累计）」：明确两种领取时间文案（实时"今日可领"/次日"次日 02:00:00 之后可领取"）、累计三状态两行提示，及金额口径重点区分——顶部"可领取"为待领取金额（不含已领取），下方"已获得"为已达标奖励总额（含已领取+待领取）；补充第六章中葡对照；原 5.3~5.5 顺延为 5.4~5.6</td><td>Laura</td></tr>
+      <tr><td>v1.4</td><td>2026-08-27</td><td>5.3 次日领取提示时间口径：时间点取后台"次日领取·选择时间"（4.4）的配置值，首笔与累计一致；凡"次日可领 R$金额"的提示均须带上该时间点；累计第 2 行文案按实时/次日完整展示；同步第六章中葡对照</td><td>Laura</td></tr>
     </tbody>
   </table>
 </div>
