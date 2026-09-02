@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>充值活动 PRD v1.4</title>
+<title>充值活动 PRD v1.9</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'PingFang SC','Helvetica Neue',Arial,sans-serif;font-size:14px;color:#1a1a1a;background:#eef1f5;line-height:1.75}
@@ -49,7 +49,7 @@ code{background:#eaf2fb;color:#0961BD;padding:1px 5px;border-radius:3px;font-siz
 <div class="cover">
   <div class="cover-title">充值活动</div>
   <div class="cover-sub">PRD 产品需求文档</div>
-  <div class="cover-meta"><span>版本：v1.4</span><span>更新日期：2026-08-27</span><span>作者：Laura</span></div>
+  <div class="cover-meta"><span>版本：v1.9</span><span>更新日期：2026-08-27</span><span>作者：Laura</span></div>
 </div>
 
 <div class="toc">
@@ -73,6 +73,7 @@ code{background:#eaf2fb;color:#0961BD;padding:1px 5px;border-radius:3px;font-siz
         <li><a href="#s4b">4.11 奖励状态流转</a></li>
         <li><a href="#s4c">4.12 异常与边界处理</a></li>
         <li><a href="#s4d">4.13 权限说明</a></li>
+        <li><a href="#s4e">4.14 系统默认规则说明（联动生成）</a></li>
       </ol>
     </li>
     <li><a href="#s5">五、前台功能说明</a>
@@ -83,6 +84,7 @@ code{background:#eaf2fb;color:#0961BD;padding:1px 5px;border-radius:3px;font-siz
         <li><a href="#s54">5.4 领取按钮状态</a></li>
         <li><a href="#s55">5.5 连续天数页交互</a></li>
         <li><a href="#s56">5.6 待领取 / 已领取 / 跨周期领取入口</a></li>
+        <li><a href="#s57">5.7 前台活动规则显示（读取后台）</a></li>
       </ol>
     </li>
     <li><a href="#s6">六、中文 / 葡语字段对照表</a></li>
@@ -350,6 +352,35 @@ code{background:#eaf2fb;color:#0961BD;padding:1px 5px;border-radius:3px;font-siz
 
   <h2 id="s4d">4.13 权限说明</h2>
   <p>充值活动的新增、编辑、查看、开启/关闭等后台操作权限，沿用现有后台活动模块的权限体系（按角色/账号权限控制），本活动不新增独立权限项。</p>
+
+  <h2 id="s4e">4.14 系统默认规则说明（联动生成 · 后台功能）</h2>
+  <p>"规则说明 = 系统默认"时，后台在<b>新增 / 编辑活动页</b>按当前配置<b>实时生成</b>前台"活动规则"共 5 条，按活动条件分三套模板；下表 <em>{}</em> 内为随配置变化的动态部分，第 4、5 条固定。"规则说明 = 自定义"时以运营录入为准，系统不生成。</p>
+  <table>
+    <thead><tr><th style="width:12%">规则条</th><th style="width:20%">联动字段</th><th>规则文案（后台生成中文，<em>{}</em> 为动态部分）</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>第 1 条<br>活动介绍</td>
+        <td>活动条件 + 重置方式</td>
+        <td>本活动为<em>{重置前缀}{充值类型}</em>活动，会员<em>{达标描述}</em>，可获得相应彩金<br>· 重置前缀：不重置 =（空）/ 每日 / 每周<br>· 充值类型 · 达标描述：首笔 = "首笔充值" · "首笔充值满足要求"；累计 = "累计充值" · "累计充值满足要求"；连续 = "连续天数充值" · "完成连续天数充值要求"</td>
+      </tr>
+      <tr>
+        <td>第 2 条<br>领取 / 过期</td>
+        <td>奖励作废方式 + 过期天数 N</td>
+        <td>彩金需要手动领取，<em>{过期文案}</em><br>· 过期自动派发 → "过期后彩金将自动派发"<br>· 过期作废 → "过期后彩金将自动作废"<br>· 保留天数自动派发 → "彩金保留 N 天后自动派发"<br>· 保留天数作废 → "彩金保留 N 天后自动作废"<br>· 保留天数类且 N = 0 或空 → "活动期间彩金将一直保留"（不过期）<br><span style="color:#888">（过期类固定"过期后…"，不受过期天数影响）</span></td>
+      </tr>
+      <tr>
+        <td>第 3 条<br>提现稽核</td>
+        <td>稽核方式 + 稽核倍数 X</td>
+        <td><em>{稽核主语}</em>需 <em>{X}</em> 倍有效投注才能提现<br>· 赠送部分 → "彩金（不含本金）"；本金+赠送 → "本金+彩金"<br>· X 代入稽核倍数配置值</td>
+      </tr>
+      <tr>
+        <td>第 4 / 5 条</td>
+        <td>固定（不联动）</td>
+        <td>4. 仅限账号本人进行正常的人为操作，否则将取消或扣除奖励、冻结、甚至拉入黑名单<br>5. 为避免文字理解差异，平台将保留本活动最终解释权</td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="legend">N = 后台"奖励领取过期天数"配置值；各配置在新增 / 编辑页变化时，规则文案实时刷新。各条各变化的完整中葡对照见第六章「活动规则文案」。</p>
 </div>
 
 <!-- 五 前台 -->
@@ -363,6 +394,7 @@ code{background:#eaf2fb;color:#0961BD;padding:1px 5px;border-radius:3px;font-siz
     <li><b>首笔充值 / 累计充值：</b>顶部 banner + 当前可领取总额徽标 + 进度文案（累计另显示"累计充值"金额与"还差 X 到档 Y"）+ 档位列表（充值金额 | 奖励金额）+ 领取按钮 + 活动规则。</li>
     <li><b>连续天数充值：</b>顶部 banner（连续 N 天 + 大奖金额）+ "中断连续将重置进度"提示 + 连续进度（x/N）+ 天数轨道（天数标签 + 可滑动天数格 + 最后一天固定展示大奖）+ 领取按钮 + 活动规则。</li>
   </ul>
+  <p><b>未登录展示：</b>会员未登录时，三种活动条件的页面均展示为各自的<b>"未开始"基线视图</b>（首笔 / 累计：可领取 R$0,00、进度从零、领取按钮不可点；连续天数：进度 0/N、无"今天"标记、天数格均未开始、领取按钮不可点），登录后再按会员实际进度渲染。</p>
 
   <h2 id="s52">5.2 档位列表展示规则</h2>
   <p>首笔 / 累计模式下，页面中的档位列表（充值金额 → 奖励金额）为<b>静态展示</b>：各档位行样式固定，不随达标 / 可领 / 已领状态而改变样式。领取状态统一通过以下元素体现，而非改变档位行样式：</p>
@@ -451,6 +483,14 @@ code{background:#eaf2fb;color:#0961BD;padding:1px 5px;border-radius:3px;font-siz
     <li><b>跨周期领取入口：</b>保留天数类奖励与活动周期无关，可跨周期保留。当主活动页已进入新周期时，未领取的旧奖励仍在"待领取"入口内可领，直至保留期满按设置自动派发或作废。</li>
   </ul>
   <p class="legend">说明：本节为 <span class="badge-normal">正常方案</span>（待领取页上线后）的能力。<span class="badge-temp">本期临时方案</span> 下，每日/每周重置已禁用"次日领取/保留天数"（见 4.10），不会产生跨周期滞留的奖励；"待领取"跨周期入口与本节能力随待领取页一并上线，届时移除 4.10 临时限制。</p>
+
+  <h2 id="s57">5.7 前台活动规则显示（读取后台规则说明）</h2>
+  <p>前台"活动规则"直接取自后台"规则说明"配置，前台不单独维护规则内容：</p>
+  <ul>
+    <li><b>规则说明 = 系统默认：</b>后台按配置联动生成中文（见 4.14），前台按生成的中文<b>逐条对应显示葡文</b>（中文 ↔ 葡文映射见第六章「活动规则（系统默认）」）。配置变化 → 后台规则中文变化 → 前台葡文随之变化。</li>
+    <li><b>规则说明 = 自定义：</b>前台<b>直接调用后台录入的内容原样显示</b>，不做翻译或中葡对照（后台录入什么，前台显示什么）。</li>
+  </ul>
+  <p class="legend">葡文以参考客户端原文为准；系统默认各配置组合的葡文对照见第六章（过期自动派发 / 保留天数作废 / 本金+赠送 / 其余重置组合的葡文原文待补）。</p>
 </div>
 
 <!-- 六 中葡对照 -->
@@ -497,6 +537,38 @@ code{background:#eaf2fb;color:#0961BD;padding:1px 5px;border-radius:3px;font-siz
       <tr><td>时间 / 活动名称 / 奖励 / 来源</td><td>Tempo / Nome do Evento / Evento de Recompensa / Fonte</td></tr>
     </tbody>
   </table>
+
+  <h2>活动规则文案（系统默认 · 联动）</h2>
+  <p>系统默认规则共 5 条，下表按「联动条件 / 中文 / 葡语」分列。标 <b>*</b> 的葡语为按参考原文规律补全，建议母语校对；未标注为参考客户端原文。</p>
+  <table>
+    <thead><tr><th style="width:20%">联动条件</th><th style="width:40%">中文</th><th style="width:40%">葡语（参考原文）</th></tr></thead>
+    <tbody>
+      <tr><td colspan="3" style="background:#eaf0fb;font-weight:600">规则 1 · 活动介绍　【联动：活动条件 + 重置方式】</td></tr>
+      <tr><td>首笔 · 不重置</td><td>本活动为首笔充值活动，会员首笔充值满足要求，可获得相应彩金</td><td>Esta é uma promoção de primeiro depósito. Se o primeiro depósito do membro atender aos requisitos, ele receberá o bônus correspondente</td></tr>
+      <tr><td>首笔 · 每日</td><td>本活动为每日首笔充值活动，会员首笔充值满足要求，可获得相应彩金</td><td>Esta é uma promoção de primeiro depósito diário. Se o primeiro depósito do membro atender aos requisitos, ele receberá o bônus correspondente *</td></tr>
+      <tr><td>首笔 · 每周</td><td>本活动为每周首笔充值活动，会员首笔充值满足要求，可获得相应彩金</td><td>Esta é uma promoção de primeiro depósito semanal. Se o primeiro depósito do membro atender aos requisitos, ele receberá o bônus correspondente *</td></tr>
+      <tr><td>累计 · 不重置</td><td>本活动为累计充值活动，会员累计充值满足要求，可获得相应彩金</td><td>Esta é uma promoção de depósito acumulado; os membros que atingirem o valor acumulado exigido receberão o bônus correspondente *</td></tr>
+      <tr><td>累计 · 每日</td><td>本活动为每日累计充值活动，会员累计充值满足要求，可获得相应彩金</td><td>Esta é uma promoção de depósito acumulado diário; os membros que atingirem o valor acumulado exigido receberão o bônus correspondente</td></tr>
+      <tr><td>累计 · 每周</td><td>本活动为每周累计充值活动，会员累计充值满足要求，可获得相应彩金</td><td>Esta é uma promoção de depósito acumulado semanal; os membros que atingirem o valor acumulado exigido receberão o bônus correspondente *</td></tr>
+      <tr><td>连续 · 不重置</td><td>本活动为连续天数充值活动，会员完成连续天数充值要求，可获得相应彩金</td><td>Esta promoção consiste em uma sequência de depósitos. Os membros que cumprirem os requisitos de sequência de depósitos receberão o bônus correspondente *</td></tr>
+      <tr><td>连续 · 每周</td><td>本活动为每周连续天数充值活动，会员完成连续天数充值要求，可获得相应彩金</td><td>Esta promoção consiste em uma sequência de depósitos semanais. Os membros que cumprirem os requisitos de sequência de depósitos receberão o bônus correspondente</td></tr>
+
+      <tr><td colspan="3" style="background:#eaf0fb;font-weight:600">规则 2 · 领取 / 过期　【联动：奖励作废方式 + 过期天数 N】</td></tr>
+      <tr><td>不过期（过期天数 = 0 / 空，仅保留天数类）</td><td>彩金需要手动领取，活动期间彩金将一直保留</td><td>O bônus deve ser resgatado manualmente; ele permanecerá disponível durante todo o evento</td></tr>
+      <tr><td>过期作废</td><td>彩金需要手动领取，过期后彩金将自动作废</td><td>O bônus deve ser resgatado manualmente; após o prazo de validade, o bônus será automaticamente cancelado</td></tr>
+      <tr><td>过期自动派发</td><td>彩金需要手动领取，过期后彩金将自动派发</td><td>O bônus deve ser resgatado manualmente; após o prazo de validade, o bônus será distribuído automaticamente *</td></tr>
+      <tr><td>保留天数自动派发（N 天）</td><td>彩金需要手动领取，彩金保留 N 天后自动派发</td><td>O bônus deve ser coletado manualmente e será distribuído automaticamente após N dias</td></tr>
+      <tr><td>保留天数作废（N 天）</td><td>彩金需要手动领取，彩金保留 N 天后自动作废</td><td>O bônus deve ser coletado manualmente e será cancelado automaticamente após N dias *</td></tr>
+
+      <tr><td colspan="3" style="background:#eaf0fb;font-weight:600">规则 3 · 提现稽核　【联动：稽核方式 + 稽核倍数 X】</td></tr>
+      <tr><td>赠送部分</td><td>彩金（不含本金）需 X 倍有效投注才能提现</td><td>O bônus (excluindo valor principal) requer X vezes de apostas válidas para sacar</td></tr>
+      <tr><td>本金+赠送</td><td>本金+彩金需 X 倍有效投注才能提现</td><td>O bônus (incluindo valor principal) requer X vezes de apostas válidas para sacar *</td></tr>
+
+      <tr><td colspan="3" style="background:#eaf0fb;font-weight:600">规则 4 / 5 · 固定（不联动）</td></tr>
+      <tr><td>固定</td><td>仅限账号本人进行正常的人为操作，否则将取消或扣除奖励、冻结、甚至拉入黑名单</td><td>Somente operações humanas normais pelo proprietário da conta são permitidas, caso contrário, as recompensas serão canceladas ou deduzidas, congeladas ou até mesmo colocadas na lista negra</td></tr>
+      <tr><td>固定</td><td>为避免文字理解差异，平台将保留本活动最终解释权</td><td>Para evitar diferenças na compreensão do texto, a plataforma reserva-se o direito de interpretação final deste evento</td></tr>
+    </tbody>
+  </table>
 </div>
 
 <!-- 七 版本记录 -->
@@ -511,6 +583,11 @@ code{background:#eaf2fb;color:#0961BD;padding:1px 5px;border-radius:3px;font-siz
       <tr><td>v1.2</td><td>2026-08-27</td><td>①连续天数天数格区分四种状态（过去已完成 / 当天已完成 / 当天未完成 / 未开始），当天已完成须与过去已完成区分；②领取按钮状态梳理：首笔/累计为两态（可点/不可点，文字始终"领取"），连续天数为三态（领取·可点 / 领取·不可点 / 已领取·不可点，"已领取"为唯一附加文字态）；③前台样式描述统一不注明颜色，仅说明状态，具体颜色以设计稿为准；同步 5.4、5.5、5.2</td><td>Laura</td></tr>
       <tr><td>v1.3</td><td>2026-08-27</td><td>新增 5.3「提示文案与金额口径（首笔 / 累计）」：明确两种领取时间文案（实时"今日可领"/次日"次日 02:00:00 之后可领取"）、累计三状态两行提示，及金额口径重点区分——顶部"可领取"为待领取金额（不含已领取），下方"已获得"为已达标奖励总额（含已领取+待领取）；补充第六章中葡对照；原 5.3~5.5 顺延为 5.4~5.6</td><td>Laura</td></tr>
       <tr><td>v1.4</td><td>2026-08-27</td><td>5.3 次日领取提示时间口径：时间点取后台"次日领取·选择时间"（4.4）的配置值，首笔与累计一致；凡"次日可领 R$金额"的提示均须带上该时间点；累计第 2 行文案按实时/次日完整展示；同步第六章中葡对照</td><td>Laura</td></tr>
+      <tr><td>v1.5</td><td>2026-08-27</td><td>5.1 新增"未登录展示"：会员未登录时三种活动条件均展示为各自"未开始"基线视图（金额从零、进度从零、领取按钮不可点），登录后按实际进度渲染；前台原型同步增加未登录状态切换</td><td>Laura</td></tr>
+      <tr><td>v1.6</td><td>2026-08-27</td><td>新增 5.7「系统默认活动规则（联动生成）」：规则按活动条件分三套模板，第 1 条随活动条件+重置方式、第 2 条随奖励作废方式+过期天数（过期天数=0/空→不过期"一直保留"）、第 3 条随稽核方式+稽核倍数 X 联动，第 4/5 条固定；补充第六章「活动规则」中葡对照（参考原文）；前台原型规则文案按活动条件拆为三套。过期自动派发/保留天数作废/本金+赠送/其余重置组合的葡文原文待补</td><td>Laura</td></tr>
+      <tr><td>v1.7</td><td>2026-08-27</td><td>明确规则联动为后台功能：新增 4.14「系统默认规则说明（联动生成）」（第 1 条随活动条件+重置方式、第 2 条随奖励作废方式+过期天数、第 3 条随稽核方式+稽核倍数，第 4/5 条固定）；5.7 改为「前台活动规则显示（读取后台）」——系统默认时按后台中文显示对应葡文、自定义时直接显示后台录入内容；后台原型新增/编辑页规则说明已按上述联动实时生成</td><td>Laura</td></tr>
+      <tr><td>v1.8</td><td>2026-08-27</td><td>第六章「活动规则」中葡对照补全：逐条标注联动处并给出全部变化——规则1（活动条件 × 重置方式，共 8 种）、规则2（不过期 / 过期作废 / 过期自动派发 / 保留天数自动派发 / 保留天数作废）、规则3（赠送部分 / 本金+赠送），按参考原文规律补全的葡文标 * 待母语校对；后台第 2 条修正：过期类固定"过期后…"、仅保留天数类过期天数=0/空→不过期，解决默认态与奖励作废默认项不一致</td><td>Laura</td></tr>
+      <tr><td>v1.9</td><td>2026-08-27</td><td>规则联动表述优化（参照会员答谢 / 神秘彩金）：4.14 改为分条清晰表述（每条一行、联动字段单列、<em>{}</em> 标动态部分）；第六章「活动规则文案」拆为独立三列表（联动条件 / 中文 / 葡语），条件与文案不再混列</td><td>Laura</td></tr>
     </tbody>
   </table>
 </div>

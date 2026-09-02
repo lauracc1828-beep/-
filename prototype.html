@@ -1484,8 +1484,8 @@ select.fs.ph{color:#bfbfbf}
             <span class="aa-fl">稽核方式：</span>
             <div class="aa-fc">
               <div class="radio-g">
-                <label class="radio-item" id="aa-charge-audit-gift-lbl"><input type="radio" name="aa-charge-audit" value="gift" checked> 赠送部分</label>
-                <label class="radio-item" id="aa-charge-audit-both-lbl"><input type="radio" name="aa-charge-audit" value="both"> 本金+赠送</label>
+                <label class="radio-item" id="aa-charge-audit-gift-lbl"><input type="radio" name="aa-charge-audit" value="gift" checked onchange="updateRuleText()"> 赠送部分</label>
+                <label class="radio-item" id="aa-charge-audit-both-lbl"><input type="radio" name="aa-charge-audit" value="both" onchange="updateRuleText()"> 本金+赠送</label>
               </div>
             </div>
           </div>
@@ -4206,19 +4206,28 @@ function updateRuleText(){
     l4.textContent='4. 仅限账号本人进行正常的人为操作，否则将取消或扣除奖励、冻结、甚至拉入黑名单；';
     l5.textContent='5. 为避免文字理解差异，平台将保留本活动最终解释权。';
   } else if(type==='charge'){
+    // ── 系统默认规则联动（充值）──
     var condEl=document.querySelector('input[name="aa-charge-cond"]:checked');
     var cond=condEl?condEl.value:'first';
-    var condWord=(cond==='accum')?'累计充值':((cond==='days')?'连续充值':'首笔充值');
-    var ctEl=document.querySelector('input[name="aa-charge-claimtime"]:checked');
-    var isNext=ctEl&&ctEl.value==='next';
+    // 第1条：活动条件 + 重置方式前缀
+    var resetC=(document.querySelector('input[name="aa-reset-n"]:checked')||{}).value||'none';
+    var prefixC=(resetC==='day')?'每日':((resetC==='week')?'每周':'');
+    var baseC, meetC;
+    if(cond==='accum'){ baseC='累计充值'; meetC='累计充值满足要求'; }
+    else if(cond==='days'){ baseC='连续天数充值'; meetC='完成连续天数充值要求'; }
+    else { baseC='首笔充值'; meetC='首笔充值满足要求'; }
+    // 第2条：过期类(过期自动派发/过期作废)固定"过期后…"；保留天数类过期天数=0/空→不过期，否则"保留N天后…"
     var expTextC;
-    if(expireVal==='1') expTextC='过期后彩金将自动派发';
-    else if(expireVal==='2') expTextC='过期后彩金将作废';
-    else if(expireVal==='3') expTextC='彩金保留'+days+'天后自动派发';
-    else expTextC='彩金保留'+days+'天后作废';
-    l1.textContent='1. 本活动为'+condWord+'活动，会员'+condWord+'满足要求，可获得相应彩金；';
-    l2.textContent='2. 彩金需'+(isNext?'次日手动领取':'手动领取')+'，'+expTextC+'；';
-    l3.textContent='3. 彩金（不含本金）需'+auditN+'倍有效投注才能提现；';
+    if(expireVal==='1') expTextC='过期后彩金将自动派发';            // 过期自动派发
+    else if(expireVal==='2') expTextC='过期后彩金将自动作废';        // 过期作废
+    else if(expireVal==='3') expTextC=(!days||days<=0)?'活动期间彩金将一直保留':('彩金保留'+days+'天后自动派发');  // 保留天数自动派发
+    else expTextC=(!days||days<=0)?'活动期间彩金将一直保留':('彩金保留'+days+'天后自动作废');                    // 保留天数作废
+    // 第3条：稽核方式 + 稽核倍数
+    var auditWayEl=document.querySelector('input[name="aa-charge-audit"]:checked');
+    var auditSubj=(auditWayEl&&auditWayEl.value==='both')?'本金+彩金':'彩金（不含本金）';
+    l1.textContent='1. 本活动为'+prefixC+baseC+'活动，会员'+meetC+'，可获得相应彩金；';
+    l2.textContent='2. 彩金需要手动领取，'+expTextC+'；';
+    l3.textContent='3. '+auditSubj+'需 '+auditN+' 倍有效投注才能提现；';
     l4.textContent='4. 仅限账号本人进行正常的人为操作，否则将取消或扣除奖励、冻结、甚至拉入黑名单；';
     l5.textContent='5. 为避免文字理解差异，平台将保留本活动最终解释权。';
   } else {

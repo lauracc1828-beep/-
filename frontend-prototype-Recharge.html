@@ -128,6 +128,13 @@ body{background:#eef1f5;color:#1a1a1a;display:flex;justify-content:center;align-
       <button data-v="days">连续天数</button>
     </div>
   </div>
+  <div class="pgroup">
+    <div class="plabel">登录状态</div>
+    <div class="seg" id="seg-login">
+      <button data-v="in" class="on">已登录</button>
+      <button data-v="out">未登录</button>
+    </div>
+  </div>
   <div class="pgroup" id="grp-claim">
     <div class="plabel">领取时间</div>
     <div class="seg" id="seg-claim">
@@ -166,7 +173,7 @@ body{background:#eef1f5;color:#1a1a1a;display:flex;justify-content:center;align-
 </div>
 
 <script>
-const S={mode:'first',claim:'realtime',state:'claimable',days:'2',dayTab:0,seqClaimed:false};
+const S={mode:'first',claim:'realtime',state:'claimable',days:'2',dayTab:0,seqClaimed:false,login:'in'};
 const FIRST_TIERS=[[20,5],[40,10],[60,15]];
 const ACCUM_TIERS=[[20,3],[40,7],[60,12]];
 // 状态集(首笔2种 / 累计3种)
@@ -174,18 +181,25 @@ const STATE_SETS={
   first:[['claimable','可领取'],['zero','未达标 / 已领取']],
   accum:[['notstart','未开始'],['ongoing','进行中'],['alldone','全部完成']]
 };
-const RULES_CHARGE=[
- '本活动为充值活动,会员在活动期间完成充值达标即可获得相应彩金;',
- '彩金需手动领取,未领取的奖励将按活动配置处理;',
- '彩金(不含本金)需完成对应稽核倍数的有效投注才能提现;',
- '仅限账号本人正常人为操作,否则将取消或扣除奖励、冻结甚至拉黑;',
- '为避免文字理解差异,平台保留本活动最终解释权。'];
+// 系统默认活动规则（示例取参考原文；第1/2/3条随配置联动，见 PRD 5.7）
+const RULES_FIRST=[
+ '本活动为首笔充值活动，会员首笔充值满足要求，可获得相应彩金；',
+ '彩金需要手动领取，活动期间彩金将一直保留；',
+ '彩金（不含本金）需 1 倍有效投注才能提现；',
+ '仅限账号本人进行正常的人为操作，否则将取消或扣除奖励、冻结、甚至拉入黑名单；',
+ '为避免文字理解差异，平台将保留本活动最终解释权。'];
+const RULES_ACCUM=[
+ '本活动为每日累计充值活动，会员累计充值满足要求，可获得相应彩金；',
+ '彩金需要手动领取，过期后彩金将自动作废；',
+ '彩金（不含本金）需 1 倍有效投注才能提现；',
+ '仅限账号本人进行正常的人为操作，否则将取消或扣除奖励、冻结、甚至拉入黑名单；',
+ '为避免文字理解差异，平台将保留本活动最终解释权。'];
 const RULES_SEQ=[
- '本活动为连续充值活动,连续多日充值达标可获得大奖;',
- '当日累计充值达到设定门槛,才计入 1 个有效充值天数;',
- '中断连续后,周期内连续天数将从第 1 天重新开始;',
- '彩金需手动领取,(不含本金)需完成稽核倍数才能提现;',
- '为避免文字理解差异,平台保留本活动最终解释权。'];
+ '本活动为每周连续天数充值活动，会员完成连续天数充值要求，可获得相应彩金；',
+ '彩金需要手动领取，彩金保留1天后自动派发；',
+ '彩金（不含本金）需 1 倍有效投注才能提现；',
+ '仅限账号本人进行正常的人为操作，否则将取消或扣除奖励、冻结、甚至拉入黑名单；',
+ '为避免文字理解差异，平台将保留本活动最终解释权。'];
 // done=实际已完成天数;today=哪天是"今天"(始终标记,0 表示无);today 是否已完成由 done 决定
 const SEQ={ '2':{n:2,done:0,today:1}, '4':{n:4,done:2,today:3}, '10':{n:10,done:3,today:3}, '21':{n:21,done:21,today:0}, '21c':{n:21,done:21,today:0} };
 const SEQ_PRIZE=7, SEQ_DAILY=10;
@@ -230,14 +244,16 @@ function renderTiered(){
   const title=isFirst?'首充奖励':'累计充值奖励';
   const tiers=isFirst?FIRST_TIERS:ACCUM_TIERS;
   let claimAmt=0, btn, mid;
+  const guest=S.login==='out';
+  const st = guest ? (isFirst?'zero':'notstart') : S.state;   // 未登录=各模式"未开始"基线
   if(isFirst){
-    claimAmt = S.state==='claimable'?5:0;               // 可领取=5,未达标/已领取=0
-    // 次日领取时:即使达标,当天也不可领(仅展示次日可领金额)→ 按钮置灰
-    btn = (S.state==='claimable' && S.claim!=='next')?`<div class="btn on" onclick="openCongrats(${claimAmt})">领取</div>`:`<div class="btn off">领取</div>`;
+    claimAmt = st==='claimable'?5:0;                    // 可领取=5,未达标/已领取/未登录=0
+    // 次日领取时:即使达标,当天也不可领(仅展示次日可领金额)→ 按钮不可点
+    btn = (st==='claimable' && S.claim!=='next')?`<div class="btn on" onclick="openCongrats(${claimAmt})">领取</div>`:`<div class="btn off">领取</div>`;
     mid = `<div class="claimhint"><span class="flag">🚩</span>${claimHint(claimAmt)}</div>`;
   }else{
-    const acc = S.state==='notstart'?0:(S.state==='ongoing'?40:60);
-    claimAmt = S.state==='notstart'?0:(S.state==='ongoing'?10:22);   // 全部完成:各档合计
+    const acc = st==='notstart'?0:(st==='ongoing'?40:60);
+    claimAmt = st==='notstart'?0:(st==='ongoing'?10:22);   // 全部完成:各档合计
     const highest=ACCUM_TIERS[ACCUM_TIERS.length-1][0];
     let line1;
     if(acc>=highest){ line1='所有充值挑战已完成!'; }
@@ -255,19 +271,20 @@ function renderTiered(){
   return nav(title)
    + `<div class="banner">${bannerSVG()}</div>`
    + `<div class="coletavel"><span class="lb">可领取</span><span class="amt">${money(claimAmt)}</span></div>`
-   + `<div class="body">${mid}<div class="tbl-hd"><span class="c1">充值金额</span><span class="c2">奖励金额</span></div>${rows}${rulesBlock(RULES_CHARGE)}</div>`
+   + `<div class="body">${mid}<div class="tbl-hd"><span class="c1">充值金额</span><span class="c2">奖励金额</span></div>${rows}${rulesBlock(isFirst?RULES_FIRST:RULES_ACCUM)}</div>`
    + `<div class="btnbar">${btn}</div>`;
 }
 
 function renderSeq(){
-  const cfg=SEQ[S.days], n=cfg.n, done=cfg.done, today=cfg.today;
+  const guest=S.login==='out';
+  const cfg=SEQ[S.days], n=cfg.n, done=guest?0:cfg.done, today=guest?0:cfg.today;   // 未登录=未开始(0/N,无今天)
   const allDone=done>=n;
   const pct=Math.round(done/n*100);
   const segEnd=n-1;
   const needScroll=segEnd>6;                 // 仅>6时固定6格并可滑动
   let tabs=[]; for(let s=1;s<=segEnd;s+=6) tabs.push([s,Math.min(s+5,segEnd)]);
   if(S.dayTab>=tabs.length)S.dayTab=0;
-  const claimed=(S.days==='21c')||S.seqClaimed;   // 连续奖励已领取且未重置
+  const claimed=guest?false:((S.days==='21c')||S.seqClaimed);   // 连续奖励已领取且未重置(未登录时不适用)
   let cells='';
   for(let dd=1;dd<=segEnd;dd++){
     const isToday=(dd===today && today>0);
@@ -340,12 +357,14 @@ function segClick(id,key,cb){
 }
 function syncPanel(){
   const isDays=S.mode==='days';
+  const guest=S.login==='out';
   document.getElementById('grp-claim').style.display=isDays?'none':'block';
-  document.getElementById('grp-state').style.display=isDays?'none':'block';
+  document.getElementById('grp-state').style.display=(isDays||guest)?'none':'block';   // 未登录时状态强制"未开始",隐藏状态切换
   document.getElementById('grp-days').style.display=isDays?'block':'none';
 }
 segClick('seg-mode','mode',()=>{ if(S.mode==='days'){S.dayTab=0;} else {buildState();} });
 segClick('seg-claim','claim');
+segClick('seg-login','login');
 segClick('seg-days','days',()=>{S.dayTab=0;S.seqClaimed=false;});
 buildState();syncPanel();render();
 </script>
