@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>充值活动 PRD v1.9</title>
+<title>充值活动 PRD v1.10</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'PingFang SC','Helvetica Neue',Arial,sans-serif;font-size:14px;color:#1a1a1a;background:#eef1f5;line-height:1.75}
@@ -49,7 +49,7 @@ code{background:#eaf2fb;color:#0961BD;padding:1px 5px;border-radius:3px;font-siz
 <div class="cover">
   <div class="cover-title">充值活动</div>
   <div class="cover-sub">PRD 产品需求文档</div>
-  <div class="cover-meta"><span>版本：v1.9</span><span>更新日期：2026-08-27</span><span>作者：Laura</span></div>
+  <div class="cover-meta"><span>版本：v1.10</span><span>更新日期：2026-08-27</span><span>作者：Laura</span></div>
 </div>
 
 <div class="toc">
@@ -303,9 +303,11 @@ code{background:#eaf2fb;color:#0961BD;padding:1px 5px;border-radius:3px;font-siz
     <thead><tr><th>奖励作废设置</th><th>处理时机</th><th>结果</th></tr></thead>
     <tbody>
       <tr><td>过期自动派发 / 过期作废</td><td>绑定活动重置 / 结束边界，即时处理（如每日重置：参与当天未领，次日重置即处理）</td><td>自动派发=到账；过期作废=作废不入账</td></tr>
-      <tr><td>保留天数自动派发 / 保留天数作废</td><td>绑定保留天数，<b>参与活动当天不计入</b>；自动处理日 = 参与日 + 1 + 保留天数。保留期内会员可手动领取</td><td>逾期未领：自动派发=到账；作废=作废不入账</td></tr>
+      <tr><td>保留天数自动派发 / 保留天数作废（过期天数 = N &gt; 0）</td><td>绑定保留天数，<b>参与活动当天不计入</b>；自动处理日 = 参与日 + 1 + 保留天数。保留期内会员可手动领取</td><td>逾期未领：自动派发=到账；作废=作废不入账</td></tr>
+      <tr><td><b>过期天数 = 0 或空（奖励不过期）</b></td><td><b>奖励永不过期</b>，不触发自动派发 / 作废，会员在活动有效期内可随时手动领取</td><td>始终可领，直至活动结束</td></tr>
     </tbody>
   </table>
+  <p class="legend"><b>奖励过期功能逻辑：</b>"奖励领取过期天数" = 0 或留空 → <b>奖励不过期、始终可领</b>（是奖励生命周期的实际行为，规则第 2 条"一直保留"等文案随此显示）；针对保留天数类。过期类（过期作废 / 过期自动派发）在活动重置 / 结束边界过期处理，不使用过期天数。</p>
 
   <h2 id="s49">4.9 编辑限制</h2>
   <p>编辑（修改/查看）已创建的充值活动时，<b>活动分类、活动类型、领取时间、活动条件不可修改</b>（置灰）；其余字段可编辑。</p>
@@ -588,6 +590,7 @@ code{background:#eaf2fb;color:#0961BD;padding:1px 5px;border-radius:3px;font-siz
       <tr><td>v1.7</td><td>2026-08-27</td><td>明确规则联动为后台功能：新增 4.14「系统默认规则说明（联动生成）」（第 1 条随活动条件+重置方式、第 2 条随奖励作废方式+过期天数、第 3 条随稽核方式+稽核倍数，第 4/5 条固定）；5.7 改为「前台活动规则显示（读取后台）」——系统默认时按后台中文显示对应葡文、自定义时直接显示后台录入内容；后台原型新增/编辑页规则说明已按上述联动实时生成</td><td>Laura</td></tr>
       <tr><td>v1.8</td><td>2026-08-27</td><td>第六章「活动规则」中葡对照补全：逐条标注联动处并给出全部变化——规则1（活动条件 × 重置方式，共 8 种）、规则2（不过期 / 过期作废 / 过期自动派发 / 保留天数自动派发 / 保留天数作废）、规则3（赠送部分 / 本金+赠送），按参考原文规律补全的葡文标 * 待母语校对；后台第 2 条修正：过期类固定"过期后…"、仅保留天数类过期天数=0/空→不过期，解决默认态与奖励作废默认项不一致</td><td>Laura</td></tr>
       <tr><td>v1.9</td><td>2026-08-27</td><td>规则联动表述优化（参照会员答谢 / 神秘彩金）：4.14 改为分条清晰表述（每条一行、联动字段单列、<em>{}</em> 标动态部分）；第六章「活动规则文案」拆为独立三列表（联动条件 / 中文 / 葡语），条件与文案不再混列</td><td>Laura</td></tr>
+      <tr><td>v1.10</td><td>2026-08-27</td><td>更正：明确"过期天数 = 0 或空 → 奖励永不过期、始终可领"为<b>奖励过期的功能逻辑</b>（非仅规则文案），补入 4.8 奖励处理时序（新增不过期行、功能说明）</td><td>Laura</td></tr>
     </tbody>
   </table>
 </div>
