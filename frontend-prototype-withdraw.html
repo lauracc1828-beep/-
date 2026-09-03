@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>取款 - Phone提款原型</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body {
+    background: #0d0d0d;
+    font-family: -apple-system, "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+    color: #fff;
+  }
+  .phone {
+    max-width: 478px;
+    margin: 0 auto;
+    min-height: 100vh;
+    background: #141414;
+    position: relative;
+    padding-bottom: 90px;
+  }
+
+  /* 顶部导航 */
+  .topbar {
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background: #1c1c1c;
+    border-bottom: 1px solid #262626;
+  }
+  .topbar .back {
+    position: absolute;
+    left: 14px;
+    font-size: 22px;
+    color: #fff;
+    line-height: 1;
+  }
+  .topbar .title { font-size: 19px; font-weight: 700; }
+  .topbar .doc {
+    position: absolute;
+    right: 14px;
+    font-size: 18px;
+    color: #cfcfcf;
+  }
+
+  .content { padding: 16px 16px 0; }
+
+  /* 余额区 */
+  .balance-row { font-size: 14px; margin-bottom: 6px; }
+  .balance-row .lbl { color: #d8d8d8; font-weight: 600; }
+  .balance-row .val { color: #f4e02a; font-weight: 700; margin-left: 6px; }
+  .bet-row { font-size: 13px; color: #9a9a9a; margin-bottom: 14px; }
+  .bet-row .val { color: #f4e02a; font-weight: 600; margin: 0 4px; }
+  .bet-row .link { color: #4a90e2; }
+
+  /* 渠道按钮 */
+  .channel-btn {
+    display: inline-block;
+    background: #f4e02a;
+    color: #111;
+    font-weight: 700;
+    font-size: 15px;
+    height: 34px;
+    line-height: 34px;
+    padding: 0 22px;
+    border-radius: 6px;
+    letter-spacing: .5px;
+    margin-bottom: 16px;
+  }
+
+  .divider { height: 1px; background: #262626; margin: 4px 0 16px; }
+
+  .section-title { font-size: 16px; font-weight: 700; margin-bottom: 12px; }
+
+  /* 金额输入 */
+  .amount-input {
+    width: 100%;
+    height: 38px;
+    background: #202020;
+    border: none;
+    border-radius: 8px;
+    padding: 0 14px;
+    color: #fff;
+    font-size: 15px;
+    outline: none;
+    margin-bottom: 22px;
+  }
+  .amount-input::placeholder { color: #6e6e6e; }
+
+  /* 提款方式切换 */
+  .field-label { font-size: 16px; font-weight: 700; margin-bottom: 12px; }
+  .method-toggle { display: flex; gap: 12px; margin-bottom: 20px; }
+  .method-btn {
+    min-width: 96px;
+    height: 40px;
+    line-height: 38px;
+    padding: 0 18px;
+    background: #1e1e1e;
+    border: 1px solid #3a3a3a;
+    border-radius: 8px;
+    color: #9a9a9a;
+    font-size: 14px;
+    font-weight: 600;
+    text-align: center;
+    cursor: pointer;
+    transition: all .15s;
+    letter-spacing: .5px;
+  }
+  .method-btn.active {
+    border-color: #f4e02a;
+    color: #fff;
+  }
+
+  /* 下划线输入字段 */
+  .form-field { margin-bottom: 18px; }
+  .form-field .name { font-size: 15px; font-weight: 700; margin-bottom: 12px; }
+  .form-field input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #333;
+    padding: 6px 0 10px;
+    color: #fff;
+    font-size: 15px;
+    outline: none;
+  }
+  .form-field input::placeholder { color: #6e6e6e; }
+  .form-field input:focus { border-bottom-color: #f4e02a; }
+  .form-field.hidden { display: none; }
+
+  /* 提交按钮 */
+  .submit-btn {
+    display: block;
+    width: 56%;
+    height: 38px;
+    margin: 30px auto 0;
+    background: #f4e02a;
+    color: #111;
+    font-size: 17px;
+    font-weight: 700;
+    border: none;
+    border-radius: 16px;
+    padding: 0;
+    cursor: pointer;
+  }
+
+  /* 底部导航 */
+  .tabbar {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    max-width: 430px;
+    margin: 0 auto;
+    height: 74px;
+    background: #1c1c1c;
+    border-top: 1px solid #262626;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding-bottom: 6px;
+  }
+  .tab { text-align: center; font-size: 11px; color: #8a8a8a; }
+  .tab .ic { font-size: 22px; display: block; margin-bottom: 2px; }
+  .tab.active { color: #f4e02a; }
+  .tab.center .ic { font-size: 30px; }
+</style>
+</head>
+<body>
+  <div class="phone">
+    <!-- 顶部导航 -->
+    <div class="topbar">
+      <span class="back">‹</span>
+      <span class="title">取款</span>
+      <span class="doc">🧾</span>
+    </div>
+
+    <div class="content">
+      <!-- 余额 -->
+      <div class="balance-row"><span class="lbl">账户余额:</span><span class="val">R$ 10.529,85</span></div>
+      <div class="bet-row">提款需投注:<span class="val">R$ 1.039,36</span><span class="link">查看详情</span></div>
+
+      <!-- 渠道 -->
+      <div class="channel-btn">BESTPAY</div>
+
+      <div class="divider"></div>
+
+      <!-- 提款金额 -->
+      <div class="section-title">提款金额</div>
+      <input class="amount-input" type="text" inputmode="decimal" placeholder="0,00 – 0,00">
+
+      <!-- 提款方式切换 -->
+      <div class="field-label">提款方式</div>
+      <div class="method-toggle">
+        <div class="method-btn active" data-method="cpf" onclick="switchMethod('cpf')">CPF</div>
+        <div class="method-btn" data-method="phone" onclick="switchMethod('phone')">PHONE</div>
+      </div>
+
+      <!-- 姓名 -->
+      <div class="form-field">
+        <div class="name">姓名</div>
+        <input type="text" placeholder="请输入您的姓名">
+      </div>
+
+      <!-- 手机号（仅PHONE方式显示） -->
+      <div class="form-field hidden" id="field-phone">
+        <div class="name">手机号</div>
+        <input type="tel" inputmode="numeric" placeholder="请输入您的手机号">
+      </div>
+
+      <!-- CPF ID -->
+      <div class="form-field">
+        <div class="name">CPF ID</div>
+        <input type="text" inputmode="numeric" placeholder="请输入您的CPF(巴西税务识别号码)">
+      </div>
+
+      <!-- 提交 -->
+      <button class="submit-btn">立即提现</button>
+    </div>
+
+    <!-- 底部导航 -->
+    <div class="tabbar">
+      <div class="tab"><span class="ic">🏠</span>首页</div>
+      <div class="tab"><span class="ic">🎁</span>优惠</div>
+      <div class="tab center"><span class="ic">👥</span>邀请</div>
+      <div class="tab active"><span class="ic">💵</span>取款</div>
+      <div class="tab"><span class="ic">🧑</span>我的</div>
+    </div>
+  </div>
+
+  <script>
+    function switchMethod(method) {
+      document.querySelectorAll('.method-btn').forEach(function(b){
+        b.classList.toggle('active', b.dataset.method === method);
+      });
+      // PHONE 方式在姓名与CPF之间显示手机号字段；CPF方式隐藏
+      document.getElementById('field-phone').classList.toggle('hidden', method !== 'phone');
+    }
+  </script>
+</body>
+</html>
