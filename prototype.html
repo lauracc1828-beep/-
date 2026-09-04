@@ -640,6 +640,15 @@ select.fs.ph{color:#bfbfbf}
   <div class="menu-item" onclick="toggleMenu(this,'')"><div class="menu-item-left"><span class="menu-icon">💰</span>商户财务管理</div><span class="arrow">›</span></div>
   <div class="menu-item" onclick="toggleMenu(this,'')"><div class="menu-item-left"><span class="menu-icon">📊</span>报表查询</div><span class="arrow">›</span></div>
   <div class="menu-item" onclick="toggleMenu(this,'')"><div class="menu-item-left"><span class="menu-icon">🤝</span>代理中心(无限极差)</div><span class="arrow">›</span></div>
+  <!-- 商户财务配置 -->
+  <div class="menu-item" id="menu-finance" onclick="toggleMenu(this,'sub-finance')"><div class="menu-item-left"><span class="menu-icon">🗂️</span>商户财务配置</div><span class="arrow">›</span></div>
+  <div class="submenu" id="sub-finance" style="display:none">
+    <div class="submenu-item disabled">支付管理</div>
+    <div class="submenu-item disabled">支付方式管理</div>
+    <div class="submenu-item disabled">充值返现设置</div>
+    <div class="submenu-item disabled">代付商户管理</div>
+    <div class="submenu-item" id="si-withdraw" onclick="switchPage('withdraw',this)">提现管理</div>
+  </div>
   <div class="menu-item" onclick="toggleMenu(this,'')"><div class="menu-item-left"><span class="menu-icon">💬</span>消息管理</div><span class="arrow">›</span></div>
   <!-- 福利中心 -->
   <div class="menu-item" id="menu-welfare" onclick="toggleMenu(this,'sub-welfare')"><div class="menu-item-left"><span class="menu-icon">🎁</span>福利中心</div><span class="arrow">›</span></div>
@@ -1159,6 +1168,101 @@ select.fs.ph{color:#bfbfbf}
       </div>
     </div>
 
+    <!-- PAGE: WITHDRAW (提现管理 · 提款方式配置) -->
+    <div id="pg-withdraw" style="display:none">
+      <div class="wm-tabs">
+        <div class="wm-tab" data-p="wm-p-channel" onclick="wmTab(this)">提现通道配置</div>
+        <div class="wm-tab active" data-p="wm-p-method" onclick="wmTab(this)">提款方式配置</div>
+        <div class="wm-tab" data-p="wm-p-cond" onclick="wmTab(this)">提现条件配置</div>
+        <div class="wm-tab" data-p="wm-p-level" onclick="wmTab(this)">提现等级配置</div>
+        <div class="wm-tab" data-p="wm-p-other" onclick="wmTab(this)">其他提现配置</div>
+      </div>
+      <div class="wm-panel hidden" id="wm-p-channel"><div class="wm-ph">提现通道配置（现有功能，非本次范围）</div></div>
+      <div class="wm-panel" id="wm-p-method">
+        <div class="table-wrap"><div class="table-scroll">
+          <table>
+            <thead><tr>
+              <th style="width:20%">提款方式</th><th style="width:15%">CODE</th><th style="width:15%">状态</th><th style="width:22%">解锁条件</th><th style="width:12%">排序</th><th style="width:16%">操作</th>
+            </tr></thead>
+            <tbody id="wm-tbody"></tbody>
+          </table>
+        </div></div>
+        <div class="pagination">
+          <div class="pg-info">共 <b>2</b> 条数据</div>
+          <div class="pg-controls"><div class="pg-btn active">1</div><select class="pg-size"><option>50 条/页</option><option>20 条/页</option><option>100 条/页</option></select></div>
+        </div>
+      </div>
+      <div class="wm-panel hidden" id="wm-p-cond"><div class="wm-ph">提现条件配置（现有功能，非本次范围）</div></div>
+      <div class="wm-panel hidden" id="wm-p-level"><div class="wm-ph">提现等级配置（现有功能，非本次范围）</div></div>
+      <div class="wm-panel hidden" id="wm-p-other"><div class="wm-ph">其他提现配置（现有功能，非本次范围）</div></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- 提款方式配置 · scoped styles -->
+<style>
+#pg-withdraw .wm-tabs{background:#fff;padding:0 20px;border-bottom:1px solid #f0f0f0;display:flex;align-items:center;border-radius:6px 6px 0 0}
+#pg-withdraw .wm-tab{padding:13px 0;font-size:14px;font-weight:600;color:#595959;cursor:pointer;border-bottom:2px solid transparent;margin-right:28px;user-select:none;white-space:nowrap;transition:color .15s}
+#pg-withdraw .wm-tab:hover{color:#0961BD}
+#pg-withdraw .wm-tab.active{color:#0961BD;border-bottom-color:#0961BD}
+#pg-withdraw .wm-panel{background:#fff;border-radius:0 0 6px 6px;padding:20px}
+#pg-withdraw .wm-panel.hidden{display:none}
+#pg-withdraw .wm-ph{color:#bbb;font-size:14px;text-align:center;padding:110px 0;border:1px dashed #e8e8e8;border-radius:6px;background:#fafafa}
+#pg-withdraw table{width:100%;border-collapse:collapse;font-size:13px}
+#pg-withdraw th{background:#fafafa;padding:12px 14px;text-align:center;font-weight:600;color:#595959;border-bottom:1px solid #f0f0f0}
+#pg-withdraw td{padding:14px;border-bottom:1px solid #f5f5f5;text-align:center;vertical-align:middle;color:#333}
+#pg-withdraw tbody tr:last-child td{border-bottom:none}
+#pg-withdraw tbody tr:hover td{background:#fafcff}
+#pg-withdraw .wm-badge{display:inline-block;padding:1px 9px;border-radius:10px;font-size:12px;background:#f0f2f5;color:#595959;border:1px solid #e0e4ea}
+#pg-withdraw .wm-edit{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border:1px solid #d9d9d9;border-radius:4px;color:#0961BD;cursor:pointer;background:#fff}
+#pg-withdraw .wm-edit:hover{border-color:#0961BD;background:#eaf3fc}
+#pg-withdraw .sw.locked .sw-track{cursor:not-allowed;opacity:.7}
+/* edit modal */
+#wm-edit .modal{width:760px}
+#wm-edit .fl{width:132px;white-space:nowrap}
+#wm-edit .sw.locked .sw-track{cursor:not-allowed;opacity:.7}
+#wm-edit .wm-cond{display:flex;align-items:center;gap:16px;height:34px;flex-wrap:nowrap;white-space:nowrap}
+#wm-edit .wm-cond label{display:inline-flex;align-items:center;gap:5px;cursor:pointer;font-size:13px;color:#333}
+#wm-edit .wm-cond label.disabled{color:#bbb;cursor:not-allowed}
+#wm-edit .wm-cond input{accent-color:#0961BD;cursor:pointer;width:15px;height:15px}
+#wm-edit .fin.err{border-color:#ff4d4f}
+#wm-edit .fin.err:focus{box-shadow:0 0 0 2px rgba(255,77,79,.12)}
+#wm-edit .hint{font-size:12px;color:#ff4d4f;margin-top:6px}
+#wm-edit .wm-info{position:relative;display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;border:1px solid #c0c0c0;color:#909090;font-size:11px;font-style:normal;cursor:help;margin-left:4px;vertical-align:middle}
+#wm-edit .wm-info:hover .wm-tip{display:block}
+#wm-edit .wm-tip{display:none;position:absolute;bottom:calc(100% + 14px);left:-10px;width:600px;background:#303030;color:#fff;font-size:12px;line-height:1.95;padding:14px 18px;border-radius:8px;z-index:30;text-align:left;box-shadow:0 6px 26px rgba(0,0,0,.3);white-space:normal;font-weight:400}
+#wm-edit .wm-tip::after{content:'';position:absolute;left:14px;bottom:-8px;width:0;height:0;border:8px solid transparent;border-top-color:#303030;border-bottom:0}
+#wm-edit #wm-accum-row.on{display:flex}
+</style>
+
+<!-- MODAL: 提款方式编辑 -->
+<div class="overlay" id="wm-edit">
+  <div class="modal">
+    <div class="mh"><span class="mt">编辑</span><span class="mc" onclick="wmClose()">×</span></div>
+    <div class="mb">
+      <div class="fi"><div class="fl">提款方式：</div><div class="fc"><input class="fin" id="wm-name" disabled></div></div>
+      <div class="fi"><div class="fl">CODE：</div><div class="fc"><input class="fin" id="wm-code" disabled></div></div>
+      <div class="fi"><div class="fl">排序：</div><div class="fc"><input class="fin" id="wm-sort" type="number" min="0" step="1"></div></div>
+      <div class="fi"><div class="fl">状态：</div><div class="fc">
+        <span class="sw" id="wm-sw"><input type="checkbox" class="sw-input" id="wm-status"><span class="sw-track" onclick="wmToggle(event)"></span><span class="sw-knob"></span></span>
+      </div></div>
+      <div class="fi"><div class="fl">解锁条件：<span class="wm-info">i<span class="wm-tip">不限制：表示该提现方式不受限制；<br>首充：表示用户须完成首充，方可显示并使用该提现方式；<br>充值2次：表示用户须完成2次充值，方可显示并使用该提现方式；<br>充值3次：表示用户须完成3次充值，方可显示并使用该提现方式；<br>CPF首提成功：表示用户须至少使用CPF 完成一次成功提现，才能显示并使用该提现方式。<br>已累计充值：用户在指定商户或平台下的充值成功金额总和（不包括退款或失败交易）。</span></span></div>
+        <div class="fc"><div class="wm-cond" id="wm-cond">
+          <label><input type="radio" name="wm-c" value="none" onclick="wmCond()">不限制</label>
+          <label><input type="radio" name="wm-c" value="first" onclick="wmCond()">首充</label>
+          <label><input type="radio" name="wm-c" value="rc2" onclick="wmCond()">充值2次</label>
+          <label><input type="radio" name="wm-c" value="rc3" onclick="wmCond()">充值3次</label>
+          <label><input type="radio" name="wm-c" value="cpf1st" onclick="wmCond()">CPF首提成功</label>
+          <label><input type="radio" name="wm-c" value="accum" onclick="wmCond()">已累计充值</label>
+        </div></div>
+      </div>
+      <div class="fi cond" id="wm-accum-row"><div class="fl req">累计充值金额：</div><div class="fc">
+        <input class="fin" id="wm-accum" type="number" min="1" max="1000" placeholder="输入金额数值大于0，最大数值为1000" oninput="wmAccumCheck(false)" onblur="wmAccumCheck(true)">
+        <div class="hint" id="wm-accum-hint" style="display:none"></div>
+      </div></div>
+    </div>
+    <div class="mf"><button class="btn btn-blue" onclick="wmSave()">确定</button></div>
   </div>
 </div>
 
@@ -3396,7 +3500,7 @@ function guideAddrChange(){
 const _origSwitchPage = switchPage;
 function switchPage(page, el){
   // hide all pages
-  ['pg-channel','pg-effect','pg-guide','pg-activity-list','pg-appstore','pg-account','pg-mafia'].forEach(function(id){
+  ['pg-channel','pg-effect','pg-guide','pg-activity-list','pg-appstore','pg-account','pg-mafia','pg-withdraw'].forEach(function(id){
     var p=document.getElementById(id); if(p) p.style.display='none';
   });
   // show requested
@@ -3415,9 +3519,10 @@ function switchPage(page, el){
     'activity-list':'福利中心 / 活动列表',
     'appstore':'推广渠道管理 / 仿应用商店',
     'account':'系统管理 / 账号管理',
-    'mafia':'系统管理 / 马甲包管理'
+    'mafia':'系统管理 / 马甲包管理',
+    'withdraw':'商户财务配置 / 提现管理'
   };
-  const bcSec = {'channel':'DD后台管理','effect':'DD后台管理','guide':'DD后台管理','activity-list':'DD后台管理','appstore':'DD后台管理','account':'DD后台管理','mafia':'DD后台管理'};
+  const bcSec = {'channel':'DD后台管理','effect':'DD后台管理','guide':'DD后台管理','activity-list':'DD后台管理','appstore':'DD后台管理','account':'DD后台管理','mafia':'DD后台管理','withdraw':'DD后台管理'};
   const bcEl = document.getElementById('breadcrumb');
   if(bcEl){
     const txt = document.getElementById('bc-text');
@@ -3427,6 +3532,7 @@ function switchPage(page, el){
   }
   if(page==='appstore') asRenderTable();
   if(page==='account') acctRender();
+  if(page==='withdraw') wmRender();
 }
 
 // ─── 马甲包管理：本地上传（一期）───
@@ -5830,6 +5936,95 @@ function asCommentSave(){
   toast('保存成功');
   asRenderTable();
 }
+
+// ─── 提款方式配置 ───
+(function(){
+  const COND={none:'不限制',first:'首充',rc2:'充值2次',rc3:'充值3次',cpf1st:'CPF首提成功',accum:'已累计充值'};
+  // 初始默认：解锁条件=不限制，排序=0；CPF 为固定兜底方式（状态锁定开启、解锁条件锁定不限制）
+  let wm=[
+    {name:'CPF',code:'CPF',status:true,cond:'none',accum:'',sort:0,locked:true},
+    {name:'PHONE',code:'PHONE',status:true,cond:'none',accum:'',sort:0,locked:false}
+  ];
+  let idx=-1;
+  window.wmRender=function(){
+    const rows=wm.map((m,i)=>({m,i})).sort((a,b)=>b.m.sort-a.m.sort);
+    document.getElementById('wm-tbody').innerHTML=rows.map(function(o){
+      const m=o.m,i=o.i;
+      const c=m.cond==='accum'?('已累计充值 R$ '+(m.accum||0)):COND[m.cond];
+      const lock=m.locked?'locked':'';
+      const clk=m.locked?'':('onclick="return wmListToggle(event,'+i+')"');
+      return '<tr>'+
+        '<td>'+m.name+'</td><td>'+m.code+'</td>'+
+        '<td><span class="sw '+lock+'"><input type="checkbox" class="sw-input" '+(m.status?'checked':'')+' disabled><span class="sw-track" '+clk+'></span><span class="sw-knob"></span></span></td>'+
+        '<td><span class="wm-badge">'+c+'</span></td>'+
+        '<td>'+m.sort+'</td>'+
+        '<td><span class="wm-edit" title="编辑" onclick="wmOpen('+i+')">✎</span></td>'+
+      '</tr>';
+    }).join('');
+  };
+  window.wmListToggle=function(e,i){e.preventDefault();wm[i].status=!wm[i].status;wmRender();return false;};
+  window.wmTab=function(el){
+    el.parentNode.querySelectorAll('.wm-tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('#pg-withdraw .wm-panel').forEach(p=>p.classList.add('hidden'));
+    el.classList.add('active');document.getElementById(el.dataset.p).classList.remove('hidden');
+  };
+  window.wmOpen=function(i){
+    idx=i;const m=wm[i];
+    document.getElementById('wm-name').value=m.name;
+    document.getElementById('wm-code').value=m.code;
+    document.getElementById('wm-sort').value=m.sort;
+    document.getElementById('wm-status').checked=m.status;
+    document.querySelectorAll('input[name=wm-c]').forEach(r=>r.checked=(r.value===m.cond));
+    document.getElementById('wm-accum').value=(m.accum!==''&&m.accum!=null)?m.accum:'0';
+    wmClearErr();
+    document.getElementById('wm-sw').classList.toggle('locked',m.locked);
+    document.querySelectorAll('input[name=wm-c]').forEach(function(r){r.disabled=m.locked;r.parentNode.classList.toggle('disabled',m.locked);});
+    wmCond();
+    document.getElementById('wm-edit').classList.add('show');
+  };
+  window.wmClose=function(){document.getElementById('wm-edit').classList.remove('show');};
+  window.wmToggle=function(e){
+    const sw=document.getElementById('wm-sw');
+    if(sw.classList.contains('locked')){if(e)e.preventDefault();return false;}
+    const cb=document.getElementById('wm-status');cb.checked=!cb.checked;return false;
+  };
+  window.wmCond=function(){
+    const sel=document.querySelector('input[name=wm-c]:checked');
+    const v=sel?sel.value:'none';
+    const on=v==='accum';
+    document.getElementById('wm-accum-row').classList.toggle('on',on);
+    if(on){const inp=document.getElementById('wm-accum');if(inp.value.trim()==='')inp.value='0';}
+    wmClearErr();
+  };
+  window.wmAccumCheck=function(isBlur){
+    const inp=document.getElementById('wm-accum'),hint=document.getElementById('wm-accum-hint');
+    const setErr=function(m){inp.classList.add('err');hint.textContent=m;hint.style.display='block';};
+    const val=inp.value.trim();
+    if(val===''){ if(isBlur){setErr('请配置正确金额数值');} else {wmClearErr();} return false; }
+    const num=parseFloat(val);
+    if(num>1000){setErr('请输入小于等于1000的数值');return false;}
+    if(!(num>=1)){setErr('请输入大于等于1的数值');return false;}
+    wmClearErr();return true;
+  };
+  function wmClearErr(){document.getElementById('wm-accum').classList.remove('err');document.getElementById('wm-accum-hint').style.display='none';}
+  window.wmSave=function(){
+    const m=wm[idx];
+    const cond=document.querySelector('input[name=wm-c]:checked').value;
+    const inp=document.getElementById('wm-accum'),hint=document.getElementById('wm-accum-hint');
+    if(cond==='accum'){
+      const val=inp.value.trim();
+      if(val===''){inp.classList.add('err');hint.textContent='请配置正确金额数值';hint.style.display='block';toast('累计充值金额必须大于0',true);return;}
+      const v=parseFloat(val);
+      if(v>1000){inp.classList.add('err');hint.textContent='请输入小于等于1000的数值';hint.style.display='block';toast('累计充值金额必须小于等于1000',true);return;}
+      if(!(v>=1)){inp.classList.add('err');hint.textContent='请输入大于等于1的数值';hint.style.display='block';toast('累计充值金额必须大于0',true);return;}
+      m.accum=v;
+    }else{m.accum='';}
+    if(!m.locked){m.status=document.getElementById('wm-status').checked;m.cond=cond;}
+    m.sort=parseInt(document.getElementById('wm-sort').value||'0',10);
+    wmRender();wmClose();toast('保存成功');
+  };
+  wmRender();
+})();
 
 </script>
 </body>
