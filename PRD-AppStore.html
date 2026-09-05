@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PRD · 仿应用商店模块 v1.1</title>
+<title>PRD · 仿应用商店模块 v1.5</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;background:#f5f6fa;color:#333;font-size:14px;line-height:1.7}
@@ -53,9 +53,9 @@ code{background:#f2f4f7;border-radius:4px;padding:1px 6px;font-size:12px;color:#
 
 <h1>仿应用商店模块 · PRD</h1>
 <div class="meta">
-  <span>📄 版本：v1.3</span>
+  <span>📄 版本：v1.5</span>
   <span>✏️ 作者：Laura</span>
-  <span>📅 更新日期：2026-07-03</span>
+  <span>📅 更新日期：2026-09-05</span>
 </div>
 
 <!-- TOC -->
@@ -217,11 +217,11 @@ code{background:#f2f4f7;border-radius:4px;padding:1px 6px;font-size:12px;color:#
 <h2>四、下载与安装交互</h2>
 
 <h3 id="i-rule">4.1 交互总则</h3>
-<p>用户通过带参推广链接 / 域名管理配置的落地域名进入本模块的下载页（仿谷歌页 / 仿苹果页）后，页面仅提供下载安装能力。点击 CTA 或页面内各下载触发点后，系统依据【用户设备类型】与【后台安装 / 下载配置（安装类型、安装包等）】触发对应安装流程：安卓设备按安卓安装类型（PWA / APK / PWA+APK）流转，iOS 设备按苹果安装方式（保存桌面）流转，并结合浏览器环境（Safari / 非 Safari、是否支持 PWA）进入相应分支。</p>
+<p>用户通过带参推广链接 / 域名管理配置的落地域名进入本模块的下载页（仿谷歌页 / 仿苹果页）后，页面仅提供下载安装能力。点击 CTA 或页面内各下载触发点后，系统依据【用户设备类型】与【后台安装 / 下载配置（安装类型、安装包等）】触发对应安装流程：安卓设备按安卓安装类型（PWA / APK / PWA+APK）流转，iOS 设备按苹果安装方式（保存桌面）流转，并结合浏览器环境（Safari / 非 Safari、是否支持 PWA）进入相应分支。<span class="chg">安卓设备加载时即判定浏览器：Chrome→正常展示页面并按下方流程下载；非 Chrome→页面加载即唤起 Chrome（支持→手机系统自带跳转确认后转 Chrome；不支持→就地打开本页正常下载）。iOS 不在本次调整范围，维持原逻辑。</span></p>
 <p><strong>统一触发点</strong>：CTA 按钮，以及数据安全「查看详情」、评论「有用/没用」、「查看全部评价」、相似游戏标题箭头、底部「在 App Store 下载」按钮，点击后均触发同一套下载流程。</p>
 <table>
   <tr><th>设备</th><th>进入页面时</th><th>点击 CTA / 触发点后</th></tr>
-  <tr><td>安卓</td><td>正常展示页面</td><td>下载确认弹框（加载状态 → 就绪状态，见 4.2）→ 按安卓安装类型走后续（见 4.3）</td></tr>
+  <tr><td>安卓</td><td><span class="chg"><strong>加载时即判定浏览器</strong>：Chrome→正常展示页面；非 Chrome→加载即唤起 Chrome（支持→手机自带跳转确认后转 Chrome；不支持→就地打开本页正常下载）</span></td><td>（Chrome / 非 Chrome 就地）下载确认弹框（加载状态 → 就绪状态，见 4.2）→ 按安卓安装类型走后续（见 4.3）</td></tr>
   <tr><td>iOS</td><td><strong>加载时即判定浏览器</strong>：若非 Safari，页面加载同步弹出复制链接弹框</td><td>下载确认弹框（加载状态 → 就绪状态，见 4.2）→ 「添加到主屏幕」说明浮层（见 4.4）</td></tr>
 </table>
 
@@ -233,9 +233,11 @@ code{background:#f2f4f7;border-radius:4px;padding:1px 6px;font-size:12px;color:#
   <tr><td>② 加载状态</td><td>圆弧进度动画（0%→100%）</td><td>点击 CTA / 触发点后进入，表示极速安装准备；达 100% 后切换为就绪状态</td></tr>
   <tr><td>③ 下载状态<br>（仅安卓 APK）</td><td>「安装」按钮区替换为线形进度条（0%→100%）</td><td>就绪状态下点击「安装」并进入 APK 下载时进入；满格后恢复为绿色「安装」按钮，并自动完成 APK 下载</td></tr>
 </table>
-<p><strong>状态流转</strong>：点击 CTA → ② 加载状态 → ① 就绪状态 →（安卓 APK）③ 下载状态 → ① 就绪状态。下载状态仅出现在两个商店页的安卓设备 APK 下载场景；全过程弹框常驻不关闭（见 4.5），APK 下载成功不额外弹出提示浮层。</p>
+<p><strong>状态流转</strong>：点击 CTA → ② 加载状态 → ① 就绪状态 → 点击「安装」<span class="chg">→ 尝试唤起已装应用（成功则打开，失败再进入安装流程，见 4.3）</span> →（安卓 APK）③ 下载状态 → ① 就绪状态。下载状态仅出现在两个商店页的安卓设备 APK 下载场景；全过程弹框常驻不关闭（见 4.5），APK 下载成功不额外弹出提示浮层。</p>
 
 <h3 id="i-android">4.3 安卓设备安装流程（就绪状态点击「安装」后）</h3>
+<div class="info"><span class="chg">前置（本次调整）：本流程为 Chrome 打开、或非 Chrome 无法唤起 Chrome 时的「就地安装机制」；非 Chrome 且可唤起时，安装在唤起后的 Chrome 中完成（见 4.1）。</span></div>
+<div class="note"><span class="chg"><strong>已安装唤起（二期新增）：</strong>就绪状态点击「安装」后，系统<strong>先尝试唤起</strong>该渠道对应的已安装应用（PWA / APK；PWA+APK 按优先级）：唤起成功则直接打开已装 App，本页仅做唤起、<strong>不涉及登录态</strong>（下载页无登录）；唤起失败（未安装）再按下表安装类型进入原下载 / 安装流程。</span></div>
 <table>
   <tr><th>安装类型 / 条件</th><th>交互</th></tr>
   <tr><td>纯 PWA · 支持 PWA</td><td>弹出 PWA 系统安装提示（带遮罩，见 4.5）；确认→安装 PWA，取消→关闭提示</td></tr>
@@ -267,7 +269,7 @@ code{background:#f2f4f7;border-radius:4px;padding:1px 6px;font-size:12px;color:#
 <div class="section-card" id="flowchart">
 <h2>五、交互逻辑流程图</h2>
 <div class="flow-wrap">
-<svg viewBox="0 0 1000 620" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:1000px;font-family:-apple-system,'PingFang SC',sans-serif;font-size:12px">
+<svg viewBox="0 0 1000 790" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:1000px;font-family:-apple-system,'PingFang SC',sans-serif;font-size:12px">
   <defs>
     <marker id="a1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#0961BD"/></marker>
     <marker id="a2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#888"/></marker>
@@ -285,33 +287,66 @@ code{background:#f2f4f7;border-radius:4px;padding:1px 6px;font-size:12px;color:#
 
   <!-- ===== ANDROID (left, cx=250) ===== -->
   <line x1="400" y1="96" x2="250" y2="96" stroke="#0961BD" stroke-width="1.5"/>
-  <line x1="250" y1="96" x2="250" y2="150" stroke="#0961BD" stroke-width="1.5" marker-end="url(#a1)"/>
+  <line x1="250" y1="96" x2="250" y2="118" stroke="#0961BD" stroke-width="1.5" marker-end="url(#a1)"/>
   <text x="325" y="88" text-anchor="middle" fill="#003a8c" font-size="11">安卓</text>
 
-  <rect x="140" y="150" width="220" height="34" rx="6" fill="#fff7e6" stroke="#ffd591"/>
-  <text x="250" y="171" text-anchor="middle" fill="#7d4f00">点 CTA / 各触发点</text>
-  <line x1="250" y1="184" x2="250" y2="204" stroke="#0961BD" stroke-width="1.5" marker-end="url(#a1)"/>
+  <!-- 加载判定浏览器（本次调整） -->
+  <polygon points="250,118 360,142 250,166 140,142" fill="#e6f4ff" stroke="#91caff" stroke-width="1.5"/>
+  <text x="250" y="139" text-anchor="middle" fill="#003a8c" font-weight="600" font-size="10.5">加载判定浏览器</text>
+  <text x="250" y="153" text-anchor="middle" fill="#003a8c" font-size="10">Chrome？</text>
+  <!-- 非Chrome：加载即唤起Chrome -->
+  <line x1="140" y1="142" x2="70" y2="142" stroke="#888" stroke-width="1.3" marker-end="url(#a2)"/>
+  <text x="105" y="134" text-anchor="middle" fill="#888" font-size="10">非Chrome</text>
+  <line x1="70" y1="142" x2="70" y2="248" stroke="#888" stroke-width="1.3" marker-end="url(#a2)"/>
+  <rect x="0" y="248" width="118" height="86" rx="6" fill="#fafafa" stroke="#d9d9d9"/>
+  <text x="59" y="266" text-anchor="middle" fill="#595959" font-size="9">加载即唤起Chrome</text>
+  <text x="59" y="284" text-anchor="middle" fill="#595959" font-size="8.5">支持→手机自带</text>
+  <text x="59" y="296" text-anchor="middle" fill="#595959" font-size="8.5">跳转确认后转Chrome</text>
+  <text x="59" y="314" text-anchor="middle" fill="#595959" font-size="8.5">不支持→就地打开</text>
+  <text x="59" y="326" text-anchor="middle" fill="#595959" font-size="8.5">本页正常下载</text>
 
-  <rect x="120" y="204" width="260" height="38" rx="6" fill="#fff" stroke="#91caff"/>
-  <text x="250" y="228" text-anchor="middle" fill="#003a8c">下载确认弹框（加载状态）</text>
-  <line x1="250" y1="242" x2="250" y2="262" stroke="#0961BD" stroke-width="1.5" marker-end="url(#a1)"/>
+  <!-- Chrome：向下走原流程 -->
+  <line x1="250" y1="166" x2="250" y2="188" stroke="#0961BD" stroke-width="1.5" marker-end="url(#a1)"/>
+  <text x="266" y="182" fill="#003a8c" font-size="10">Chrome</text>
 
-  <rect x="150" y="262" width="200" height="34" rx="6" fill="#f6ffed" stroke="#b7eb8f"/>
-  <text x="250" y="283" text-anchor="middle" fill="#135200">就绪状态：点「安装」</text>
-  <line x1="250" y1="296" x2="250" y2="318" stroke="#0961BD" stroke-width="1.5" marker-end="url(#a1)"/>
+  <rect x="140" y="188" width="220" height="34" rx="6" fill="#fff7e6" stroke="#ffd591"/>
+  <text x="250" y="209" text-anchor="middle" fill="#7d4f00">点 CTA / 各触发点</text>
+  <line x1="250" y1="222" x2="250" y2="240" stroke="#0961BD" stroke-width="1.5" marker-end="url(#a1)"/>
 
-  <polygon points="250,318 360,348 250,378 140,348" fill="#e6f4ff" stroke="#91caff" stroke-width="1.5"/>
-  <text x="250" y="345" text-anchor="middle" fill="#003a8c" font-weight="600" font-size="11">安卓安装类型？</text>
-  <text x="250" y="360" text-anchor="middle" fill="#003a8c" font-size="10">PWA / APK / PWA+APK</text>
-  <line x1="250" y1="378" x2="250" y2="400" stroke="#0961BD" stroke-width="1.5" marker-end="url(#a1)"/>
+  <rect x="120" y="240" width="260" height="38" rx="6" fill="#fff" stroke="#91caff"/>
+  <text x="250" y="264" text-anchor="middle" fill="#003a8c">下载确认弹框（加载状态）</text>
+  <line x1="250" y1="278" x2="250" y2="296" stroke="#0961BD" stroke-width="1.5" marker-end="url(#a1)"/>
 
-  <rect x="30" y="400" width="440" height="120" rx="6" fill="#f8fafc" stroke="#cbd5e1"/>
-  <text x="46" y="424" fill="#334155" font-size="11.5">• 纯 APK / PWA+APK(不支持 PWA)</text>
-  <text x="58" y="440" fill="#64748b" font-size="11">→ 下载状态：线形进度 0→100%，自动下载 APK</text>
-  <text x="46" y="464" fill="#334155" font-size="11.5">• 纯 PWA(支持) / PWA+APK(支持)</text>
-  <text x="58" y="480" fill="#64748b" font-size="11">→ PWA 系统提示（带遮罩）</text>
-  <text x="58" y="495" fill="#64748b" font-size="11">　PWA+APK 取消 → APK 确认 → 下载状态</text>
-  <text x="46" y="513" fill="#334155" font-size="11.5">• 纯 PWA(不支持) → Chrome 复制链接弹框</text>
+  <rect x="150" y="296" width="200" height="34" rx="6" fill="#f6ffed" stroke="#b7eb8f"/>
+  <text x="250" y="317" text-anchor="middle" fill="#135200">就绪状态：点「安装」</text>
+  <line x1="250" y1="330" x2="250" y2="348" stroke="#0961BD" stroke-width="1.5" marker-end="url(#a1)"/>
+
+  <!-- 已安装唤起（二期新增） -->
+  <polygon points="250,348 358,382 250,416 142,382" fill="#f9f0ff" stroke="#d3adf7" stroke-width="1.5"/>
+  <text x="250" y="378" text-anchor="middle" fill="#531dab" font-weight="600" font-size="10.5">尝试唤起已装应用</text>
+  <text x="250" y="393" text-anchor="middle" fill="#531dab" font-size="10">唤起成功？</text>
+
+  <line x1="358" y1="382" x2="392" y2="382" stroke="#0961BD" stroke-width="1.5" marker-end="url(#a1)"/>
+  <text x="375" y="374" text-anchor="middle" fill="#389e0d" font-size="10">成功</text>
+  <rect x="392" y="358" width="184" height="48" rx="6" fill="#f6ffed" stroke="#b7eb8f"/>
+  <text x="484" y="378" text-anchor="middle" fill="#135200" font-size="11">直接打开已装 App</text>
+  <text x="484" y="394" text-anchor="middle" fill="#237804" font-size="10">下载页仅唤起，不涉登录态</text>
+
+  <line x1="250" y1="416" x2="250" y2="436" stroke="#0961BD" stroke-width="1.5" marker-end="url(#a1)"/>
+  <text x="292" y="430" text-anchor="middle" fill="#d46b08" font-size="10">失败/未装</text>
+
+  <polygon points="250,436 360,466 250,496 140,466" fill="#e6f4ff" stroke="#91caff" stroke-width="1.5"/>
+  <text x="250" y="463" text-anchor="middle" fill="#003a8c" font-weight="600" font-size="11">安卓安装类型？</text>
+  <text x="250" y="478" text-anchor="middle" fill="#003a8c" font-size="10">PWA / APK / PWA+APK</text>
+  <line x1="250" y1="496" x2="250" y2="518" stroke="#0961BD" stroke-width="1.5" marker-end="url(#a1)"/>
+
+  <rect x="30" y="518" width="440" height="120" rx="6" fill="#f8fafc" stroke="#cbd5e1"/>
+  <text x="46" y="542" fill="#334155" font-size="11.5">• 纯 APK / PWA+APK(不支持 PWA)</text>
+  <text x="58" y="558" fill="#64748b" font-size="11">→ 下载状态：线形进度 0→100%，自动下载 APK</text>
+  <text x="46" y="582" fill="#334155" font-size="11.5">• 纯 PWA(支持) / PWA+APK(支持)</text>
+  <text x="58" y="598" fill="#64748b" font-size="11">→ PWA 系统提示（带遮罩）</text>
+  <text x="58" y="613" fill="#64748b" font-size="11">　PWA+APK 取消 → APK 确认 → 下载状态</text>
+  <text x="46" y="631" fill="#334155" font-size="11.5">• 纯 PWA(不支持) → Chrome 复制链接弹框</text>
 
   <!-- ===== iOS (right, cx=750) ===== -->
   <line x1="600" y1="96" x2="750" y2="96" stroke="#0961BD" stroke-width="1.5"/>
@@ -344,9 +379,9 @@ code{background:#f2f4f7;border-radius:4px;padding:1px 6px;font-size:12px;color:#
   <text x="750" y="389" text-anchor="middle" fill="#135200" font-size="11">（3 步引导）</text>
 
   <!-- note -->
-  <rect x="210" y="556" width="580" height="46" rx="6" fill="#eef1ff" stroke="#c7d2fe"/>
-  <text x="500" y="576" text-anchor="middle" fill="#3730a3" font-size="11">下载确认弹框弹出后始终常驻；PWA / APK / 复制链接弹框带遮罩，</text>
-  <text x="500" y="592" text-anchor="middle" fill="#3730a3" font-size="11">盖住页面及下载确认弹框，位于最上层</text>
+  <rect x="210" y="712" width="580" height="46" rx="6" fill="#eef1ff" stroke="#c7d2fe"/>
+  <text x="500" y="732" text-anchor="middle" fill="#3730a3" font-size="11">下载确认弹框弹出后始终常驻；PWA / APK / 复制链接弹框带遮罩，</text>
+  <text x="500" y="748" text-anchor="middle" fill="#3730a3" font-size="11">盖住页面及下载确认弹框，位于最上层</text>
 </svg>
 </div>
 </div>
@@ -466,7 +501,7 @@ code{background:#f2f4f7;border-radius:4px;padding:1px 6px;font-size:12px;color:#
 <figure style="margin:0 0 24px"><img src="仿应用商店/Group%205.png" alt="模板样式配置项截图 Group 5" style="width:100%;max-width:840px;display:block;border:1px solid #e8e8e8;border-radius:6px"><figcaption style="color:#888;font-size:12px;margin-top:6px">Group 5</figcaption></figure>
 <figure style="margin:0 0 8px"><img src="仿应用商店/Group%206.png" alt="模板样式配置项截图 Group 6" style="width:100%;max-width:840px;display:block;border:1px solid #e8e8e8;border-radius:6px"><figcaption style="color:#888;font-size:12px;margin-top:6px">Group 6</figcaption></figure>
 
-<p style="text-align:center;color:#bbb;font-size:12px;margin-top:32px;padding-bottom:20px">仿应用商店模块 PRD v1.3 · 2026-07-03</p>
+<p style="text-align:center;color:#bbb;font-size:12px;margin-top:32px;padding-bottom:20px">仿应用商店模块 PRD v1.5 · 2026-09-05</p>
 </div>
 </div>
 </body>

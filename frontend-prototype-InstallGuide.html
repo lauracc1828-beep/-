@@ -1012,6 +1012,32 @@ body{background:#0c0919;min-height:100vh;display:flex;align-items:flex-start;jus
     </div>
   </div>
 
+  <!-- 手机系统自带：唤起 Chrome 跳转确认弹窗（原型模拟；实际为手机系统/来源浏览器自带，非本平台）-->
+  <style>
+  .wake-mask{position:absolute;inset:0;background:rgba(0,0,0,.5);z-index:60;display:none;align-items:center;justify-content:center;padding:30px}
+  .wake-mask.on{display:flex}
+  .wake-box{background:#fff;border-radius:14px;width:100%;max-width:300px;padding:20px 18px;box-shadow:0 10px 40px rgba(0,0,0,.3)}
+  .wake-sys{display:inline-block;font-size:10px;color:#999;background:#f0f0f0;border-radius:6px;padding:2px 8px;margin-bottom:8px}
+  .wake-title{font-size:16px;font-weight:700;color:#1a1a1a;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+  .wake-title img{width:20px;height:20px;object-fit:contain}
+  .wake-desc{font-size:12px;color:#666;line-height:1.6;margin-bottom:16px}
+  .wake-btns{display:flex;gap:10px}
+  .wake-btns button{flex:1;padding:10px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;border:none}
+  .wake-cancel{background:#f0f0f0;color:#666}
+  .wake-ok{background:#0071e3;color:#fff}
+  </style>
+  <div class="wake-mask" id="wakeDlg">
+    <div class="wake-box">
+      <div class="wake-sys">手机系统自带弹窗（原型模拟）</div>
+      <div class="wake-title"><img src="安装引导/chrome.png" alt="">在 Chrome 中打开？</div>
+      <div class="wake-desc">此确认弹窗为<strong>手机系统 / 来源浏览器自带</strong>，样式与是否弹出随机型而定，非本平台页面。确认后进入 Chrome 打开「防封谷歌页」域名商店页完成安装。</div>
+      <div class="wake-btns">
+        <button class="wake-cancel" onclick="closeWake()">取消</button>
+        <button class="wake-ok" onclick="onWakeOpen()">在 Chrome 中打开</button>
+      </div>
+    </div>
+  </div>
+
 </div><!-- /h5-wrap -->
 
 <!-- ══ 控制面板 ══ -->
@@ -1029,6 +1055,20 @@ body{background:#0c0919;min-height:100vh;display:flex;align-items:flex-start;jus
       <div class="cg">
         <button class="cb on" id="dlDev-android" onclick="setDlDev('android')">Android</button>
         <button class="cb" id="dlDev-ios" onclick="setDlDev('ios')">iOS</button>
+      </div>
+    </div>
+    <div class="cs" id="cs-dlChrome">
+      <div class="cl">安卓浏览器</div>
+      <div class="cg">
+        <button class="cb on" id="dlChrome-yes" onclick="setDlChrome(true)">Chrome</button>
+        <button class="cb" id="dlChrome-no" onclick="setDlChrome(false)">非 Chrome</button>
+      </div>
+    </div>
+    <div class="cs" id="cs-dlWake" style="display:none">
+      <div class="cl">能否唤起 Chrome</div>
+      <div class="cg">
+        <button class="cb on" id="dlWake-yes" onclick="setDlWake(true)">支持唤起</button>
+        <button class="cb" id="dlWake-no" onclick="setDlWake(false)">不支持</button>
       </div>
     </div>
     <div class="cs" id="cs-dlType">
@@ -1074,6 +1114,20 @@ body{background:#0c0919;min-height:100vh;display:flex;align-items:flex-start;jus
       <div class="cg">
         <button class="cb on" id="gpDev-android" onclick="setGpDev('android')">Android</button>
         <button class="cb" id="gpDev-ios" onclick="setGpDev('ios')">iOS</button>
+      </div>
+    </div>
+    <div class="cs" id="cs-gpChrome">
+      <div class="cl">安卓浏览器</div>
+      <div class="cg">
+        <button class="cb on" id="gpChrome-yes" onclick="setGpChrome(true)">Chrome</button>
+        <button class="cb" id="gpChrome-no" onclick="setGpChrome(false)">非 Chrome</button>
+      </div>
+    </div>
+    <div class="cs" id="cs-gpWake" style="display:none">
+      <div class="cl">能否唤起 Chrome</div>
+      <div class="cg">
+        <button class="cb on" id="gpWake-yes" onclick="setGpWake(true)">支持唤起</button>
+        <button class="cb" id="gpWake-no" onclick="setGpWake(false)">不支持</button>
       </div>
     </div>
     <div class="cs" id="cs-gpType">
@@ -1134,6 +1188,20 @@ body{background:#0c0919;min-height:100vh;display:flex;align-items:flex-start;jus
         <button class="cb" id="stDev-ios" onclick="setStDev('ios')">iOS</button>
       </div>
     </div>
+    <div class="cs" id="cs-stChrome">
+      <div class="cl">安卓浏览器</div>
+      <div class="cg">
+        <button class="cb on" id="stChrome-yes" onclick="setStChrome(true)">Chrome</button>
+        <button class="cb" id="stChrome-no" onclick="setStChrome(false)">非 Chrome</button>
+      </div>
+    </div>
+    <div class="cs" id="cs-stWake" style="display:none">
+      <div class="cl">能否唤起 Chrome</div>
+      <div class="cg">
+        <button class="cb on" id="stWake-yes" onclick="setStWake(true)">支持唤起</button>
+        <button class="cb" id="stWake-no" onclick="setStWake(false)">不支持</button>
+      </div>
+    </div>
     <div class="cs" id="cs-stType">
       <div class="cl">安装类型（安卓）</div>
       <div class="cg">
@@ -1170,9 +1238,9 @@ const GP_BONUS_AMT = 100;
 
 const S = {
   tab:'dl',
-  dlDev:'android', dlType:'pwa', dlPwa:true, dlBr:'safari',
-  gpContent:'normal', gpDev:'android', gpType:'pwa', gpPwa:true, gpBr:'safari', gpCanClose:false,
-  stPage:'google', stDev:'android', stType:'pwa', stPwa:true, stBr:'safari', stAuth:'standard',
+  dlDev:'android', dlType:'pwa', dlPwa:true, dlBr:'safari', dlChrome:true, dlWake:true,
+  gpContent:'normal', gpDev:'android', gpType:'pwa', gpPwa:true, gpBr:'safari', gpCanClose:false, gpChrome:true, gpWake:true,
+  stPage:'google', stDev:'android', stType:'pwa', stPwa:true, stBr:'safari', stAuth:'standard', stChrome:true, stWake:true,
   storeEntry:'tab',
   origin:null,
 };
@@ -1231,6 +1299,7 @@ function closeAllOverlays(){
   resetStLoad();
   $('stGuide').classList.remove('on');
   $('stGuideMask').classList.remove('on');
+  $('wakeDlg').classList.remove('on');
   hideMask();
   resetGpBtn();
 }
@@ -1284,6 +1353,12 @@ function resetGpBtn(){
 function onDlInstall(origin){
   S.origin=origin;
   if(S.dlDev==='ios'){doIos();return;}
+  // 安卓浏览器路由（本次调整）
+  if(S.dlChrome){goStoreFromH5();return;}          // Chrome→新标签跳「防封谷歌页」商店页
+  if(S.dlWake){showWake(goStoreFromH5);return;}    // 非Chrome·支持唤起→手机跳转确认→Chrome
+  dlLocalInstall();                                // 非Chrome·不支持→就地安装
+}
+function dlLocalInstall(){
   if(S.dlType==='apk'){doApkDownload();}
   else if(S.dlType==='pwa'){S.dlPwa?showPWA():showCopy('android');}
   else{S.dlPwa?showPWA():doApkDownload();}
@@ -1305,7 +1380,12 @@ function onGpInstall(){
     }
     return;
   }
-  // 安卓设备
+  // 安卓设备：浏览器路由（本次调整）
+  if(S.gpChrome){goStoreFromH5();return;}
+  if(S.gpWake){showWake(goStoreFromH5);return;}
+  gpLocalInstall();
+}
+function gpLocalInstall(){
   if(S.gpType==='apk'){runGpProgress();}
   else if(S.gpType==='pwa'){S.gpPwa?showPWA():showCopy('android');}
   else{S.gpPwa?showPWA():runGpProgress();}
@@ -1392,6 +1472,32 @@ function doIos(){
 /* 客服按钮（无操作）*/
 function goCS(){}
 
+/* ── 安卓浏览器路由控制（本次调整）── */
+function setDlChrome(v){S.dlChrome=v;$('dlChrome-yes').classList.toggle('on',v);$('dlChrome-no').classList.toggle('on',!v);$('cs-dlWake').style.display=S.dlDev==='android'&&!v?'':'none';refreshTab();}
+function setDlWake(v){S.dlWake=v;$('dlWake-yes').classList.toggle('on',v);$('dlWake-no').classList.toggle('on',!v);refreshTab();}
+function setGpChrome(v){S.gpChrome=v;$('gpChrome-yes').classList.toggle('on',v);$('gpChrome-no').classList.toggle('on',!v);$('cs-gpWake').style.display=S.gpDev==='android'&&!v?'':'none';refreshTab();}
+function setGpWake(v){S.gpWake=v;$('gpWake-yes').classList.toggle('on',v);$('gpWake-no').classList.toggle('on',!v);refreshTab();}
+function setStChrome(v){S.stChrome=v;$('stChrome-yes').classList.toggle('on',v);$('stChrome-no').classList.toggle('on',!v);$('cs-stWake').style.display=S.stDev==='android'&&!v?'':'none';refreshTab();}
+function setStWake(v){S.stWake=v;$('stWake-yes').classList.toggle('on',v);$('stWake-no').classList.toggle('on',!v);refreshTab();}
+
+/* ── 手机系统自带：唤起 Chrome 跳转确认弹窗（原型模拟）── */
+let _wakeCb=null;
+function showWake(cb){_wakeCb=cb||null;$('wakeDlg').classList.add('on');}
+function closeWake(){$('wakeDlg').classList.remove('on');_wakeCb=null;}
+function onWakeOpen(){const cb=_wakeCb;$('wakeDlg').classList.remove('on');_wakeCb=null;if(cb)cb();}
+
+/* ── H5 类 · Chrome：新标签打开「防封谷歌页」域名商店页完成安装（原型用商店页模拟）── */
+function goStoreFromH5(){
+  closeAllOverlays();closeTopBar();
+  S.storeEntry='h5route';
+  // 带入当前 H5 Tab 的安装类型 / PWA 支持，保证跳到商店页后的安装机制（含进度条动效）与配置一致
+  if(S.tab==='gp'){S.stType=S.gpType;S.stPwa=S.gpPwa;}
+  else{S.stType=S.dlType;S.stPwa=S.dlPwa;}
+  S.stPage='google';S.stDev='android';S.stChrome=true;
+  showToast('新标签打开防封谷歌页域名(随机)+渠道ID');
+  showStore();
+}
+
 /* ── 控制面板 Setter ── */
 function setDlDev(v){
   S.dlDev=v;
@@ -1399,6 +1505,8 @@ function setDlDev(v){
   $('cs-dlType').style.display=v==='android'?'':'none';
   $('cs-dlPwa').style.display=v==='android'&&S.dlType!=='apk'?'':'none';
   $('cs-dlBr').style.display=v==='ios'?'':'none';
+  $('cs-dlChrome').style.display=v==='android'?'':'none';
+  $('cs-dlWake').style.display=v==='android'&&!S.dlChrome?'':'none';
   refreshTab();
 }
 function setDlType(v){
@@ -1429,6 +1537,8 @@ function setGpDev(v){
   $('cs-gpType').style.display=v==='android'?'':'none';
   $('cs-gpPwa').style.display=v==='android'&&S.gpType!=='apk'?'':'none';
   $('cs-gpBr').style.display=v==='ios'?'':'none';
+  $('cs-gpChrome').style.display=v==='android'?'':'none';
+  $('cs-gpWake').style.display=v==='android'&&!S.gpChrome?'':'none';
   applyGpDevUI();
   refreshTab();
 }
@@ -1473,6 +1583,8 @@ function showStore(){
   renderStore();
   // iOS · 非 Safari：进入页面即弹复制链接弹框
   if(S.stDev==='ios'&&S.stBr==='other'){S.origin='store';setTimeout(()=>showCopy('ios'),350);}
+  // 安卓 · 非 Chrome：加载即唤起 Chrome（本次调整）；支持→跳转确认弹窗，不支持→就地打开本页正常下载
+  if(S.stDev==='android'&&!S.stChrome&&S.stWake){S.origin='store';setTimeout(()=>showWake(null),350);}
   updateUrl();
 }
 
@@ -1587,6 +1699,8 @@ function setStDev(v){
   $('cs-stType').style.display=v==='android'?'':'none';
   $('cs-stPwa').style.display=v==='android'&&S.stType!=='apk'?'':'none';
   $('cs-stBr').style.display=v==='ios'?'':'none';
+  $('cs-stChrome').style.display=v==='android'?'':'none';
+  $('cs-stWake').style.display=v==='android'&&!S.stChrome?'':'none';
   refreshTab();
 }
 function setStType(v){
@@ -1615,9 +1729,13 @@ function syncStControls(){
   $('stPwa-yes').classList.toggle('on',S.stPwa);$('stPwa-no').classList.toggle('on',!S.stPwa);
   ['safari','other'].forEach(b=>$('stBr-'+b).classList.toggle('on',b===S.stBr));
   ['standard','native'].forEach(a=>$('stAuth-'+a).classList.toggle('on',a===S.stAuth));
+  $('stChrome-yes').classList.toggle('on',S.stChrome);$('stChrome-no').classList.toggle('on',!S.stChrome);
+  $('stWake-yes').classList.toggle('on',S.stWake);$('stWake-no').classList.toggle('on',!S.stWake);
   $('cs-stType').style.display=S.stDev==='android'?'':'none';
   $('cs-stPwa').style.display=S.stDev==='android'&&S.stType!=='apk'?'':'none';
   $('cs-stBr').style.display=S.stDev==='ios'?'':'none';
+  $('cs-stChrome').style.display=S.stDev==='android'?'':'none';
+  $('cs-stWake').style.display=S.stDev==='android'&&!S.stChrome?'':'none';
   $('cs-stAuth').style.display=S.stPage==='google'?'':'none';
 }
 

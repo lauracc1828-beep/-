@@ -63,9 +63,9 @@ td:first-child{white-space:nowrap;font-weight:500}
 
 <h1>推广渠道管理模块 · PRD</h1>
 <div class="meta">
-  <span>📄 版本：v2.5</span>
-  <span>✅ 状态：已完成</span>
-  <span>📅 更新日期：2026-07-18</span>
+  <span>📄 版本：v2.7</span>
+  <span>✏️ 作者：Laura</span>
+  <span>📅 更新日期：2026-09-05</span>
 </div>
 
 <!-- TOC -->
@@ -119,11 +119,11 @@ td:first-child{white-space:nowrap;font-weight:500}
   <div class="flow-branch">
     <div class="flow-branch-item">
       <div class="flow-branch-label">落地指向：仿谷歌页 / 防封下载页</div>
-      <div class="flow-box orange">⑥A 下载页（仿谷歌/苹果商店样式）<br>用户只有下载操作，无H5跳转<br>下载按钮和引导安装弹窗不生效<br><span class="chg">支持安卓与iOS，按设备/安装类型/浏览器区分交互</span><br><span class="chg">安卓→安装类型决定PWA/APK；iOS→保存桌面/添加到主屏幕</span></div>
+      <div class="flow-box orange">⑥A 下载页（仿谷歌/苹果商店样式）<br>用户只有下载操作，无H5跳转<br>下载按钮和引导安装弹窗不生效<br><span class="chg">支持安卓与iOS，按设备/安装类型/浏览器区分交互</span><br><span class="chg">安卓→安装类型决定PWA/APK；iOS→保存桌面/添加到主屏幕</span><br><span class="chg">安卓路由：Chrome 直接下载；非 Chrome 加载即唤起 Chrome（支持→手机自带跳转确认，不支持→就地打开点安装下载）</span></div>
     </div>
     <div class="flow-branch-item">
       <div class="flow-branch-label">落地指向：官网首页 / 官网注册页 / 主域名</div>
-      <div class="flow-box green">⑥B H5页面<br>下载按钮（顶部横幅+底部安装浮层）生效<br>引导安装弹窗生效<br>按渠道配置触发时机和安装类型</div>
+      <div class="flow-box green">⑥B H5页面<br>下载按钮（顶部横幅+底部安装浮层）生效<br>引导安装弹窗生效<br>按渠道配置触发时机和安装类型<br><span class="chg">安卓路由：Chrome 点安装→新标签跳「防封谷歌页」域名商店页完成安装；非 Chrome 点安装→唤起 Chrome（支持→跳转确认，不支持→就地下载）</span></div>
     </div>
   </div>
   <div class="flow-arrow">↓</div>
@@ -141,6 +141,15 @@ td:first-child{white-space:nowrap;font-weight:500}
   </div>
 </div>
 </div>
+
+<h3><span class="chg">安卓下载流程（本次调整 · 仅安卓）</span></h3>
+<div class="info"><span class="chg">推广渠道 / 官方渠道的安卓下载流程按「落地页类型 × 浏览器」路由；iOS 不在本次范围，维持原逻辑。详细交互见《安装引导模块 PRD》3.4、《仿应用商店模块 PRD》第四章。</span></div>
+<table>
+  <tr><th>落地页类型</th><th>Chrome 打开</th><th>非 Chrome 打开（其他浏览器 / App 内置 WebView）</th></tr>
+  <tr><td><span class="chg">H5 页类<br>（官网首页 / 官网注册页 / 主域名）</span></td><td><span class="chg">点击安装 → 新标签打开「域名管理-防封谷歌页类域名（随机选取）+ 渠道 ID」→ 进入商店页完成 PWA / APK 安装</span></td><td><span class="chg">点击安装 → 唤起 Chrome 打开上述同规则链接。支持唤起：手机自带跳转确认（非本平台）后由 Chrome 接管；不支持唤起：就地在当前 H5 直接下载 / 安装</span></td></tr>
+  <tr><td><span class="chg">下载页类<br>（防封下载页 / 仿谷歌页）</span></td><td><span class="chg">点击安装 → 直接下载</span></td><td><span class="chg">页面加载即唤起 Chrome。支持唤起：手机自带跳转确认后转 Chrome 商店页点安装下载；不支持唤起：就地打开本页，点安装正常下载</span></td></tr>
+</table>
+<div class="note"><span class="chg">用户侧无「尝试→失败」中间态、无延迟：支持唤起的浏览器直接弹跳转确认，不支持的直接下载 / 打开页面。唤起 Chrome 的确认弹窗为手机系统 / 来源浏览器自带，非本平台页面。渠道 ID 通过下载 URL 参数透传，官网主域名访问无渠道 ID。</span></div>
 
 <h3>关键概念说明</h3>
 <table>
@@ -231,7 +240,7 @@ td:first-child{white-space:nowrap;font-weight:500}
 </table>
 
 <p><strong>替换类型：更换安装包</strong></p>
-<div class="note">APK相关配置项（APK包地址、APK包名、选择APK按钮）因当前平台暂无APK功能，实际使用时置灰不可操作。</div>
+<div class="note"><span class="chg">APK / PWA+APK 相关配置项已启用（二期）。因马甲包管理菜单暂未上线，「选择马甲包」弹窗内下拉选项暂时留空，待其上线后再读取；当前通过「上传」手动上传 apk 文件（限 100MB）配置。</span></div>
 <table>
   <tr><th>字段</th><th>控件</th><th>说明</th></tr>
   <tr><td>渠道安装类型 <span class="tag tag-req">必填</span></td><td>下拉单选</td><td>可选：APK / PWA+APK / 苹果商店；PWA无需替换安装包故不在选项内。<span class="chg"><strong>注：</strong>「苹果商店」选项因当前暂不支持，暂时隐藏，仅展示 APK / PWA+APK；其下属字段（iOS地址类型 / 苹果地址 / IOS上架包名字 / 选择IOS上架包）随之暂不展示，待功能支持后恢复。</span></td></tr>
@@ -247,6 +256,7 @@ td:first-child{white-space:nowrap;font-weight:500}
 
 <p><strong>替换类型：更换安装引导</strong></p>
 <p>渠道安装类型决定下方目标安装类型的配置内容：选择安卓类型（PWA / APK / PWA+APK）展示安卓引导配置；选择苹果类型（保存桌面 / 苹果商店）展示苹果引导配置。</p>
+<div class="note"><span class="chg"><strong>平台作用范围：</strong>「更换安装引导」的所有目标配置（弹框内容、弹框时间点、弹框间隔、弹框安装类型、安装送彩金、替换引导开关等）<strong>仅作用于所选「渠道安装类型」对应的平台</strong>，另一平台配置保持原样——选择安卓类型（PWA / APK / PWA+APK）时只修改指定渠道的<strong>安卓</strong>安装引导配置，苹果配置不变；选择苹果类型（保存桌面）时只修改<strong>苹果</strong>安装引导配置，安卓配置不变。<strong>示例：</strong>上方选 PWA、「替换引导开关」选「全部关闭」，则指定渠道的<strong>安卓</strong>引导安装被关闭，<strong>苹果</strong>引导安装保持不变。</span></div>
 <table>
   <tr><th>字段</th><th>控件</th><th>说明</th></tr>
   <tr><td>渠道安装类型 <span class="tag tag-req">必填</span></td><td>下拉单选</td><td>可选：PWA / APK / PWA+APK / 保存桌面 / 苹果商店。<span class="chg"><strong>注：</strong>「苹果商店」选项因当前暂不支持，暂时隐藏，仅展示 PWA / APK / PWA+APK / 保存桌面，待功能支持后恢复。</span></td></tr>
@@ -265,7 +275,7 @@ td:first-child{white-space:nowrap;font-weight:500}
   <tr><td>安装送彩金</td><td>下拉单选</td><td>可选：关闭 / 充值用户赠送 / 无需充值赠送；为用户实际到账的赠送金额</td></tr>
   <tr><td class="indent">↳ 赠送金额</td><td>数字输入</td><td>选非关闭时展示；为实际赠送金额</td></tr>
   <tr><td class="indent">↳ 打码倍数</td><td>数字输入</td><td>同上</td></tr>
-  <tr><td>替换引导开关</td><td>单选（Radio）</td><td>可选：保持原有 / 全部开启 / 全部关闭；控制批量替换后各渠道安卓引导安装弹框Toggle开关的状态</td></tr>
+  <tr><td>替换引导开关</td><td>单选（Radio）</td><td>可选：保持原有 / 全部开启 / 全部关闭；<span class="chg">控制批量替换后各渠道<strong>所选「渠道安装类型」对应平台</strong>的引导安装开关状态（安卓类型→安卓引导；苹果类型→苹果引导），另一平台的引导开关保持原样。</span></td></tr>
   <tr><td>替换渠道 <span class="tag tag-req">必填</span></td><td>两层级联多选 + 全选</td><td>同更换安装包；仅展示安装类型与所选「渠道安装类型」完全匹配的渠道</td></tr>
 </table>
 
@@ -317,8 +327,8 @@ td:first-child{white-space:nowrap;font-weight:500}
 <p><strong>落地指向选项说明</strong></p>
 <table>
   <tr><th>选项</th><th>落地页类型</th><th>下载按钮/引导安装</th><th>说明</th></tr>
-  <tr><td>仿谷歌页</td><td>下载页（仿谷歌商店样式）</td><td>❌ 不生效</td><td>仿应用商店模板页面；<span class="chg">支持安卓与 iOS，按设备/安装类型/浏览器区分交互（安卓走安装类型决定 PWA/APK，iOS 走保存桌面/添加到主屏幕），页面区块、样式与下载交互详见《仿应用商店模块 PRD》</span>；页面只有下载操作，不跳转 H5；弹框安装类型和 APK 包地址生效，决定安装方式</td></tr>
-  <tr><td>防封下载页</td><td>下载页（防封中转）</td><td>❌ 不生效</td><td>功能与仿谷歌页类似；弹框安装类型和APK包地址生效；<span class="chg">下载页样式与交互同样详见《仿应用商店模块 PRD》</span></td></tr>
+  <tr><td>仿谷歌页</td><td>下载页（仿谷歌商店样式）</td><td>❌ 不生效</td><td>仿应用商店模板页面；<span class="chg">支持安卓与 iOS，按设备/安装类型/浏览器区分交互（安卓走安装类型决定 PWA/APK，iOS 走保存桌面/添加到主屏幕），页面区块、样式与下载交互详见《仿应用商店模块 PRD》</span>；页面只有下载操作，不跳转 H5；弹框安装类型和 APK 包地址生效，决定安装方式<br><span class="chg">安卓：Chrome 直接下载；非 Chrome 加载即唤起 Chrome（不支持唤起则就地打开点安装下载）</span></td></tr>
+  <tr><td>防封下载页</td><td>下载页（防封中转）</td><td>❌ 不生效</td><td>功能与仿谷歌页类似；弹框安装类型和APK包地址生效；<span class="chg">下载页样式与交互同样详见《仿应用商店模块 PRD》；安卓：Chrome 直接下载，非 Chrome 加载即唤起 Chrome（不支持唤起则就地打开点安装下载）</span></td></tr>
   <tr><td>官网首页</td><td>H5官网主页</td><td>✅ 生效</td><td>落地到H5首页，下载按钮（顶部横幅 + 底部安装浮层）和引导安装弹窗按渠道配置生效</td></tr>
   <tr><td>官网注册页</td><td>H5注册页</td><td>✅ 生效</td><td>落地到H5注册页，同上</td></tr>
   <tr><td>主域名</td><td>H5主域名</td><td>✅ 生效</td><td>直接走主域名落地H5页面，同上</td></tr>
@@ -346,15 +356,16 @@ td:first-child{white-space:nowrap;font-weight:500}
   <tr><td class="indent2">↳↳ 显示赠送金额</td><td><span class="tag tag-cond">条件必填</span></td><td>数字输入</td><td>固定金额为单一输入框，随机金额为两个输入框（最小值/最大值）</td><td>仅为弹窗中展示给用户看的营销数字，不影响实际赠送金额。</td></tr>
   <tr><td class="indent">↳ 弹框时间点</td><td><span class="tag tag-cond">条件必填</span></td><td>下拉单选</td><td>引导安装开启后展示；默认「用户充值」</td><td>「访问主页」：用户每次访问H5首页时触发弹窗（受弹框间隔时间控制）。「用户充值」：用户每次充值回调成功后触发（若用户当前在游戏中则不弹，退出游戏后仍会弹出）。「首次提现」：用户第一次提现回调成功后触发，仅触发一次。</td></tr>
   <tr><td class="indent">↳ 弹框间隔时间</td><td><span class="tag tag-cond">条件必填</span></td><td>下拉单选</td><td>引导安装开启后展示；默认「0小时(强制安装)」；可选：0小时(强制安装) / 1~24小时</td><td>「0小时(强制安装)」：弹窗强制弹出，无「×」按钮，用户无法关闭，也无法点击弹窗外区域关闭。<span class="chg">用户触发下载或完成安装后，弹窗仍保留、不会自动关闭，直至页面刷新或跳转。</span>1~24小时：弹窗弹出后用户可点击弹窗外区域关闭。<span class="chg">用户触发下载或完成安装后，弹窗同样保留、不自动关闭；</span>每隔对应时长会再次弹出（<span class="chg">不做已安装判定，按间隔持续弹出</span>）。<span class="chg">（弹窗关闭逻辑与《安装引导模块 PRD》3.4 节「弹窗关闭逻辑」口径一致）</span></td></tr>
-  <tr><td class="indent">↳ 弹框安装类型</td><td><span class="tag tag-cond">条件必填</span></td><td>下拉单选</td><td>引导安装开启后展示；默认「apk(需要自己封装)」；当前平台APK暂未上线，含APK选项实际置灰不可用</td><td>「pwa(快速安装)」：引导用户将H5页面添加到手机桌面（PWA），若用户使用非谷歌浏览器，会提示用户用谷歌浏览器打开后再安装。「apk(需要自己封装)」：弹窗引导用户下载并安装APK包，需要商户提前上传封装好的APK。「pwa(优先)+apk(推荐使用)」：优先引导安装PWA，若当前浏览器不支持PWA，则降级引导安装APK。</td></tr>
+  <tr><td class="indent">↳ 弹框安装类型</td><td><span class="tag tag-cond">条件必填</span></td><td>下拉单选</td><td><span class="chg">引导安装开启后展示；可选：pwa(快速安装) / apk(需要自己封装) / pwa(优先)+apk(推荐使用)；默认「pwa(快速安装)」（二期：APK 选项已启用，默认值由 apk 调整为 pwa，与《安装引导模块 PRD》2.3 对齐）</span></td><td>「pwa(快速安装)」：引导用户将H5页面添加到手机桌面（PWA），<span class="chg">若用户使用非谷歌浏览器，点击安装时唤起 Chrome（支持唤起→手机自带跳转确认后转 Chrome 完成安装；不支持唤起→就地按原安装流程处理），详见《安装引导模块 PRD》3.4</span>。「apk(需要自己封装)」：弹窗引导用户下载并安装APK包，需要商户提前上传封装好的APK。「pwa(优先)+apk(推荐使用)」：优先引导安装PWA，若当前浏览器不支持PWA，则降级引导安装APK。</td></tr>
   <tr><td class="indent2">↳↳ APK包地址</td><td><span class="tag tag-cond">条件必填</span></td><td>文本输入</td><td>弹框安装类型含APK时展示</td><td>APK文件的下载地址，用户点击安装时从该地址下载APK包。</td></tr>
   <tr><td class="indent2">↳↳ APK包名</td><td>—</td><td>自动填充</td><td>含APK时展示；选择马甲包后自动读取，手动修改APK包地址后自动清空</td><td><span class="chg">APK的唯一包标识符，仅作渠道包的标识与管理记录，<strong>不用于</strong>判断用户设备是否已安装（前台不做已安装判定）。</span></td></tr>
-  <tr><td class="indent2">↳↳ 选择APK</td><td><span class="tag tag-cond">条件必填</span></td><td>按钮组</td><td>「选择马甲包」从系统管理-马甲包管理中选（自动填入地址和包名）；「上传」直接上传apk文件（限100MB）</td><td>马甲包是经过伪装的APK，外观与普通APP相似，用于规避应用商店审核。选择马甲包后APK包地址和包名自动填入。</td></tr>
+  <tr><td class="indent2">↳↳ 选择APK</td><td><span class="tag tag-cond">条件必填</span></td><td>按钮组</td><td>「选择马甲包」从系统管理-马甲包管理中选（自动填入地址和包名）；「上传」直接上传apk文件（限100MB）。<span class="chg">二期：马甲包管理暂未上线，「选择马甲包」下拉暂空，当前用「上传」手动上传跑通。</span></td><td>马甲包是经过伪装的APK，外观与普通APP相似，用于规避应用商店审核。选择马甲包后APK包地址和包名自动填入。</td></tr>
   <tr><td>安装pwa/App赠送</td><td><span class="tag tag-req">必填</span></td><td>下拉单选</td><td>可选：关闭 / 充值用户赠送 / 无需充值赠送；默认「关闭」；<strong>注：当前功能配置可保存但暂不上线生效</strong></td><td>「关闭」：用户安装后不赠送任何彩金。「充值用户赠送」：仅有过充值记录的用户完成安装后，系统自动赠送彩金到账户，未充值用户不赠送。「无需充值赠送」：所有完成安装的用户均可获得赠送彩金，包括未充值用户。赠送彩金到账后需满足打码倍数要求方可提现。</td></tr>
   <tr><td class="indent">↳ 赠送金额</td><td><span class="tag tag-cond">条件必填</span></td><td>数字输入</td><td>选赠送类型后展示</td><td>用户安装后实际到账的彩金金额，与弹窗中「显示赠送金额」相互独立，两者可以不同。</td></tr>
   <tr><td class="indent">↳ 打码倍数</td><td><span class="tag tag-cond">条件必填</span></td><td>数字输入</td><td>选赠送类型后展示</td><td>赠送彩金的流水要求倍数。例如赠送100元、打码倍数为10，则用户需累计投注1000元后，赠送金额方可提现。</td></tr>
 </table>
 <div class="tip"><span class="chg">安装引导弹窗触发下载或安装动作后均不会自动关闭：「0小时(强制安装)」下弹窗保留至页面刷新或跳转，「1~24小时」下需用户手动关闭。系统不判断用户是否已完成安装（PWA / APK 均不做已安装判定），弹窗按弹框间隔持续弹出，不因"已安装"而停止；仅顶部横幅保持可见，用户可点击「×」手动关闭（与《安装引导模块 PRD》口径一致）。</span></div>
+<div class="tip"><span class="chg"><strong>已安装唤起（二期新增）：</strong>用户在 H5 点击任意安装入口（顶部横幅 / 底部浮层 / 引导弹窗 / 下载页下载按钮）时，系统先尝试唤起该渠道对应的已安装 PWA / APK：已安装则直接打开并保持登录态无缝进入 App，不再重复下载；未安装则兜底回落到原下载安装流程；PWA+APK 按优先级（优先 PWA，不支持再 APK）判断后唤起。本逻辑仅作用于「点击安装」的瞬间，<strong>不改变</strong>弹窗弹出频率——仍不做持续性已安装判定，横幅 / 浮层 / 弹窗照常按时间点与间隔展示（与《安装引导模块 PRD》口径一致）。</span></div>
 
 <p><strong>渠道设置 - 苹果 Tab</strong></p>
 <table>
@@ -443,7 +454,7 @@ td:first-child{white-space:nowrap;font-weight:500}
 </div>
 
 <!-- 子页面三 -->
-<p style="text-align:center;color:#bbb;font-size:12px;margin-top:32px;padding-bottom:20px">推广渠道管理模块 PRD v2.5 · 2026-07-18</p>
+<p style="text-align:center;color:#bbb;font-size:12px;margin-top:32px;padding-bottom:20px">推广渠道管理模块 PRD v2.7 · 2026-09-05 · 作者：Laura</p>
 </div>
 </body>
 </html>
