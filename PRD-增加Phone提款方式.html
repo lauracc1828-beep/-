@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>增加Phone提款方式 PRD v1.1</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'PingFang SC','Helvetica Neue',Arial,sans-serif;font-size:14px;color:#1a1a1a;background:#eef1f5;line-height:1.75}
+.page{max-width:980px;margin:0 auto;padding:32px 24px 80px}
+.cover{background:linear-gradient(135deg,#0a2a6e 0%,#1a5fa8 60%,#3ab8d8 100%);border-radius:12px;padding:56px 48px;color:#fff;margin-bottom:26px;text-align:center}
+.cover-title{font-size:32px;font-weight:700;letter-spacing:2px;margin-bottom:10px}
+.cover-sub{font-size:16px;opacity:.85;margin-bottom:26px}
+.cover-meta{display:flex;justify-content:center;gap:36px;font-size:13px;opacity:.75}
+.toc{background:#fff;border-radius:10px;padding:20px 28px;margin-bottom:18px;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+.toc-title{font-size:15px;font-weight:600;color:#0b3f78;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid #dbe8f6}
+.toc ol{padding-left:20px;list-style:none}.toc li{margin:4px 0}.toc a{color:#0961BD;text-decoration:none;font-size:13px}.toc a:hover{text-decoration:underline}.toc ol ol{padding-left:16px}.toc ol ol li{margin:2px 0;opacity:.85}
+.section{background:#fff;border-radius:10px;padding:26px 32px;margin-bottom:16px;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+h1{font-size:20px;font-weight:700;color:#08305c;padding-bottom:10px;border-bottom:2px solid #dbe8f6;margin-bottom:18px}
+h2{font-size:15px;font-weight:600;color:#0b3f78;margin:22px 0 10px;padding-left:10px;border-left:3px solid #1a5fa8}
+h3{font-size:14px;font-weight:600;color:#0961BD;margin:16px 0 8px}
+p{margin-bottom:10px;color:#333}ul,ol{padding-left:20px;margin-bottom:10px}li{margin-bottom:5px}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13px}
+thead tr{background:#eaf2fb}
+th{padding:9px 12px;text-align:left;font-weight:600;color:#0b3f78;border:1px solid #d6dee8}
+td{padding:8px 12px;border:1px solid #e0e4ea;vertical-align:top}
+tr:nth-child(even) td{background:#fafbfc}
+.notice{display:flex;gap:10px;background:#fff8e8;border-left:4px solid #f0a800;border-radius:6px;padding:11px 15px;margin:12px 0;font-size:13px;color:#6a4a00}
+.notice-info{background:#edf2ff;border-color:#4a7aee;color:#1a3a8a}
+.notice b{color:inherit}
+code{background:#eaf2fb;color:#0961BD;padding:1px 5px;border-radius:3px;font-size:12px;font-family:monospace}
+.fc-wrap{overflow:hidden;padding:10px 0}
+.pill{display:inline-block;font-size:12px;padding:1px 9px;border-radius:10px;border:1px solid;margin-right:2px;white-space:nowrap}
+.p-base{color:#0b3f78;border-color:#9cc4ea;background:#eef4fb}
+.p-lock{color:#7a4b00;border-color:#e0b878;background:#fdf3e3}
+.legend{font-size:12px;color:#888;margin-top:8px}
+b,strong{color:#1a1a2e}
+.tag{display:inline-block;background:#e6f4ff;color:#0961BD;border:1px solid #91caff;border-radius:4px;padding:0 7px;font-size:12px;margin-right:6px}
+.mono{font-family:monospace}
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="cover">
+  <div class="cover-title">增加Phone提款方式</div>
+  <div class="cover-sub">PRD 产品需求文档 · 提款方式配置 / 取款页 / 提现报表</div>
+  <div class="cover-meta"><span>版本：v1.1</span><span>更新日期：2026-09-05</span><span>作者：Laura</span></div>
+</div>
+
+<div class="toc">
+  <div class="toc-title">目录</div>
+  <ol>
+    <li><a href="#s1">一、需求背景</a></li>
+    <li><a href="#s2">二、名词解释</a></li>
+    <li><a href="#s3">三、交互逻辑流程图</a></li>
+    <li><a href="#s4">四、后台功能说明</a>
+      <ol>
+        <li><a href="#s41">4.1 入口与页面位置</a></li>
+        <li><a href="#s42">4.2 列表字段说明</a></li>
+        <li><a href="#s43">4.3 编辑弹窗——字段规格</a></li>
+        <li><a href="#s44">4.4 解锁条件选项说明</a></li>
+        <li><a href="#s45">4.5 校验规则与错误提示</a></li>
+        <li><a href="#s46">4.6 CPF 兜底方式规则</a></li>
+      </ol>
+    </li>
+    <li><a href="#s5">五、前台显示与联动逻辑</a>
+      <ol>
+        <li><a href="#s51">5.1 展示与可用性判定</a></li>
+        <li><a href="#s52">5.2 提款信息填写、保存与回填</a></li>
+      </ol>
+    </li>
+    <li><a href="#sr">六、后台报表字段补充</a>
+      <ol>
+        <li><a href="#sr1">6.1 会员提现审核</a></li>
+        <li><a href="#sr2">6.2 提现订单记录</a></li>
+      </ol>
+    </li>
+    <li><a href="#s6">七、中文 / 葡语文案对照表</a></li>
+    <li><a href="#s7">八、边界与异常处理</a></li>
+  </ol>
+</div>
+
+<!-- 一 需求背景 -->
+<div class="section" id="s1">
+  <h1>一、需求背景</h1>
+  <p>H5 取款页当前仅支持 CPF 单一提款方式。为支持巴西 PIX 场景下的多种收款标识（CPF、手机号等），并结合风控需要对不同方式设置开放门槛，需在后台<b>提现管理</b>页新增<b>提款方式配置</b>模块，由运营配置 H5 取款页可选的提款方式、展示顺序、启用状态及解锁条件。前台 H5 取款页原型已于前期完成，本期交付后台配置能力与相应的前台联动逻辑。</p>
+  <p>本期上线的提款方式为 <b>CPF</b> 与 <b>PHONE</b> 两种。本需求「增加 PHONE 提款方式」覆盖三部分：<b>后台提款方式配置</b>（第四章）、<b>前台 H5 取款页</b>（第五章）、以及<b>提现相关报表</b>字段体现（第六章：会员提现审核、提现订单记录）。</p>
+</div>
+
+<!-- 二 名词解释 -->
+<div class="section" id="s2">
+  <h1>二、名词解释</h1>
+  <table>
+    <thead><tr><th style="width:150px">术语</th><th>说明</th></tr></thead>
+    <tbody>
+      <tr><td>提款方式</td><td>会员在 H5 取款页提现时填写收款标识的类型，对应 PIX Key 类型，如 CPF、PHONE。</td></tr>
+      <tr><td>CODE</td><td>提款方式的系统标识码，与提款方式一一对应（如 <code>CPF</code>、<code>PHONE</code>），前后端交互及对接支付渠道时使用，语言无关。</td></tr>
+      <tr><td>解锁条件</td><td>会员可使用某提款方式的前置门槛。会员满足条件后该方式方在前台展示并可选；未满足则前台<b>隐藏</b>该方式。</td></tr>
+      <tr><td>兜底方式</td><td>状态恒为开启、解锁条件恒为「不限制」的提款方式，保证任一会员在任意状态下至少有一种可用方式。本期由 <b>CPF</b> 固定担任。</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- 三 流程图 -->
+<div class="section" id="s3">
+  <h1>三、交互逻辑流程图</h1>
+  <p>下图描述前台 H5 取款页对提款方式的展示与可用性判定逻辑（后台配置为输入）。</p>
+  <div class="fc-wrap">
+  <svg viewBox="0 0 900 560" width="100%" xmlns="http://www.w3.org/2000/svg" style="max-width:900px;display:block;margin:0 auto;font-family:'PingFang SC',Arial,sans-serif">
+    <defs>
+      <marker id="arw" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L8,5 L0,10 Z" fill="#5a7ba6"/></marker>
+    </defs>
+    <!-- start -->
+    <rect x="360" y="20" width="180" height="42" rx="21" fill="#0961BD"/>
+    <text x="450" y="46" fill="#fff" font-size="14" text-anchor="middle">会员进入 H5 取款页</text>
+    <line x1="450" y1="62" x2="450" y2="92" stroke="#5a7ba6" stroke-width="1.6" marker-end="url(#arw)"/>
+    <!-- load config -->
+    <rect x="330" y="92" width="240" height="46" rx="6" fill="#eef4fb" stroke="#9cc4ea"/>
+    <text x="450" y="120" fill="#0b3f78" font-size="13" text-anchor="middle">读取后台已配置的提款方式列表</text>
+    <line x1="450" y1="138" x2="450" y2="168" stroke="#5a7ba6" stroke-width="1.6" marker-end="url(#arw)"/>
+    <!-- loop label -->
+    <text x="600" y="158" fill="#8a8a8a" font-size="11" text-anchor="start">对每个方式逐一判定</text>
+    <!-- decision 1: status -->
+    <polygon points="450,180 560,230 450,280 340,230" fill="#fff8e8" stroke="#e0b878"/>
+    <text x="450" y="226" fill="#6a4a00" font-size="13" text-anchor="middle">状态是否开启？</text>
+    <text x="450" y="244" fill="#6a4a00" font-size="12" text-anchor="middle">（CPF 恒开启）</text>
+    <!-- no -> hide -->
+    <line x1="560" y1="230" x2="700" y2="230" stroke="#5a7ba6" stroke-width="1.6" marker-end="url(#arw)"/>
+    <text x="628" y="220" fill="#c0341d" font-size="12" text-anchor="middle">否</text>
+    <rect x="700" y="208" width="150" height="44" rx="6" fill="#fdecec" stroke="#e6a5a5"/>
+    <text x="775" y="235" fill="#c0341d" font-size="13" text-anchor="middle">前台不展示该方式</text>
+    <!-- yes down -->
+    <line x1="450" y1="280" x2="450" y2="312" stroke="#5a7ba6" stroke-width="1.6" marker-end="url(#arw)"/>
+    <text x="464" y="300" fill="#0a7d3e" font-size="12" text-anchor="start">是</text>
+    <!-- decision 2: unlock -->
+    <polygon points="450,312 575,364 450,416 325,364" fill="#fff8e8" stroke="#e0b878"/>
+    <text x="450" y="360" fill="#6a4a00" font-size="13" text-anchor="middle">会员是否满足</text>
+    <text x="450" y="378" fill="#6a4a00" font-size="13" text-anchor="middle">解锁条件？</text>
+    <!-- no -> hide (route to same hide box) -->
+    <line x1="575" y1="364" x2="775" y2="364" stroke="#5a7ba6" stroke-width="1.6"/>
+    <line x1="775" y1="364" x2="775" y2="252" stroke="#5a7ba6" stroke-width="1.6" marker-end="url(#arw)"/>
+    <text x="660" y="354" fill="#c0341d" font-size="12" text-anchor="middle">否（隐藏）</text>
+    <!-- yes down -->
+    <line x1="450" y1="416" x2="450" y2="448" stroke="#5a7ba6" stroke-width="1.6" marker-end="url(#arw)"/>
+    <text x="464" y="436" fill="#0a7d3e" font-size="12" text-anchor="start">是</text>
+    <!-- show -->
+    <rect x="330" y="448" width="240" height="46" rx="6" fill="#e8f7ef" stroke="#8fceb0"/>
+    <text x="450" y="476" fill="#0a5c3a" font-size="13" text-anchor="middle">前台展示该方式，供会员选择</text>
+    <!-- bottom note -->
+    <text x="450" y="524" fill="#8a8a8a" font-size="12" text-anchor="middle">因 CPF 恒为「开启 + 不限制」，前台至少展示 CPF，一定存在可用方式</text>
+  </svg>
+  </div>
+  <p class="legend">判定顺序：先判「状态」，再判「解锁条件」；任一不满足即隐藏。按方式的<b>排序值降序</b>依次展示已通过判定的方式。</p>
+</div>
+
+<!-- 四 后台功能说明 -->
+<div class="section" id="s4">
+  <h1>四、后台功能说明</h1>
+
+  <h2 id="s41">4.1 入口与页面位置</h2>
+  <p>在后台 <b>商户财务配置 → 提现管理</b> 页顶部页签中新增 <b>「提款方式配置」</b> 页签，位置固定为<b>第二个</b>，位于「提现通道配置」之后：</p>
+  <p style="text-align:center;color:#0b3f78;font-weight:600;background:#f4f8fd;border:1px solid #dbe8f6;border-radius:6px;padding:10px">提现通道配置 ｜ <span class="tag">提款方式配置（新增）</span> ｜ 提现条件配置 ｜ 提现等级配置 ｜ 其他提现配置</p>
+  <p>页签内容为单一列表（不含地区/商户筛选、大类分组头及额外操作按钮），沿用现有后台列表与弹窗样式。本期列表固定包含 CPF、PHONE 两条记录。</p>
+
+  <h2 id="s42">4.2 列表字段说明</h2>
+  <table>
+    <thead><tr><th style="width:110px">列</th><th>含义</th><th style="width:210px">取值 / 展示</th></tr></thead>
+    <tbody>
+      <tr><td>提款方式</td><td>提款方式名称。</td><td>CPF / PHONE，只读展示。</td></tr>
+      <tr><td>CODE</td><td>提款方式系统标识码。</td><td><code>CPF</code> / <code>PHONE</code>，只读展示。</td></tr>
+      <tr><td>状态</td><td>该方式是否启用。开关控件。</td><td>开启 / 关闭。CPF 恒为开启且开关置灰不可操作。</td></tr>
+      <tr><td>解锁条件</td><td>会员使用该方式的前置门槛，展示当前配置值。</td><td>见 4.4；「已累计充值」时同时展示所配金额。</td></tr>
+      <tr><td>排序</td><td>前台展示顺序权重。</td><td>整数；<b>数值越大越靠前</b>。</td></tr>
+      <tr><td>操作</td><td>行操作入口。</td><td>「编辑」（打开编辑弹窗）。</td></tr>
+    </tbody>
+  </table>
+  <div class="notice notice-info"><span>ℹ️</span><div>列表按<b>排序值降序</b>展示；排序值相同按方式默认顺序（CPF、PHONE）。本期已按参照移除「图标」列。</div></div>
+
+  <h2 id="s43">4.3 编辑弹窗——字段规格</h2>
+  <p>点击行「编辑」打开弹窗，标题「编辑」。字段规格如下（含义 / 控件 / 必填 / 输入要求）：</p>
+  <table>
+    <thead><tr><th style="width:130px">字段</th><th>含义</th><th style="width:150px">控件</th><th style="width:60px">必填</th><th>输入要求 / 说明</th></tr></thead>
+    <tbody>
+      <tr><td>提款方式</td><td>方式名称。</td><td>文本框（置灰只读）</td><td>—</td><td>带出当前值，不可编辑。</td></tr>
+      <tr><td>CODE</td><td>系统标识码。</td><td>文本框（置灰只读）</td><td>—</td><td>带出当前值，不可编辑。</td></tr>
+      <tr><td>排序</td><td>前台展示顺序权重。</td><td>数字输入框（含步进器）</td><td>是</td><td>整数，最小 0；<b>默认初始值 0</b>；数值越大越靠前。</td></tr>
+      <tr><td>状态</td><td>是否启用该方式。</td><td>开关（开 / 关）</td><td>是</td><td>默认沿用当前值。<b>CPF 置灰锁定为「开」</b>（见 4.6）。</td></tr>
+      <tr><td>解锁条件</td><td>会员使用该方式的前置门槛。</td><td>单选（Radio，6 选 1）</td><td>是</td><td>选项与 ⓘ 说明见 4.4；<b>默认选中「不限制」</b>；旁附 <span class="mono">ⓘ</span> 说明图标（悬浮展示选项说明）。<b>CPF 整组置灰锁定为「不限制」</b>（见 4.6）。</td></tr>
+      <tr><td>累计充值金额</td><td>「已累计充值」门槛的金额阈值。</td><td>数字输入框</td><td>是<sup>*</sup></td><td><b>仅当解锁条件 =「已累计充值」时显示</b>，<b>默认初始填入 0</b>；有效值 1–1000。校验与提示见 4.5。</td></tr>
+    </tbody>
+  </table>
+  <p class="legend"><sup>*</sup>「累计充值金额」为条件必填：仅在选中「已累计充值」时出现并要求填写；其余解锁条件下该字段隐藏、不参与校验。</p>
+  <p>弹窗底部为居中「确定」按钮；点击右上角「×」或遮罩关闭不保存。</p>
+
+  <h2 id="s44">4.4 解锁条件选项说明</h2>
+  <p>解锁条件为单选，共 6 项，默认选中「不限制」。字段旁 ⓘ 图标悬浮展示以下说明（浮层原文）：</p>
+  <table>
+    <thead><tr><th style="width:140px">选项</th><th>说明（ⓘ 浮层原文）</th></tr></thead>
+    <tbody>
+      <tr><td>不限制</td><td>表示该提现方式不受限制；</td></tr>
+      <tr><td>首充</td><td>表示用户须完成首充，方可显示并使用该提现方式；</td></tr>
+      <tr><td>充值2次</td><td>表示用户须完成2次充值，方可显示并使用该提现方式；</td></tr>
+      <tr><td>充值3次</td><td>表示用户须完成3次充值，方可显示并使用该提现方式；</td></tr>
+      <tr><td>CPF首提成功</td><td>表示用户须至少使用CPF 完成一次成功提现，才能显示并使用该提现方式。</td></tr>
+      <tr><td>已累计充值</td><td>用户在指定商户或平台下的充值成功金额总和（不包括退款或失败交易）。</td></tr>
+    </tbody>
+  </table>
+  <p class="legend">「CPF首提成功」作用于非 CPF 方式（如 PHONE）；CPF 自身解锁条件已锁定为「不限制」，不涉及该项。</p>
+
+  <h2 id="s45">4.5 校验规则与错误提示</h2>
+  <p>「累计充值金额」仅在解锁条件 =「已累计充值」时参与校验，默认初始填入 0，有效值 1–1000。字段下红字为即时校验（输入 / 失焦时触发），顶部 toast 于点击「确定」时触发。各状态文案如下：</p>
+  <table>
+    <thead><tr><th style="width:150px">场景</th><th style="width:170px">触发时机</th><th>字段下红字（即时）</th><th>顶部 toast（确定时）</th></tr></thead>
+    <tbody>
+      <tr><td>占位（字段为空未操作）</td><td>—</td><td colspan="2">输入框占位：<b>输入金额数值大于0，最大数值为1000</b></td></tr>
+      <tr><td>清空后失去焦点</td><td>失焦 / 确定</td><td><b>请配置正确金额数值</b></td><td><b>累计充值金额必须大于0</b></td></tr>
+      <tr><td>填 0 或 &lt; 1</td><td>输入 / 失焦 / 确定</td><td><b>请输入大于等于1的数值</b></td><td><b>累计充值金额必须大于0</b></td></tr>
+      <tr><td>&gt; 1000</td><td>输入 / 失焦 / 确定</td><td><b>请输入小于等于1000的数值</b></td><td><b>累计充值金额必须小于等于1000</b></td></tr>
+    </tbody>
+  </table>
+  <p class="legend">校验不通过时输入框标红并拦截保存。空值与 0/&lt;1 的字段下红字文案不同：空值为「请配置正确金额数值」，0/&lt;1 为「请输入大于等于1的数值」。</p>
+
+  <h2 id="s46">4.6 CPF 兜底方式规则</h2>
+  <p><b>CPF 固定作为兜底方式</b>，以保证前台永远至少有一种可用提款方式：</p>
+  <ul>
+    <li>列表与编辑弹窗中，CPF 的<b>状态开关置灰锁定为「开」</b>，不可关闭。</li>
+    <li>CPF 的<b>解锁条件整组置灰锁定为「不限制」</b>，不可编辑。</li>
+    <li>CPF 仍可编辑<b>排序</b>。</li>
+  </ul>
+  <p><span class="pill p-base">CPF</span><span class="pill p-lock">状态：开（锁定）</span><span class="pill p-lock">解锁条件：不限制（锁定）</span></p>
+  <p>其余方式（PHONE 等）状态与解锁条件均可自由配置。由于 CPF 恒为「开启 + 不限制」，任一会员在任意状态下前台至少展示 CPF，从机制上杜绝「无可用方式」。</p>
+</div>
+
+<!-- 五 前台 -->
+<div class="section" id="s5">
+  <h1>五、前台显示与联动逻辑</h1>
+  <h2 id="s51">5.1 展示与可用性判定</h2>
+  <p>H5 取款页「提款方式」区域根据后台配置动态展示可选方式，判定规则如下：</p>
+  <ol>
+    <li><b>展示条件：</b>某方式需同时满足「状态 = 开启」<b>且</b>「当前会员已满足其解锁条件」，方在前台展示并可选。</li>
+    <li><b>未解锁处理：</b>不满足解锁条件的方式<b>直接隐藏</b>（不置灰、不占位）。</li>
+    <li><b>展示顺序：</b>已通过判定的方式按<b>排序值降序</b>横向排列；默认选中排序最靠前的一个。</li>
+    <li><b>字段联动：</b>选择不同提款方式时，下方对应的收款标识输入字段随之变化（如 PHONE 方式展示「手机号」字段）。此为前台既有交互，本需求不改动。</li>
+    <li><b>兜底保证：</b>因 CPF 恒为「开启 + 不限制」，前台至少展示 CPF，一定存在可选方式。</li>
+  </ol>
+  <div class="notice notice-info"><span>ℹ️</span><div>前台各提款方式的按钮文案直接取 CODE（CPF、PHONE），语言无关，无需本地化。</div></div>
+
+  <h2 id="s52">5.2 提款信息填写、保存与回填</h2>
+  <p>会员选择提款方式后需填写该方式对应的收款信息。字段构成：<b>CPF 方式</b>含「姓名、CPF ID」；<b>PHONE 方式</b>含「姓名、手机号、CPF ID」。规则如下：</p>
+  <table>
+    <thead><tr><th style="width:150px">规则</th><th>说明</th></tr></thead>
+    <tbody>
+      <tr><td>全部必填</td><td>所选提款方式对应的<b>全部字段均为必填</b>，缺项不可提交提款。</td></tr>
+      <tr><td>首次保存时机</td><td>会员此前<b>未保存</b>过提款信息时：<b>提款成功后</b>才将本次填写的信息保存至该会员的提款信息；保存后<b>用户不可自行修改</b>。</td></tr>
+      <tr><td>失败不保存</td><td>首次填写的提款信息若<b>提款不成功，则不保存</b>；下次进入仍需手动填写。</td></tr>
+      <tr><td>已保存回填锁定</td><td>会员此前<b>已保存</b>过提款信息时：提款页<b>自动填入已保存信息且不可修改</b>。</td></tr>
+      <tr><td>部分保存</td><td>此前<b>仅保存过部分字段</b>时：已保存字段自动填入并锁定不可改，<b>未保存字段需手动输入</b>；本次提款成功后，新填写的字段一并保存并锁定。</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- 六 后台报表字段补充 -->
+<div class="section" id="sr">
+  <h1>六、后台报表字段补充</h1>
+  <p>因新增 PHONE 提款方式，需在提现相关报表中体现<b>账户类型</b>及<b>手机号</b>。涉及「商户财务管理」菜单下的两张报表：<b>会员提现审核</b>、<b>提现订单记录</b>。</p>
+
+  <h2 id="sr1">6.1 会员提现审核</h2>
+  <p>在「提款信息」栏补充两项字段：</p>
+  <table>
+    <thead><tr><th style="width:110px">字段</th><th>含义 / 取值</th><th style="width:220px">位置</th></tr></thead>
+    <tbody>
+      <tr><td>账户类型</td><td>该笔提款所用的 PIX Key 类型，取值 <b>CPF / PHONE</b>。</td><td>「提款信息」栏内，<b>「提现方式」下方</b>。</td></tr>
+      <tr><td>手机号</td><td>会员提交的手机号；<b>仅当账户类型 = PHONE 时显示</b>。</td><td>「提款信息」栏内，<b>「提款卡号」下方</b>。</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="sr2">6.2 提现订单记录</h2>
+  <h3>① 列表新增列</h3>
+  <table>
+    <thead><tr><th style="width:110px">列</th><th>含义 / 取值</th></tr></thead>
+    <tbody>
+      <tr><td>账户类型</td><td>CPF / PHONE。</td></tr>
+      <tr><td>CPF ID</td><td>读取会员提交的 CPF ID。</td></tr>
+    </tbody>
+  </table>
+  <p>列顺序：<b>提款方式 → 账户类型 → CPF ID → 提款账号</b>。该报表列较多，支持横向滚动。</p>
+  <h3>② 「提款账号」取值联动</h3>
+  <p>「提款账号」列按账户类型取值：账户类型 = <b>CPF</b> 时显示会员的 <b>CPF ID</b>；账户类型 = <b>PHONE</b> 时显示会员的<b>手机号</b>。</p>
+  <h3>③ 「提款信息」栏补充</h3>
+  <p>同 6.1：在「提款信息」栏「提现方式」下方增加「账户类型」，「提款卡号」下方增加「手机号」（仅 PHONE 显示）。</p>
+  <h3>④ 筛选区调整</h3>
+  <table>
+    <thead><tr><th style="width:130px">筛选项</th><th>规则</th></tr></thead>
+    <tbody>
+      <tr><td>提款方式</td><td>选项改为 <b>全部 / PIX</b>（与列表「提款方式」取值一致）。</td></tr>
+      <tr><td>账户类型（新增）</td><td>位于「提款方式」之后。<b>联动</b>：提款方式 = PIX 时，账户类型可选 <b>CPF / PHONE</b>；提款方式 = 全部 时，账户类型为空，下拉展示「暂无数据」空状态。</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- 七 中葡对照 -->
+<div class="section" id="s6">
+  <h1>七、中文 / 葡语文案对照表</h1>
+  <p>覆盖 H5 取款页与本需求相关的固定展示文案。葡语取自前台参考图原文，前台按客户端语言展示。<code>{金额}</code> 为动态数值。</p>
+  <table>
+    <thead><tr><th style="width:130px">位置</th><th style="width:230px">中文</th><th>葡语（参考原文）</th></tr></thead>
+    <tbody>
+      <tr><td>页面标题</td><td>取款</td><td>Saque</td></tr>
+      <tr><td>余额标签</td><td>账户余额</td><td>Conta Saldo</td></tr>
+      <tr><td>投注提示</td><td>提款需投注 {金额}</td><td>Você preciso apostar {金额} para sacar</td></tr>
+      <tr><td>详情链接</td><td>查看详情</td><td>Ver detalhes</td></tr>
+      <tr><td>金额区块标题</td><td>提款金额</td><td>Valor do Saque</td></tr>
+      <tr><td>金额输入占位</td><td>0,00 – 0,00（金额区间，随限额动态）</td><td>20,00 - 50.000,00（金额区间，随限额动态）</td></tr>
+      <tr><td>提款方式区块标题</td><td>提款方式</td><td>Método de Retirada</td></tr>
+      <tr><td>提款方式名称</td><td>CPF</td><td>CPF</td></tr>
+      <tr><td>提款方式名称</td><td>PHONE</td><td>PHONE</td></tr>
+      <tr><td>字段标签</td><td>姓名</td><td>Nome</td></tr>
+      <tr><td>输入框提示</td><td>请输入您的姓名</td><td>Por favor, insira seu nome</td></tr>
+      <tr><td>字段标签</td><td>手机号</td><td>Telefone</td></tr>
+      <tr><td>输入框提示</td><td>请输入您的手机号</td><td>Por favor, insira o número de telefone</td></tr>
+      <tr><td>字段标签</td><td>CPF ID</td><td>CPF ID</td></tr>
+      <tr><td>输入框提示</td><td>请输入您的CPF(巴西税务识别号码)</td><td>Por favor, insira o CPF</td></tr>
+      <tr><td>提交按钮</td><td>立即提现</td><td>Retirar Agora</td></tr>
+    </tbody>
+  </table>
+  <p class="legend">后台配置界面为中文，不涉及葡语；上表仅为前台展示文案。</p>
+</div>
+
+<!-- 七 边界异常 -->
+<div class="section" id="s7">
+  <h1>八、边界与异常处理</h1>
+  <table>
+    <thead><tr><th style="width:230px">场景</th><th>处理</th></tr></thead>
+    <tbody>
+      <tr><td>运营尝试关闭 CPF / 修改 CPF 解锁条件</td><td>控件置灰锁定，无法操作（见 4.6）。</td></tr>
+      <tr><td>非 CPF 方式全部关闭或均未被会员解锁</td><td>因 CPF 兜底，前台仍展示 CPF；不会出现无可用方式。</td></tr>
+      <tr><td>理论极端：因历史数据 / 异常导致前台零个可用方式</td><td>隐藏「提款方式」区并置灰「立即提现」按钮，提示「暂无可用的提款方式，请完成充值后再试或联系客服」（兜底防御，正常配置下不触发）。</td></tr>
+      <tr><td>解锁条件切换离开「已累计充值」</td><td>隐藏并清空「累计充值金额」，不参与本次校验。</td></tr>
+      <tr><td>排序值重复</td><td>相同排序按方式默认顺序（CPF、PHONE）稳定展示。</td></tr>
+    </tbody>
+  </table>
+</div>
+
+</div>
+</body>
+</html>

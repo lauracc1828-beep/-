@@ -637,7 +637,17 @@ select.fs.ph{color:#bfbfbf}
   </div>
   <div class="menu-item" onclick="toggleMenu(this,'')"><div class="menu-item-left"><span class="menu-icon">🎮</span>商户游戏管理</div><span class="arrow">›</span></div>
   <div class="menu-item" onclick="toggleMenu(this,'')"><div class="menu-item-left"><span class="menu-icon">👥</span>会员管理</div><span class="arrow">›</span></div>
-  <div class="menu-item" onclick="toggleMenu(this,'')"><div class="menu-item-left"><span class="menu-icon">💰</span>商户财务管理</div><span class="arrow">›</span></div>
+  <div class="menu-item" id="menu-mfm" onclick="toggleMenu(this,'sub-mfm')"><div class="menu-item-left"><span class="menu-icon">💰</span>商户财务管理</div><span class="arrow">›</span></div>
+  <div class="submenu" id="sub-mfm" style="display:none">
+    <div class="submenu-item disabled">人工提存</div>
+    <div class="submenu-item disabled">人工提存记录</div>
+    <div class="submenu-item disabled">充值订单记录</div>
+    <div class="submenu-item disabled">未上分三方充值订单</div>
+    <div class="submenu-item disabled">支付方式排序</div>
+    <div class="submenu-item disabled">提现审核记录</div>
+    <div class="submenu-item" id="si-worder" onclick="switchPage('worder',this)">提现订单记录</div>
+    <div class="submenu-item" id="si-maudit" onclick="switchPage('maudit',this)">会员提现审核</div>
+  </div>
   <div class="menu-item" onclick="toggleMenu(this,'')"><div class="menu-item-left"><span class="menu-icon">📊</span>报表查询</div><span class="arrow">›</span></div>
   <div class="menu-item" onclick="toggleMenu(this,'')"><div class="menu-item-left"><span class="menu-icon">🤝</span>代理中心(无限极差)</div><span class="arrow">›</span></div>
   <!-- 商户财务配置 -->
@@ -1197,8 +1207,247 @@ select.fs.ph{color:#bfbfbf}
       <div class="wm-panel hidden" id="wm-p-other"><div class="wm-ph">其他提现配置（现有功能，非本次范围）</div></div>
     </div>
 
+    <!-- PAGE: 会员提现审核 -->
+    <div id="pg-maudit" style="display:none">
+      <div class="sec-tabs-bar" style="border-radius:6px 6px 0 0;margin-bottom:12px">
+        <div class="sec-tab active" onclick="mauditTab(this)">一审</div>
+        <div class="sec-tab" onclick="mauditTab(this)">二审</div>
+        <div class="sec-tab" onclick="mauditTab(this)">待出款</div>
+      </div>
+      <div class="filter-area">
+        <div class="filter-row">
+          <div class="filter-item"><span class="filter-label">申请时间：</span><input class="f-input" placeholder="申请时间(开始)" style="min-width:120px"><span style="margin:0 4px">→</span><input class="f-input" placeholder="申请时间(结束)" style="min-width:120px"></div>
+          <div class="filter-item"><span class="filter-label">订单号：</span><input class="f-input" placeholder="订单号" style="min-width:170px"></div>
+          <div class="filter-item"><span class="filter-label">会员查询：</span><select class="f-select" style="min-width:88px"><option>会员ID</option></select><input class="f-input" placeholder="请输入会员ID" style="min-width:140px"></div>
+          <div class="filter-item"><span class="filter-label">大额提款：</span><select class="f-select"><option>大额提款</option></select></div>
+        </div>
+        <div class="filter-row">
+          <div class="filter-item"><span class="filter-label">提款金额：</span><input class="f-input" placeholder="提款金额(最小)" style="min-width:110px"><span style="margin:0 4px">~</span><input class="f-input" placeholder="提款金额(最大)" style="min-width:110px"></div>
+          <div class="filter-item"><span class="filter-label">审核状态：</span><select class="f-select"><option>审核状态</option><option>待审核</option><option>审核通过</option><option>审核拒绝</option></select></div>
+          <div class="filter-item"><span class="filter-label">提款类型：</span><select class="f-select"><option>提款类型</option><option>即时提款</option></select></div>
+          <div class="filter-item" style="margin-left:auto"><button class="btn btn-white" onclick="toast('已重置')">重 置</button><button class="btn btn-query" style="margin-left:10px" onclick="toast('查询中...')">查 询</button></div>
+        </div>
+      </div>
+      <div style="color:#cf1322;font-size:12px;margin:8px 2px 10px">数据更新时间：2026-09-05 07:07:22 (UTC-3)</div>
+      <div class="table-wrap"><div class="table-scroll">
+        <table>
+          <thead><tr>
+            <th>锁单</th><th>操作</th><th>会员ID</th><th>手机号(会员账号)/姓名</th><th>订单号</th><th>提款方式</th><th style="min-width:210px">提款信息</th><th>提款金额</th><th>提款类型</th><th>申请时间</th><th>审核状态</th><th>审核人</th>
+          </tr></thead>
+          <tbody>
+            <tr>
+              <td><input type="checkbox"></td>
+              <td><button class="btn btn-white btn-sm">查 看</button></td>
+              <td><a style="color:#0961BD;cursor:pointer">83491174</a></td>
+              <td>55900000000 / -</td>
+              <td>5392762640869367808</td>
+              <td>PIX</td>
+              <td><div class="pinfo">
+                <div>提款类型：即时提款</div>
+                <div>提现金额：16 <span class="copy-icon">⧉</span></div>
+                <div>提现通道：- <span class="copy-icon">⧉</span></div>
+                <div>提现币种：BRL</div>
+                <div>提现方式：PIX提款</div>
+                <div class="pinfo-new">账户类型：CPF</div>
+                <div>提款卡号：42846146810 <span class="copy-icon">⧉</span></div>
+                <div>持卡人：- <span class="copy-icon">⧉</span></div>
+                <div>开户地址：- <span class="copy-icon">⧉</span></div>
+                <div style="color:#cf1322;cursor:pointer;margin-top:2px">一键复制</div>
+              </div></td>
+              <td>16(BRL) <span class="copy-icon">⧉</span></td>
+              <td>即时提款</td>
+              <td>2026-08-31 23:28:20 (UTC-3)</td>
+              <td><span class="wbadge wb-wait">待审核</span></td>
+              <td>-</td>
+            </tr>
+            <tr>
+              <td><input type="checkbox"></td>
+              <td><button class="btn btn-white btn-sm">查 看</button></td>
+              <td><a style="color:#0961BD;cursor:pointer">83491180</a></td>
+              <td>55911112222 / -</td>
+              <td>5392762640869399999</td>
+              <td>PIX</td>
+              <td><div class="pinfo">
+                <div>提款类型：即时提款</div>
+                <div>提现金额：20 <span class="copy-icon">⧉</span></div>
+                <div>提现通道：- <span class="copy-icon">⧉</span></div>
+                <div>提现币种：BRL</div>
+                <div>提现方式：PIX提款</div>
+                <div class="pinfo-new">账户类型：PHONE</div>
+                <div>提款卡号：03136098536 <span class="copy-icon">⧉</span></div>
+                <div class="pinfo-new">手机号：71988850666 <span class="copy-icon">⧉</span></div>
+                <div>持卡人：- <span class="copy-icon">⧉</span></div>
+                <div>开户地址：- <span class="copy-icon">⧉</span></div>
+                <div style="color:#cf1322;cursor:pointer;margin-top:2px">一键复制</div>
+              </div></td>
+              <td>20(BRL) <span class="copy-icon">⧉</span></td>
+              <td>即时提款</td>
+              <td>2026-08-31 22:10:05 (UTC-3)</td>
+              <td><span class="wbadge wb-wait">待审核</span></td>
+              <td>-</td>
+            </tr>
+          </tbody>
+        </table>
+      </div></div>
+      <div class="pagination"><div class="pg-info">共 <b>2</b> 条数据</div><div class="pg-controls"><div class="pg-btn active">1</div><select class="pg-size"><option>50 条/页</option></select></div></div>
+    </div>
+
+    <!-- PAGE: 提现订单记录 -->
+    <div id="pg-worder" style="display:none">
+      <div class="filter-area">
+        <div class="filter-row">
+          <div class="filter-item"><span class="filter-label">申请时间：</span><input class="f-input" placeholder="申请时间(开始)" style="min-width:120px"><span style="margin:0 4px">→</span><input class="f-input" placeholder="申请时间(结束)" style="min-width:120px"></div>
+          <div class="filter-item"><span class="filter-label">出款时间：</span><input class="f-input" placeholder="出款时间(开始)" style="min-width:120px"><span style="margin:0 4px">→</span><input class="f-input" placeholder="出款时间(结束)" style="min-width:120px"></div>
+          <div class="filter-item"><span class="filter-label">订单号：</span><input class="f-input" placeholder="订单号" style="min-width:150px"></div>
+          <div class="filter-item"><span class="filter-label">钱包币种：</span><select class="f-select"><option>钱包币种</option><option>BRL</option></select></div>
+        </div>
+        <div class="filter-row">
+          <div class="filter-item"><span class="filter-label">订单来源：</span><select class="f-select"><option>订单来源</option><option>IOS_H5</option><option>Android_H5</option></select></div>
+          <div class="filter-item"><span class="filter-label">订单状态：</span><select class="f-select"><option>订单状态</option><option>待审核</option><option>已出款</option><option>已拒绝</option></select></div>
+          <div class="filter-item"><span class="filter-label">客户端状态：</span><select class="f-select"><option>客户端状态</option><option>处理中</option><option>成功</option><option>失败</option></select></div>
+          <div class="filter-item"><span class="filter-label">会员等级：</span><select class="f-select"><option>会员等级</option></select></div>
+        </div>
+        <div class="filter-row">
+          <div class="filter-item"><span class="filter-label">提款IP：</span><input class="f-input" placeholder="提款IP" style="min-width:130px"></div>
+          <div class="filter-item"><span class="filter-label">提款方式：</span><select class="f-select" id="wo-method" onchange="woMethodChange()"><option value="all">全部</option><option value="pix">PIX</option></select></div>
+          <div class="filter-item"><span class="filter-label">账户类型：</span>
+            <div class="acct-dd" id="wo-acct-dd">
+              <div class="acct-dd-field" onclick="woAcctToggle(event)">
+                <span class="acct-dd-text placeholder" id="wo-acct-text">请选择</span>
+                <svg class="acct-dd-ic" width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="5" stroke="#bfbfbf" stroke-width="1.4"/><line x1="10.7" y1="10.7" x2="14" y2="14" stroke="#bfbfbf" stroke-width="1.4"/></svg>
+              </div>
+              <div class="acct-dd-panel" id="wo-acct-panel"></div>
+            </div>
+          </div>
+          <div class="filter-item"><span class="filter-label">出款方式：</span><select class="f-select"><option>出款方式</option><option>人工出款</option><option>三方出款</option></select></div>
+          <div class="filter-item"><span class="filter-label">三方平台/充值通道：</span><select class="f-select"><option>三方平台/充值通道</option></select></div>
+        </div>
+        <div class="filter-row">
+          <div class="filter-item"><span class="filter-label">会员查询：</span><select class="f-select" style="min-width:88px"><option>会员ID</option></select><input class="f-input" placeholder="请输入会员ID" style="min-width:140px"></div>
+          <div class="filter-item"><span class="filter-label">提款账号：</span><input class="f-input" placeholder="提款账号" style="min-width:150px"></div>
+          <div class="filter-item"><span class="filter-label">提款金额：</span><input class="f-input" placeholder="提款金额(最小)" style="min-width:110px"><span style="margin:0 4px">至</span><input class="f-input" placeholder="提款金额(最大)" style="min-width:110px"></div>
+          <div class="filter-item" style="margin-left:auto"><button class="btn btn-white" onclick="toast('已重置')">重 置</button><button class="btn btn-query" style="margin-left:10px" onclick="toast('查询中...')">查 询</button></div>
+        </div>
+      </div>
+      <div class="action-bar"><button class="btn btn-blue" onclick="toast('导出中...')">导 出</button></div>
+      <div class="table-wrap"><div class="table-scroll">
+        <table>
+          <thead><tr>
+            <th>会员ID</th><th>手机号(会员账号)</th><th>提款订单号</th><th>提款金额</th><th>手续费</th><th>出款金额</th><th>订单状态</th><th>客户端状态</th><th>后台备注</th><th>客户端备注</th><th>提款人姓名</th><th>提款方式</th><th class="col-new">账户类型</th><th class="col-new">CPF ID</th><th>提款账号</th><th>返现比例</th><th>返现金额</th><th style="min-width:200px">提款信息</th><th>提款IP</th><th>出款方式</th><th>三方平台/提现通道</th><th>订单来源</th><th>申请时间</th><th>出款时间</th><th>账号状态</th><th>出款管理员</th>
+          </tr></thead>
+          <tbody>
+            <tr>
+              <td><a style="color:#0961BD;cursor:pointer">83491174</a></td>
+              <td>55900000000</td>
+              <td>5392762640869367808</td>
+              <td>16(BRL)</td>
+              <td>0</td>
+              <td>16(BRL)</td>
+              <td><span class="wbadge wb-wait">待审核</span></td>
+              <td><span class="wbadge wb-proc">处理中</span></td>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>PIX</td>
+              <td class="col-new">CPF</td>
+              <td class="col-new">42846146810</td>
+              <td>42846146810</td>
+              <td>-</td>
+              <td>-</td>
+              <td><div class="pinfo">
+                <div>提款类型：即时提款</div>
+                <div>提现金额：16 <span class="copy-icon">⧉</span></div>
+                <div>提现通道：- <span class="copy-icon">⧉</span></div>
+                <div>提现币种：BRL</div>
+                <div>提现方式：PIX提款</div>
+                <div class="pinfo-new">账户类型：CPF</div>
+                <div>提款卡号：42846146810 <span class="copy-icon">⧉</span></div>
+                <div>持卡人：- <span class="copy-icon">⧉</span></div>
+                <div>开户地址：- <span class="copy-icon">⧉</span></div>
+                <div style="color:#cf1322;cursor:pointer;margin-top:2px">一键复制</div>
+              </div></td>
+              <td>175.176.46.147</td>
+              <td>人工出款</td>
+              <td>- / -</td>
+              <td>IOS_H5</td>
+              <td>2026-08-31 23:28:20 (UTC-3)</td>
+              <td>-</td>
+              <td><span class="wbadge wb-ok">正常</span></td>
+              <td>-</td>
+            </tr>
+            <tr>
+              <td><a style="color:#0961BD;cursor:pointer">83491180</a></td>
+              <td>55911112222</td>
+              <td>5392742007600603136</td>
+              <td>15(BRL)</td>
+              <td>0</td>
+              <td>15(BRL)</td>
+              <td><span class="wbadge wb-ok">已出款</span></td>
+              <td><span class="wbadge wb-ok">成功</span></td>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>PIX</td>
+              <td class="col-new">PHONE</td>
+              <td class="col-new">03136098536</td>
+              <td>71988850666</td>
+              <td>-</td>
+              <td>-</td>
+              <td><div class="pinfo">
+                <div>提款类型：即时提款</div>
+                <div>提现金额：15 <span class="copy-icon">⧉</span></div>
+                <div>提现通道：PIX <span class="copy-icon">⧉</span></div>
+                <div>提现币种：BRL</div>
+                <div>提现方式：PIX提款</div>
+                <div class="pinfo-new">账户类型：PHONE</div>
+                <div>提款卡号：03136098536 <span class="copy-icon">⧉</span></div>
+                <div class="pinfo-new">手机号：71988850666 <span class="copy-icon">⧉</span></div>
+                <div>持卡人：- <span class="copy-icon">⧉</span></div>
+                <div>开户地址：- <span class="copy-icon">⧉</span></div>
+                <div style="color:#cf1322;cursor:pointer;margin-top:2px">一键复制</div>
+              </div></td>
+              <td>175.176.46.147</td>
+              <td>三方出款</td>
+              <td>bestpay代付 / PIX</td>
+              <td>IOS_H5</td>
+              <td>2026-08-31 23:08:19 (UTC-3)</td>
+              <td>2026-08-31 23:08:23 (UTC-3)</td>
+              <td><span class="wbadge wb-ok">正常</span></td>
+              <td>-</td>
+            </tr>
+          </tbody>
+        </table>
+      </div></div>
+      <div class="pagination"><div class="pg-info">共 <b>2</b> 条数据</div><div class="pg-controls"><div class="pg-btn active">1</div><select class="pg-size"><option>50 条/页</option></select></div></div>
+    </div>
+
   </div>
 </div>
+
+<!-- 提现审核/订单记录 · scoped styles -->
+<style>
+#pg-maudit td,#pg-maudit th{vertical-align:top}
+#pg-maudit .pinfo,#pg-worder .pinfo{font-size:12px;line-height:1.75;text-align:left;min-width:190px;white-space:normal}
+.pinfo-new{color:#0961BD;font-weight:600}
+.wbadge{display:inline-block;padding:1px 8px;border-radius:3px;font-size:12px;white-space:nowrap;font-weight:500}
+.wb-wait{background:#e6f4ff;color:#0961BD;border:1px solid #91caff}
+.wb-proc{background:#fff7e6;color:#d46b08;border:1px solid #ffd591}
+.wb-ok{background:#f6ffed;color:#389e0d;border:1px solid #b7eb8f}
+#pg-worder th,#pg-worder td{white-space:nowrap;vertical-align:top}
+#pg-worder .pinfo{white-space:normal}
+#pg-worder th.col-new,#pg-worder td.col-new{background:#fffbe6}
+#pg-worder .acct-dd{position:relative;display:inline-block}
+#pg-worder .acct-dd-field{height:32px;min-width:150px;border:1px solid #d9d9d9;border-radius:4px;padding:0 10px;display:flex;align-items:center;justify-content:space-between;gap:8px;background:#fff;cursor:pointer;font-size:13px}
+#pg-worder .acct-dd-field:hover{border-color:#0961BD}
+#pg-worder .acct-dd.open .acct-dd-field{border-color:#0961BD;box-shadow:0 0 0 2px rgba(9,97,189,.1)}
+#pg-worder .acct-dd-text{color:#333}
+#pg-worder .acct-dd-text.placeholder{color:#bfbfbf}
+#pg-worder .acct-dd-panel{display:none;position:absolute;top:36px;left:0;min-width:100%;background:#fff;border:1px solid #e8e8e8;border-radius:4px;box-shadow:0 4px 16px rgba(0,0,0,.12);z-index:50;padding:4px 0}
+#pg-worder .acct-dd.open .acct-dd-panel{display:block}
+#pg-worder .acct-opt{padding:7px 14px;font-size:13px;color:#333;cursor:pointer;white-space:nowrap}
+#pg-worder .acct-opt:hover{background:#f0f7ff;color:#0961BD}
+#pg-worder .acct-empty{padding:20px 24px;text-align:center;color:#bfbfbf;font-size:13px}
+</style>
 
 <!-- 提款方式配置 · scoped styles -->
 <style>
@@ -3500,7 +3749,7 @@ function guideAddrChange(){
 const _origSwitchPage = switchPage;
 function switchPage(page, el){
   // hide all pages
-  ['pg-channel','pg-effect','pg-guide','pg-activity-list','pg-appstore','pg-account','pg-mafia','pg-withdraw'].forEach(function(id){
+  ['pg-channel','pg-effect','pg-guide','pg-activity-list','pg-appstore','pg-account','pg-mafia','pg-withdraw','pg-maudit','pg-worder'].forEach(function(id){
     var p=document.getElementById(id); if(p) p.style.display='none';
   });
   // show requested
@@ -3520,9 +3769,11 @@ function switchPage(page, el){
     'appstore':'推广渠道管理 / 仿应用商店',
     'account':'系统管理 / 账号管理',
     'mafia':'系统管理 / 马甲包管理',
-    'withdraw':'商户财务配置 / 提现管理'
+    'withdraw':'商户财务配置 / 提现管理',
+    'maudit':'商户财务管理 / 会员提现审核',
+    'worder':'商户财务管理 / 提现订单记录'
   };
-  const bcSec = {'channel':'DD后台管理','effect':'DD后台管理','guide':'DD后台管理','activity-list':'DD后台管理','appstore':'DD后台管理','account':'DD后台管理','mafia':'DD后台管理','withdraw':'DD后台管理'};
+  const bcSec = {'channel':'DD后台管理','effect':'DD后台管理','guide':'DD后台管理','activity-list':'DD后台管理','appstore':'DD后台管理','account':'DD后台管理','mafia':'DD后台管理','withdraw':'DD后台管理','maudit':'DD后台管理','worder':'DD后台管理'};
   const bcEl = document.getElementById('breadcrumb');
   if(bcEl){
     const txt = document.getElementById('bc-text');
@@ -5936,6 +6187,41 @@ function asCommentSave(){
   toast('保存成功');
   asRenderTable();
 }
+
+// ─── 会员提现审核 / 提现订单记录 ───
+function mauditTab(el){
+  el.parentNode.querySelectorAll('.sec-tab').forEach(function(t){t.classList.remove('active');});
+  el.classList.add('active');
+}
+function woMethodChange(){
+  var m=document.getElementById('wo-method').value;
+  var panel=document.getElementById('wo-acct-panel');
+  var txt=document.getElementById('wo-acct-text');
+  txt.textContent='请选择'; txt.classList.add('placeholder');
+  if(m==='pix'){
+    panel.innerHTML='<div class="acct-opt" onclick="woAcctPick(\'全部\')">全部</div>'+
+      '<div class="acct-opt" onclick="woAcctPick(\'CPF\')">CPF</div>'+
+      '<div class="acct-opt" onclick="woAcctPick(\'PHONE\')">PHONE</div>';
+  } else {
+    panel.innerHTML='<div class="acct-empty">'+
+      '<svg width="46" height="38" viewBox="0 0 72 58" fill="none">'+
+      '<path d="M10 34 L24 34 L28 42 L44 42 L48 34 L62 34 L62 50 A2 2 0 0 1 60 52 L12 52 A2 2 0 0 1 10 50 Z" fill="#fafafa" stroke="#e0e0e0" stroke-width="1.4"/>'+
+      '<path d="M17 34 L24 10 L48 10 L55 34" fill="none" stroke="#e0e0e0" stroke-width="1.4"/></svg>'+
+      '<div>暂无数据</div></div>';
+  }
+}
+function woAcctToggle(e){ if(e)e.stopPropagation(); document.getElementById('wo-acct-dd').classList.toggle('open'); }
+function woAcctPick(v){
+  var txt=document.getElementById('wo-acct-text');
+  txt.textContent=v; txt.classList.remove('placeholder');
+  document.getElementById('wo-acct-dd').classList.remove('open');
+}
+document.addEventListener('click',function(e){
+  var dd=document.getElementById('wo-acct-dd');
+  if(dd && !dd.contains(e.target)) dd.classList.remove('open');
+});
+// 初始化账户类型下拉（默认提款方式=全部 → 暂无数据）
+if(document.getElementById('wo-acct-panel')) woMethodChange();
 
 // ─── 提款方式配置 ───
 (function(){
